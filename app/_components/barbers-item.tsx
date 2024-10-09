@@ -2,6 +2,7 @@ import { Barber } from "@prisma/client"
 import { Card, CardContent } from "./ui/card"
 import Image from "next/image"
 import { Button } from "./ui/button"
+import Link from "next/link"
 
 interface BarberItemProps {
   barbers: Barber
@@ -24,8 +25,8 @@ const BarberItem = ({ barbers }: BarberItemProps) => {
         {/* TEXTO */}
         <div className="px-1 py-3">
           <h3 className="truncate font-semibold">{barbers.name}</h3>
-          <Button variant="secondary" className="mt-3 w-full">
-            Reservar
+          <Button variant="secondary" className="mt-3 w-full" asChild>
+            <Link href={`/barbers/${barbers.id}`}>Reservar</Link>
           </Button>
         </div>
       </CardContent>
