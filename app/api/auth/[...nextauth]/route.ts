@@ -19,6 +19,18 @@ const handler = NextAuth({
     }),
     //EmailProvider({}),
   ],
+
+  //pegar o id do usuário que ta no banco e colocando no session
+  callbacks: {
+    async session({ session, user }) {
+      session.user = {
+        ...session.user,
+        id: user.id,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any
+      return session
+    },
+  },
 })
 
 export { handler as GET, handler as POST }
