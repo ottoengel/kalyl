@@ -10,33 +10,14 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "./_lib/auth"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
+import { getConfirmedBookings } from "./_data/get-confirmed-bookings"
 
 const Home = async () => {
   //pegar o usuário logado
   const session = await getServerSession(authOptions)
   //chamar o banco
   const barbers = await db.barber.findMany({})
-  const confirmedBookings = session?.user
-    ? await db.booking.findMany({
-        where: {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          userId: (session?.user as any).id,
-          date: {
-            gte: new Date(),
-          },
-        },
-        include: {
-          service: {
-            include: {
-              barber: true,
-            },
-          },
-        },
-        orderBy: {
-          date: "asc",
-        },
-      })
-    : []
+  const confirmedBookings = await getConfirmedBookings()
 
   return (
     <div>
