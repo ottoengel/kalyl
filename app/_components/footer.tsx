@@ -2,7 +2,7 @@ import { Card, CardContent } from "./ui/card"
 
 const Footer = () => {
   return (
-    <footer>
+    <footer className="fixed bottom-0 w-full">
       <Card>
         <CardContent className="px-5 py-6">
           <p className="text-sm text-gray-400">
