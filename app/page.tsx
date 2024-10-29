@@ -11,6 +11,7 @@ import { authOptions } from "./_lib/auth"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import { getConfirmedBookings } from "./_data/get-confirmed-bookings"
+import FAQ from "./_components/faq-item"
 
 const Home = async () => {
   //pegar o usuário logado
@@ -80,6 +81,10 @@ const Home = async () => {
           {barbers.map((barbers) => (
             <BarberItem key={barbers.id} barbers={barbers} />
           ))}
+        </div>
+
+        <div className="pt-3">
+          <FAQ />
         </div>
       </div>
     </div>
