@@ -13,6 +13,7 @@ model User {
   email         String    @unique
   emailVerified DateTime?
   image         String?
+  role          String    @default("USER") // Campo para indicar o papel do usuário
   accounts      Account[]
   sessions      Session[]
   bookings      Booking[]
