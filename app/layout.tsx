@@ -32,7 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-          {children}
+          <main className="flex-grow">{children}</main>
           <Toaster />
           <Footer />
         </AuthProvider>
