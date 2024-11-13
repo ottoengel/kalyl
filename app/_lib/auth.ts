@@ -23,11 +23,12 @@ export const authOptions: AuthOptions = {
   //pegar o id do usuário que ta no banco e colocando no session
   callbacks: {
     async session({ session, user }) {
+      // Inclui o id e o role do usuário na sessão
       session.user = {
         ...session.user,
         id: user.id,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any
+        role: user.role, // Adiciona o campo role
+      }
       return session
     },
   },

@@ -58,12 +58,26 @@ const SidebarSheet = () => {
           </Button>
         </SheetClose>
         <Button className="justify-start gap-2" variant="ghost" asChild>
-          <Link href="/bookings">
+          <Link
+            href={data?.user?.role === "ADMIN" ? "/dashboard" : "/bookings"}
+          >
             <CalendarIcon size={18} />
-            Agendamentos
+            {data?.user?.role === "ADMIN" ? "Dashboard" : "Agendamentos"}
           </Link>
         </Button>
       </div>
+
+      {/* Link "Dashboard" visível apenas para administradores */}
+      {/* {data?.user?.role === "ADMIN" && (
+        <SheetClose asChild>
+          <Button className="justify-start gap-2" variant="ghost" asChild>
+            <Link href="/dashboard">
+              <CalendarIcon size={18} />
+              Dashboard
+            </Link>
+          </Button>
+        </SheetClose>
+      )} */}
 
       {data?.user && (
         <div className="flex flex-col gap-2 py-5">
