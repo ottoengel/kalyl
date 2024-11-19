@@ -9,8 +9,6 @@ import BookingItem from "../_components/booking-item"
 const Dashboard = async () => {
   const session = await getServerSession(authOptions)
 
-  console.log("Sessão:", session)
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (!session?.user || (session.user as any).role !== "ADMIN") {
     // Se não for administrador, redireciona ou mostra página de não encontrado
