@@ -6,6 +6,7 @@ import Image from "next/image"
 
 const SignInDialog = () => {
   const handleLoginWithGoogleClick = () => signIn("google")
+  const handleLoginWithFacebookClick = () => signIn("facebook")
   return (
     <>
       <DialogHeader>
@@ -41,7 +42,11 @@ const SignInDialog = () => {
         />
         Google
       </Button>
-      <Button variant="outline" className="gap-1 font-bold">
+      <Button
+        variant="outline"
+        className="gap-1 font-bold"
+        onClick={handleLoginWithFacebookClick}
+      >
         <Image
           alt="Fazer login com Facebook"
           src="/facebook.png"
