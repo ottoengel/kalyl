@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
@@ -11,8 +13,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/app/_lib/utils";
 import { buttonVariants } from "@/app/_components/ui/button";
 import { toast } from "sonner";
-import { createBooking } from "../_actions/create-booking";
-import { tr } from "date-fns/locale";
 import { Block } from "@prisma/client";
 import { getBlock } from "../_actions/get-block";
 import { createBlock } from "../_actions/create-block";

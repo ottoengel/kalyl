@@ -6,7 +6,6 @@ import Image from "next/image"
 
 const SignInDialog = () => {
   const handleLoginWithGoogleClick = () => signIn("google")
-  const handleLoginWithFacebookClick = () => signIn("facebook")
   return (
     <>
       <DialogHeader>

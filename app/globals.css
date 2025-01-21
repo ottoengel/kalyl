@@ -4,7 +4,7 @@
 
 @layer base {
   .dark {
-    --background: 225 9% 9%;
+    --background: 255 9% 9%;
     --foreground: 210 40% 98%;
 
     --card: 228 9% 11%;
@@ -38,7 +38,8 @@
 
 @layer base {
   * {
-    @apply border-border antialiased;
+    border-color: hsl(var(--border)); /* Define a cor da borda usando a variável */
+    antialiased: inherit; /* Corrige a propriedade de antialiasing */
   }
   html {
     @apply h-full;
@@ -46,4 +47,13 @@
   body {
     @apply h-full bg-background text-foreground;
   }
+  .dark {
+    --background: 225 9% 9%; /* Um cinza bem escuro */
+    --foreground: 210 40% 98%;
+  }
+
+  body {
+    @apply bg-background text-foreground; /* Usa as variáveis definidas */
+  }
 }
+
