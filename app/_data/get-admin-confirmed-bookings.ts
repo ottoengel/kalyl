@@ -38,6 +38,7 @@ export const getAdminConfirmedBookings = async () => {
           barber: true,
         },
       },
+      user: true, // Inclui informações do usuário
     },
     orderBy: {
       date: "asc",

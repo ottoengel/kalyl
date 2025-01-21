@@ -17,6 +17,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   bookings      Booking[]
+  block         Block[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
@@ -89,6 +90,16 @@ model Booking {
   user      User           @relation(fields: [userId], references: [id])
   serviceId String
   service   BarberServices @relation(fields: [serviceId], references: [id])
+  date      DateTime
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  type      String         @default("Reserva")
+}
+
+model Block {
+  id        String         @id @default(uuid())
+  userId    String
+  user      User           @relation(fields: [userId], references: [id])
   date      DateTime
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt

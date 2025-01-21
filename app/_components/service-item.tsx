@@ -23,6 +23,7 @@ import { Dialog, DialogContent } from "./ui/dialog"
 import SignInDialog from "./sign-in-dialog"
 import BookingSummary from "./booking-summary"
 import { useRouter } from "next/navigation"
+import { getBlock } from "../_actions/get-block"
 
 interface ServiceItemProps {
   service: BarberServices
@@ -55,9 +56,18 @@ const TIME_LIST = [
 interface GetTimeListProps {
   bookings: Booking[]
   selectedDay: Date
+  block: Block[]
 }
 
-const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
+interface Block {
+  id: string;
+  userId: string;
+  date: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const getTimeList = ({ block, bookings, selectedDay }: GetTimeListProps) => {
   return TIME_LIST.filter((time) => {
     const hour = Number(time.split(":")[0])
     const minutes = Number(time.split(":")[1])
@@ -72,7 +82,14 @@ const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
         booking.date.getHours() === hour &&
         booking.date.getMinutes() === minutes,
     )
-    if (hasBookingOnCurrentTime) {
+
+    const isBlocked = block.some(
+      (block) =>
+        block.date.getHours() === hour &&
+        block.date.getMinutes() === minutes
+    );
+
+    if (hasBookingOnCurrentTime || isBlocked) {  
       return false
     }
     return true
@@ -87,6 +104,7 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
   const [selectedTime, setSelectedTime] = useState<string | undefined>(
     undefined,
   )
+  const [dayBlock, setDayBlock] = useState<Block[]>([]);
 
   const [dayBookings, setDayBookings] = useState<Booking[]>([])
   const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
@@ -99,6 +117,10 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
         serviceId: service.id,
       })
       setDayBookings(bookings)
+      const blockings: Block[] = await getBlock({
+        date: selectedDay,
+      });
+      setDayBlock(blockings)
     }
     fetch()
   }, [selectedDay, service.id])
@@ -143,6 +165,7 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
       await createBooking({
         serviceId: service.id,
         date: selectedDate,
+        type: 'Reserva'
       })
       handleBookingSheetOpenChange()
       toast.success("Reserva criada com sucesso!", {
@@ -158,126 +181,116 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
   }
 
   const timeList = useMemo(() => {
-    if (!selectedDay) return []
+    if (!selectedDay) return [];
     return getTimeList({
       bookings: dayBookings,
       selectedDay,
-    })
-  }, [dayBookings, selectedDay])
-
+      block: dayBlock,
+    });
+  }, [dayBookings, dayBlock, selectedDay]);
+  
   return (
     <>
-      <Card>
-        <CardContent className="flex items-center gap-3 p-3">
-          {/* IMAGEM  */}
-          <div className="relative max-h-[110px] min-h-[110px] min-w-[110px] max-w-[110px]">
+      <Card className="max-w-4xl mx-auto my-6 shadow-lg">
+        <CardContent className="flex flex-col lg:flex-row items-center lg:items-start gap-6 p-6">
+          {/* IMAGEM */}
+          <div className="relative w-full max-w-[110px] lg:max-w-[110px] aspect-square mx-auto lg:mx-0">
             <Image
               alt={service.name}
               src={service.imageUrl}
               fill
-              className="rounded-lg object-cover"
+              className="rounded-lg object-cover "
             />
           </div>
-          {/* DIREITA */}
-          <div className="space-y-2">
-            <h3 className="text-sm font-semibold">{service.name}</h3>
-            <p className="text-sm text-gray-400">{service.description}</p>
-            {/* PREÇO E BOTÃO */}
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-bold text-[#F6484B]">
+  
+          {/* DETALHES */}
+          <div className="flex-1 space-y-4">
+            <div className="space-y-2">
+              <h3 className="text-xl font-semibold text-center lg:text-left">{service.name}</h3>
+              <p className="text-sm text-gray-500 text-center lg:text-left">{service.description}</p>
+            </div>
+  
+            {/* PREÇO E AÇÃO */}
+            <div className="flex flex-col items-center lg:items-start space-y-4">
+              <p className="text-2xl font-bold text-red-600">
                 {Intl.NumberFormat("pt-BR", {
                   style: "currency",
                   currency: "BRL",
                 }).format(Number(service.price))}
               </p>
-
+  
               <Sheet
                 open={bookingSheetIsOpen}
                 onOpenChange={handleBookingSheetOpenChange}
               >
                 <Button
                   variant="secondary"
-                  size="sm"
+                  size="lg"
                   onClick={handleBookingClick}
                 >
                   Reservar
                 </Button>
-                <SheetContent className="px-0">
+  
+                {/* Modal ocupando a altura total */}
+                <SheetContent className="w-full max-w-2xl h-full px-4 flex flex-col">
                   <SheetHeader>
-                    <SheetTitle>Fazer Reserva</SheetTitle>
+                    <SheetTitle className="text-xl font-bold">Fazer Reserva</SheetTitle>
                   </SheetHeader>
-
-                  <div className="border-b border-solid py-5">
-                    <Calendar
-                      mode="single"
-                      locale={ptBR}
-                      selected={selectedDay}
-                      onSelect={handleDateSelect}
-                      fromDate={new Date()}
-                      styles={{
-                        head_cell: {
-                          width: "100%",
-                          textTransform: "capitalize",
-                        },
-                        cell: {
-                          width: "100%",
-                        },
-                        button: {
-                          width: "100%",
-                        },
-                        nav_button_previous: {
-                          width: "32px",
-                          height: "32px",
-                        },
-                        nav_button_next: {
-                          width: "32px",
-                          height: "32px",
-                        },
-                        caption: {
-                          textTransform: "capitalize",
-                        },
-                      }}
-                    />
-                  </div>
-
-                  {/* HORÁRIOS */}
-                  {selectedDay && (
-                    <div className="flex gap-3 overflow-x-auto border-b border-solid p-5 [&::-webkit-scrollbar]:hidden">
-                      {timeList.length > 0 ? (
-                        timeList.map((time) => (
-                          <Button
-                            key={time}
-                            variant={
-                              selectedTime === time ? "default" : "outline"
-                            }
-                            className="rounded-full"
-                            onClick={() => handleTimeSelect(time)}
-                          >
-                            {time}
-                          </Button>
-                        ))
-                      ) : (
-                        <p className="text-xs">
-                          Não há horários disponíveis para este dia.
-                        </p>
-                      )}
-                    </div>
-                  )}
-
-                  {selectedDate && (
-                    <div className="p-5">
-                      <BookingSummary
-                        barber={barber}
-                        service={service}
-                        selectedDate={selectedDate}
+  
+                  {/* Conteúdo com rolagem interna */}
+                  <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-100">
+                    {/* CALENDÁRIO */}
+                    <div className="border-b py-5">
+                      <Calendar
+                        mode="single"
+                        locale={ptBR}
+                        selected={selectedDay}
+                        onSelect={handleDateSelect}
+                        fromDate={new Date()}
                       />
                     </div>
-                  )}
-
-                  <SheetFooter className="mt-5 px-5">
+  
+                    {/* HORÁRIOS DISPONÍVEIS */}
+                    {selectedDay && (
+                      <div className="flex flex-wrap gap-3 border-b py-5">
+                        {timeList.length > 0 ? (
+                          timeList.map((time) => (
+                            <Button
+                              key={time}
+                              variant={
+                                selectedTime === time ? "default" : "outline"
+                              }
+                              className="rounded-full px-4 py-2"
+                              onClick={() => handleTimeSelect(time)}
+                            >
+                              {time}
+                            </Button>
+                          ))
+                        ) : (
+                          <p className="text-sm text-center w-full">
+                            Não há horários disponíveis para este dia.
+                          </p>
+                        )}
+                      </div>
+                    )}
+  
+                    {selectedDate && (
+                      <div className="p-5">
+                        <BookingSummary
+                          barber={barber}
+                          service={service}
+                          selectedDate={selectedDate}
+                        />
+                      </div>
+                    )}
+                  </div>
+  
+                  {/* BOTÃO DE CONFIRMAR */}
+                  <SheetFooter className="mt-5 px-5 flex justify-center">
                     <Button
                       onClick={handleCreateBooking}
                       disabled={!selectedDay || !selectedTime}
+                      className="w-full max-w-sm"
                     >
                       Confirmar
                     </Button>
@@ -288,17 +301,18 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
           </div>
         </CardContent>
       </Card>
-
+  
       <Dialog
         open={signInDialogIsOpen}
         onOpenChange={(open) => setSignInDialogIsOpen(open)}
       >
-        <DialogContent className="w-[90%] rounded-xl">
+        <DialogContent className="w-full max-w-md mx-auto p-6">
           <SignInDialog />
         </DialogContent>
       </Dialog>
     </>
-  )
-}
+  );
+
+}  
 
 export default ServiceItem

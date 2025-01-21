@@ -39,26 +39,27 @@ const Home = async () => {
           </span>
         </p>
 
-        {/* BUSCA */}
-        <div className="mt-6 flex items-center gap-2">
-          <Input placeholder="Faça sua busca..." />
-          <Button className="bg-[#F6484B]" variant="outline">
-            <SearchIcon />
-          </Button>
-        </div>
         {/* IMAGEM */}
-        <div className="relative mt-6 h-[150px] w-full">
+        <div className="flex justify-center items-center">
           <Image
             alt="Agende nos melhores com o Kalyls"
             src="/banner-02.png"
-            fill
+
             className="rounded-xl object-cover"
+
+            width={780}
+            height={500}
           />
         </div>
 
+        {/* <div className={styles.container}>
+
+            <Image src={Banner} width={400} height={300}
+
+          </div> */}
         {confirmedBookings.length > 0 && (
           <>
-            <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+            <h2 className="relative mb-3 mt-6 text-xs font-bold uppercase text-gray-400 justify-center items-center">
               Agendamentos
             </h2>
 
@@ -77,11 +78,12 @@ const Home = async () => {
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
           Barbeiros
         </h2>
-        <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
+        <div className="flex gap-4 sm:gap-40 overflow-auto [&::-webkit-scrollbar]:hidden justify-center items-center">
           {barbers.map((barbers) => (
             <BarberItem key={barbers.id} barbers={barbers} />
           ))}
         </div>
+
 
         <div className="pt-3">
           <FAQ />

@@ -42,7 +42,7 @@ const SignInDialog = () => {
         />
         Google
       </Button>
-      <Button
+      {/* <Button
         variant="outline"
         className="gap-1 font-bold"
         onClick={handleLoginWithFacebookClick}
@@ -54,7 +54,7 @@ const SignInDialog = () => {
           height={18}
         />
         FaceBook
-      </Button>
+      </Button> */}
     </>
   )
 }
