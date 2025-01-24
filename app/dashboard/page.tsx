@@ -91,12 +91,13 @@ const Dashboard = () => {
     })
   }
 
-  const hours = Array.from({ length: 20 }, (_, i) => {
-    const hour = 9 + Math.floor(i / 2);
-    const minutes = i % 2 === 0 ? "00" : "30";
-    return `${hour}:${minutes}`;
+  const hours = Array.from({ length: 11 }, (_, i) => {
+    const hour = 9 + i; // Começa às 9:00 e vai até 19:00
+    return `${hour}:00`;
   });
+  
 
+  
   const selectedDate = useMemo(() => {
     if (!selectedDay || !selectedHour) return
     return set(selectedDay, {
