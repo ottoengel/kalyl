@@ -91,8 +91,8 @@ const Dashboard = () => {
     })
   }
 
-  const hours = Array.from({ length: 11 }, (_, i) => {
-    const hour = 9 + i; // Começa às 9:00 e vai até 19:00
+  const hours = Array.from({ length: 10 }, (_, i) => {
+    const hour = 9 + i; 
     return `${hour}:00`;
   });
   
