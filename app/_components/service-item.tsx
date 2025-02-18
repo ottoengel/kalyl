@@ -164,6 +164,7 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
           onClick: () => router.push("/bookings"),
         },
       })
+      router.refresh();
     } catch (error) {
       console.error(error)
       toast.error("Erro ao criar reserva!")

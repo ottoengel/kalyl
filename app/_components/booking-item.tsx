@@ -53,6 +53,7 @@ const BookingItem = ({ booking, isAdmin = false }: BookingItemProps) => {
   const isConfirmed = isFuture(booking.date);
 
   const handleCancelBooking = async () => {
+    console.log("Cancelando reserva ID:", booking.id);
     try {
       await deleteBooking(booking.id);
       setIsSheetOpen(false);
