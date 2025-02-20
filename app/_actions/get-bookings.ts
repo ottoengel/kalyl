@@ -5,6 +5,7 @@ import { db } from "../_lib/prisma"
 
 interface GetBookingsProps {
   serviceId: string
+  barberId?: string
   date: Date
 }
 

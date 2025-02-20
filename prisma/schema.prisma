@@ -71,6 +71,7 @@ model Barber {
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
   services  BarberServices[]
+  bookings Booking[]
 }
 
 model BarberServices {
@@ -90,6 +91,8 @@ model Booking {
   user      User           @relation(fields: [userId], references: [id])
   serviceId String
   service   BarberServices @relation(fields: [serviceId], references: [id])
+  barberId  String
+  barber    Barber         @relation(fields: [barberId], references: [id])
   date      DateTime
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
