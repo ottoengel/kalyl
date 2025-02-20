@@ -9,6 +9,7 @@ interface CreateBookingParams {
   serviceId: string
   date: Date
   type: string  
+  barberId: string
 }
 
 export const createBooking = async (params: CreateBookingParams) => {
