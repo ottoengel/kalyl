@@ -1,0 +1,560 @@
+[
+    {
+        "id": "03fdb644-1be2-40ec-af17-000d3128cfb3",
+        "userId": "cm7anurc100007wqium6fqo3f",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-04-12 13:00:00",
+        "createdAt": "2025-02-18 17:57:43.203",
+        "updatedAt": "2025-02-18 17:57:43.203",
+        "type": "Reserva"
+    },
+    {
+        "id": "1899e642-b630-4a31-960e-26ba3e8dec81",
+        "userId": "cm69os4kb0000tf5he2ib8civ",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-02-20 20:00:00",
+        "createdAt": "2025-02-18 23:07:43.899",
+        "updatedAt": "2025-02-18 23:07:43.899",
+        "type": "Reserva"
+    },
+    {
+        "id": "1e1abd94-d5ed-4397-b689-0917f9fa52f6",
+        "userId": "cm69os4kb0000tf5he2ib8civ",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-02-19 21:00:00",
+        "createdAt": "2025-02-18 12:50:55.31",
+        "updatedAt": "2025-02-18 12:50:55.31",
+        "type": "Reserva"
+    },
+    {
+        "id": "22383308-68f8-4799-882c-5fb1cfe43983",
+        "userId": "cm7cc24pj000013ij6ngu2xv9",
+        "serviceId": "35b59b8c-2fa3-48d3-8167-9f109a329375",
+        "date": "2025-02-26 12:00:00",
+        "createdAt": "2025-02-19 19:57:13.287",
+        "updatedAt": "2025-02-19 19:57:13.287",
+        "type": "Reserva"
+    },
+    {
+        "id": "297fa013-223a-4a20-b1e1-f6bd26b0a26e",
+        "userId": "cm7aztsyk000014mwemwrirxq",
+        "serviceId": "35b59b8c-2fa3-48d3-8167-9f109a329375",
+        "date": "2025-02-21 21:00:00",
+        "createdAt": "2025-02-18 21:26:06.773",
+        "updatedAt": "2025-02-18 21:26:06.773",
+        "type": "Reserva"
+    },
+    {
+        "id": "2c3d889e-359a-42fb-9d7e-393cd74fea54",
+        "userId": "cm7anurc100007wqium6fqo3f",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-06-28 13:00:00",
+        "createdAt": "2025-02-18 17:59:09.303",
+        "updatedAt": "2025-02-18 17:59:09.303",
+        "type": "Reserva"
+    },
+    {
+        "id": "351c622d-30aa-4602-aaa0-297808de57a8",
+        "userId": "cm7ahqcs70001fiz7ci7ufv5b",
+        "serviceId": "81184d97-2d05-410a-8038-6f9105d59b60",
+        "date": "2025-03-13 19:00:00",
+        "createdAt": "2025-02-18 13:21:45.256",
+        "updatedAt": "2025-02-18 13:21:45.256",
+        "type": "Reserva"
+    },
+    {
+        "id": "359447ed-aa2d-411c-b070-f7b73925bf63",
+        "userId": "cm7akfm1m0000djug6nlnssm3",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-02-21 12:00:00",
+        "createdAt": "2025-02-18 16:03:42.649",
+        "updatedAt": "2025-02-18 16:03:42.649",
+        "type": "Reserva"
+    },
+    {
+        "id": "3f3729c6-147f-4b23-82d8-0ac7de84785b",
+        "userId": "cm7asfeoe000111qpz8sv4ug9",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-02-28 14:00:00",
+        "createdAt": "2025-02-18 18:42:01.242",
+        "updatedAt": "2025-02-18 18:42:01.242",
+        "type": "Reserva"
+    },
+    {
+        "id": "3f591de6-b405-441c-b5eb-16f7124e359f",
+        "userId": "cm7ahdmuo0000fiz75mlde6a3",
+        "serviceId": "81184d97-2d05-410a-8038-6f9105d59b60",
+        "date": "2025-02-20 15:00:00",
+        "createdAt": "2025-02-18 12:49:10.183",
+        "updatedAt": "2025-02-18 12:49:10.183",
+        "type": "Reserva"
+    },
+    {
+        "id": "484ea190-5849-43f0-8a74-8634e8cd2e3e",
+        "userId": "cm7asfeoe000111qpz8sv4ug9",
+        "serviceId": "81184d97-2d05-410a-8038-6f9105d59b60",
+        "date": "2025-03-11 14:00:00",
+        "createdAt": "2025-02-18 18:38:28.95",
+        "updatedAt": "2025-02-18 18:38:28.95",
+        "type": "Reserva"
+    },
+    {
+        "id": "489fd3f1-b169-46e6-8b8b-2feb142b3715",
+        "userId": "cm69os4kb0000tf5he2ib8civ",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-02-22 12:00:00",
+        "createdAt": "2025-02-18 12:52:20.42",
+        "updatedAt": "2025-02-18 12:52:20.42",
+        "type": "Reserva"
+    },
+    {
+        "id": "4b5d06aa-cc6e-4783-9881-42819296febf",
+        "userId": "cm69os4kb0000tf5he2ib8civ",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-02-22 14:00:00",
+        "createdAt": "2025-02-18 12:52:28.098",
+        "updatedAt": "2025-02-18 12:52:28.098",
+        "type": "Reserva"
+    },
+    {
+        "id": "4e1ea86f-a335-485f-bd06-a1e91e8f60ee",
+        "userId": "cm7anurc100007wqium6fqo3f",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-05-24 13:00:00",
+        "createdAt": "2025-02-18 17:58:29.979",
+        "updatedAt": "2025-02-18 17:58:29.979",
+        "type": "Reserva"
+    },
+    {
+        "id": "54664d4c-f235-41f6-b5e3-fbcd26e0c129",
+        "userId": "cm7anurc100007wqium6fqo3f",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-05-31 13:00:00",
+        "createdAt": "2025-02-18 17:58:39.108",
+        "updatedAt": "2025-02-18 17:58:39.108",
+        "type": "Reserva"
+    },
+    {
+        "id": "56ea627e-abf8-4fc7-aa7b-9c6211ad9e5b",
+        "userId": "cm7anurc100007wqium6fqo3f",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-03-15 13:00:00",
+        "createdAt": "2025-02-18 17:57:09.503",
+        "updatedAt": "2025-02-18 17:57:09.503",
+        "type": "Reserva"
+    },
+    {
+        "id": "59515b5e-1cfd-4301-8e07-b5bd566d0589",
+        "userId": "cm7ahx6mo0002fiz7t7iiqquf",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-03-24 15:00:00",
+        "createdAt": "2025-02-18 13:05:19.386",
+        "updatedAt": "2025-02-18 13:05:19.386",
+        "type": "Reserva"
+    },
+    {
+        "id": "5d803f00-c778-42c9-94fa-b8f5097ef3c9",
+        "userId": "cm7anurc100007wqium6fqo3f",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-04-05 13:00:00",
+        "createdAt": "2025-02-18 17:57:37.695",
+        "updatedAt": "2025-02-18 17:57:37.695",
+        "type": "Reserva"
+    },
+    {
+        "id": "62fdf67f-4f35-41cf-8f5f-fd713b4da184",
+        "userId": "cm7atawgt0000b458lbzok9qu",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-03-05 12:00:00",
+        "createdAt": "2025-02-18 18:23:08.219",
+        "updatedAt": "2025-02-18 18:23:08.219",
+        "type": "Reserva"
+    },
+    {
+        "id": "6e2d7d7d-185c-441e-b460-a20503513782",
+        "userId": "cm69os4kb0000tf5he2ib8civ",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-02-24 17:00:00",
+        "createdAt": "2025-02-18 12:54:32.633",
+        "updatedAt": "2025-02-18 12:54:32.633",
+        "type": "Reserva"
+    },
+    {
+        "id": "71c52524-d309-45b7-a49c-23a755bc2fce",
+        "userId": "cm7anurc100007wqium6fqo3f",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-06-21 13:00:00",
+        "createdAt": "2025-02-18 17:58:58.167",
+        "updatedAt": "2025-02-18 17:58:58.167",
+        "type": "Reserva"
+    },
+    {
+        "id": "738dcea6-9575-4514-8571-525808caa58e",
+        "userId": "cm7ahqcs70001fiz7ci7ufv5b",
+        "serviceId": "81184d97-2d05-410a-8038-6f9105d59b60",
+        "date": "2025-02-20 19:00:00",
+        "createdAt": "2025-02-18 12:59:12.151",
+        "updatedAt": "2025-02-18 12:59:12.151",
+        "type": "Reserva"
+    },
+    {
+        "id": "7724c86d-6a24-4f7f-890b-76449da07b62",
+        "userId": "cm7anurc100007wqium6fqo3f",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-06-14 13:00:00",
+        "createdAt": "2025-02-18 17:58:51.937",
+        "updatedAt": "2025-02-18 17:58:51.937",
+        "type": "Reserva"
+    },
+    {
+        "id": "78e1e3c3-1600-4dcd-b60c-bcf4c8f3bab5",
+        "userId": "cm7anurc100007wqium6fqo3f",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-03-29 13:00:00",
+        "createdAt": "2025-02-18 17:57:26.754",
+        "updatedAt": "2025-02-18 17:57:26.754",
+        "type": "Reserva"
+    },
+    {
+        "id": "79791cc3-34e1-4a0a-be07-5bf0eac42c24",
+        "userId": "cm7asfeoe000111qpz8sv4ug9",
+        "serviceId": "81184d97-2d05-410a-8038-6f9105d59b60",
+        "date": "2025-02-18 20:00:00",
+        "createdAt": "2025-02-18 18:37:19.907",
+        "updatedAt": "2025-02-18 18:37:19.907",
+        "type": "Reserva"
+    },
+    {
+        "id": "7e283bdf-5d2f-461c-aa19-bea4f285f573",
+        "userId": "cm7ahqcs70001fiz7ci7ufv5b",
+        "serviceId": "81184d97-2d05-410a-8038-6f9105d59b60",
+        "date": "2025-02-27 19:00:00",
+        "createdAt": "2025-02-18 13:21:22.03",
+        "updatedAt": "2025-02-18 13:21:22.03",
+        "type": "Reserva"
+    },
+    {
+        "id": "817e2c0c-238c-47a7-9db0-08df83cf37c4",
+        "userId": "cm7atawgt0000b458lbzok9qu",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-03-05 13:00:00",
+        "createdAt": "2025-02-19 16:04:48.346",
+        "updatedAt": "2025-02-19 16:04:48.346",
+        "type": "Reserva"
+    },
+    {
+        "id": "834c77cf-e6e5-4285-9d51-e5f31373b7a7",
+        "userId": "cm69os4kb0000tf5he2ib8civ",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-02-22 15:00:00",
+        "createdAt": "2025-02-18 23:08:45.552",
+        "updatedAt": "2025-02-18 23:08:45.552",
+        "type": "Reserva"
+    },
+    {
+        "id": "8bbba0ad-cf6d-411b-8044-34a9e5abedff",
+        "userId": "cm7ahx6mo0002fiz7t7iiqquf",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-02-24 15:00:00",
+        "createdAt": "2025-02-18 13:04:30.147",
+        "updatedAt": "2025-02-18 13:04:30.147",
+        "type": "Reserva"
+    },
+    {
+        "id": "8bc89667-2f45-4a18-bf32-4994f1ec45a9",
+        "userId": "cm69os4kb0000tf5he2ib8civ",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-02-19 15:00:00",
+        "createdAt": "2025-02-18 12:50:39.844",
+        "updatedAt": "2025-02-18 12:50:39.844",
+        "type": "Reserva"
+    },
+    {
+        "id": "8c702991-ec9f-4d9b-a46c-03099ec35b8a",
+        "userId": "cm7anurc100007wqium6fqo3f",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-03-01 13:00:00",
+        "createdAt": "2025-02-18 17:56:57.715",
+        "updatedAt": "2025-02-18 17:56:57.715",
+        "type": "Reserva"
+    },
+    {
+        "id": "8e264fab-adc0-41d5-8549-00834f21a92d",
+        "userId": "cm7anurc100007wqium6fqo3f",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-05-03 13:00:00",
+        "createdAt": "2025-02-18 17:58:05.611",
+        "updatedAt": "2025-02-18 17:58:05.611",
+        "type": "Reserva"
+    },
+    {
+        "id": "95e2efa5-a8fe-48ee-97bd-e74ec12145dd",
+        "userId": "cm7asfeoe000111qpz8sv4ug9",
+        "serviceId": "81184d97-2d05-410a-8038-6f9105d59b60",
+        "date": "2025-02-25 14:00:00",
+        "createdAt": "2025-02-18 18:00:00.128",
+        "updatedAt": "2025-02-18 18:00:00.128",
+        "type": "Reserva"
+    },
+    {
+        "id": "9f269acc-d73c-492b-ba0b-eaee4d71ca38",
+        "userId": "cm7ahx6mo0002fiz7t7iiqquf",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-03-17 15:00:00",
+        "createdAt": "2025-02-18 13:05:06.363",
+        "updatedAt": "2025-02-18 13:05:06.363",
+        "type": "Reserva"
+    },
+    {
+        "id": "9f544bdc-f97c-4acf-a646-e24e75abe1fe",
+        "userId": "cm69os4kb0000tf5he2ib8civ",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-02-18 21:00:00",
+        "createdAt": "2025-02-18 12:50:45.9",
+        "updatedAt": "2025-02-18 12:50:45.9",
+        "type": "Reserva"
+    },
+    {
+        "id": "a86ed030-c54f-4d2f-a8df-f0e8c6b72945",
+        "userId": "cm7asfeoe000111qpz8sv4ug9",
+        "serviceId": "81184d97-2d05-410a-8038-6f9105d59b60",
+        "date": "2025-02-21 14:00:00",
+        "createdAt": "2025-02-18 17:59:12.691",
+        "updatedAt": "2025-02-18 17:59:12.691",
+        "type": "Reserva"
+    },
+    {
+        "id": "a9977752-a4b1-4821-81c6-e06b2eb14ecd",
+        "userId": "cm7anurc100007wqium6fqo3f",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-05-10 13:00:00",
+        "createdAt": "2025-02-18 17:58:14.996",
+        "updatedAt": "2025-02-18 17:58:14.996",
+        "type": "Reserva"
+    },
+    {
+        "id": "af4f3752-9a9a-4ad7-8a70-f6b51d356c00",
+        "userId": "cm7dc27aa0000zmkf4yv5t6k2",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-02-21 20:00:00",
+        "createdAt": "2025-02-20 12:44:01.017",
+        "updatedAt": "2025-02-20 12:44:01.017",
+        "type": "Reserva"
+    },
+    {
+        "id": "b0ee9c62-7b4a-4e3c-9beb-aaac68342b45",
+        "userId": "cm7akfm1m0000djug6nlnssm3",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-02-26 21:00:00",
+        "createdAt": "2025-02-18 17:50:48.453",
+        "updatedAt": "2025-02-18 17:50:48.453",
+        "type": "Reserva"
+    },
+    {
+        "id": "b3c8da6c-ece5-44e8-8534-aa1a892bfd52",
+        "userId": "cm7bwum050000ax5061kskqzx",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-02-19 19:00:00",
+        "createdAt": "2025-02-19 12:50:16.821",
+        "updatedAt": "2025-02-19 12:50:16.821",
+        "type": "Reserva"
+    },
+    {
+        "id": "b7f087b4-b940-4935-8b6f-5d76f3b444ee",
+        "userId": "cm3ofcxcu0000yfk8pg5n2300",
+        "serviceId": "35b59b8c-2fa3-48d3-8167-9f109a329375",
+        "date": "2025-02-19 14:00:00",
+        "createdAt": "2025-02-19 13:06:27.759",
+        "updatedAt": "2025-02-19 13:06:27.759",
+        "type": "Reserva"
+    },
+    {
+        "id": "b82f2265-7500-49ff-86ea-df75a2b2511b",
+        "userId": "cm7anurc100007wqium6fqo3f",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-04-26 13:00:00",
+        "createdAt": "2025-02-18 17:57:56.17",
+        "updatedAt": "2025-02-18 17:57:56.17",
+        "type": "Reserva"
+    },
+    {
+        "id": "b9f25cf5-23e8-4f65-bdfb-78d50c8deb9a",
+        "userId": "cm7anurc100007wqium6fqo3f",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-03-22 13:00:00",
+        "createdAt": "2025-02-18 17:57:16.071",
+        "updatedAt": "2025-02-18 17:57:16.071",
+        "type": "Reserva"
+    },
+    {
+        "id": "be37468a-5b7b-47d3-8119-61dd64f4c6cc",
+        "userId": "cm7anurc100007wqium6fqo3f",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-03-08 13:00:00",
+        "createdAt": "2025-02-18 17:57:04.284",
+        "updatedAt": "2025-02-18 17:57:04.284",
+        "type": "Reserva"
+    },
+    {
+        "id": "c213b867-d61a-4585-8e23-0dfac7582a58",
+        "userId": "cm7ahx6mo0002fiz7t7iiqquf",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-03-31 15:00:00",
+        "createdAt": "2025-02-18 13:05:32.384",
+        "updatedAt": "2025-02-18 13:05:32.384",
+        "type": "Reserva"
+    },
+    {
+        "id": "cacbaf20-95c3-4eee-8b9e-c9fa21090836",
+        "userId": "cm7ahx6mo0002fiz7t7iiqquf",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-03-10 15:00:00",
+        "createdAt": "2025-02-18 13:04:52.994",
+        "updatedAt": "2025-02-18 13:04:52.994",
+        "type": "Reserva"
+    },
+    {
+        "id": "cae7d145-c4bc-41aa-bb53-92588b0016d7",
+        "userId": "cm6jbgaii0000tr3clpulek5f",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-01-30 14:00:00",
+        "createdAt": "2025-01-30 12:34:16.145",
+        "updatedAt": "2025-01-30 12:34:16.145",
+        "type": "Reserva"
+    },
+    {
+        "id": "d128faf2-0838-4233-85aa-c6831b2a6f07",
+        "userId": "cm69os4kb0000tf5he2ib8civ",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-02-21 16:00:00",
+        "createdAt": "2025-02-18 12:56:47.684",
+        "updatedAt": "2025-02-18 12:56:47.684",
+        "type": "Reserva"
+    },
+    {
+        "id": "d17fcfb3-9103-45f1-96a3-07bbe8773920",
+        "userId": "cm7ahqcs70001fiz7ci7ufv5b",
+        "serviceId": "81184d97-2d05-410a-8038-6f9105d59b60",
+        "date": "2025-03-06 19:00:00",
+        "createdAt": "2025-02-18 13:21:35.487",
+        "updatedAt": "2025-02-18 13:21:35.487",
+        "type": "Reserva"
+    },
+    {
+        "id": "d20779c0-54df-4ef8-b6d2-d64e136f4570",
+        "userId": "cm69os4kb0000tf5he2ib8civ",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-02-20 17:00:00",
+        "createdAt": "2025-02-19 01:15:04.709",
+        "updatedAt": "2025-02-19 01:15:04.709",
+        "type": "Reserva"
+    },
+    {
+        "id": "d33d0696-5b21-47d1-9282-cc299dd1d407",
+        "userId": "cm7ahdmuo0000fiz75mlde6a3",
+        "serviceId": "81184d97-2d05-410a-8038-6f9105d59b60",
+        "date": "2025-02-27 15:00:00",
+        "createdAt": "2025-02-18 12:50:50.68",
+        "updatedAt": "2025-02-18 12:50:50.68",
+        "type": "Reserva"
+    },
+    {
+        "id": "d36f90ea-03a9-4b1b-8ad8-38577eff3be5",
+        "userId": "cm7akfm1m0000djug6nlnssm3",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-03-07 12:00:00",
+        "createdAt": "2025-02-18 16:03:18.845",
+        "updatedAt": "2025-02-18 16:03:18.845",
+        "type": "Reserva"
+    },
+    {
+        "id": "d698b94c-9d1b-42f0-aaaf-a05c27ade919",
+        "userId": "cm7b97nd70000kk2tesp1lxh1",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-02-20 13:00:00",
+        "createdAt": "2025-02-19 01:51:14.698",
+        "updatedAt": "2025-02-19 01:51:14.698",
+        "type": "Reserva"
+    },
+    {
+        "id": "db6d6ff9-14c6-45ee-96cb-6de5b4ed62a5",
+        "userId": "cm69os4kb0000tf5he2ib8civ",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-02-21 15:00:00",
+        "createdAt": "2025-02-18 12:51:48.204",
+        "updatedAt": "2025-02-18 12:51:48.204",
+        "type": "Reserva"
+    },
+    {
+        "id": "df6ee878-9596-4530-8082-364ddff347f6",
+        "userId": "cm7anurc100007wqium6fqo3f",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-06-07 13:00:00",
+        "createdAt": "2025-02-18 17:58:45.981",
+        "updatedAt": "2025-02-18 17:58:45.981",
+        "type": "Reserva"
+    },
+    {
+        "id": "e117e9c0-8c7e-4f25-b719-bd1f21e9347c",
+        "userId": "cm7anurc100007wqium6fqo3f",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-05-17 13:00:00",
+        "createdAt": "2025-02-18 17:58:21.317",
+        "updatedAt": "2025-02-18 17:58:21.317",
+        "type": "Reserva"
+    },
+    {
+        "id": "e3482fe0-4d48-4320-b9e6-b6afc0fcdfad",
+        "userId": "cm69os4kb0000tf5he2ib8civ",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-02-20 21:00:00",
+        "createdAt": "2025-02-18 12:51:11.465",
+        "updatedAt": "2025-02-18 12:51:11.465",
+        "type": "Reserva"
+    },
+    {
+        "id": "eba4c0b2-32e3-4b2d-b8e0-48104e491050",
+        "userId": "cm7asc9jt000011qphybj2522",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-02-26 19:00:00",
+        "createdAt": "2025-02-18 17:56:17.724",
+        "updatedAt": "2025-02-18 17:56:17.724",
+        "type": "Reserva"
+    },
+    {
+        "id": "ec28bfd3-4a15-496f-a896-274bb79da997",
+        "userId": "cm7asfeoe000111qpz8sv4ug9",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-03-14 14:00:00",
+        "createdAt": "2025-02-18 18:41:30.83",
+        "updatedAt": "2025-02-18 18:41:30.83",
+        "type": "Reserva"
+    },
+    {
+        "id": "f0d57728-a905-4078-9174-4d18487aa242",
+        "userId": "cm7daqng70000k1cuexg5oj0t",
+        "serviceId": "35b59b8c-2fa3-48d3-8167-9f109a329375",
+        "date": "2025-02-22 13:00:00",
+        "createdAt": "2025-02-20 12:06:55.072",
+        "updatedAt": "2025-02-20 12:06:55.072",
+        "type": "Reserva"
+    },
+    {
+        "id": "f85c4158-21cd-456d-927a-4cfcebb86884",
+        "userId": "cm69os4kb0000tf5he2ib8civ",
+        "serviceId": "8172a2a8-e9e9-4b3c-a373-1e51a3136cb5",
+        "date": "2025-02-19 17:00:00",
+        "createdAt": "2025-02-19 01:25:59.645",
+        "updatedAt": "2025-02-19 01:25:59.645",
+        "type": "Reserva"
+    },
+    {
+        "id": "fc2d5979-8242-4389-afcc-adb37e4d0187",
+        "userId": "cm7anurc100007wqium6fqo3f",
+        "serviceId": "dec09322-44a4-4db8-b58e-2e446456a6ae",
+        "date": "2025-04-19 13:00:00",
+        "createdAt": "2025-02-18 17:57:48.072",
+        "updatedAt": "2025-02-18 17:57:48.072",
+        "type": "Reserva"
+    }
+]
