@@ -43,33 +43,34 @@ interface BookingItemProps {
       }
       user: true // Inclua o usuário associado à reserva
     }
-  }>,
-  isAdmin?: boolean; // Prop para identificar se é um administrador
+  }>
+  isAdmin?: boolean // Prop para identificar se é um administrador
 }
 
 // TODO: receber agendamento como prop
 const BookingItem = ({ booking, isAdmin = false }: BookingItemProps) => {
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const isConfirmed = isFuture(booking.date);
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
+  const isConfirmed = isFuture(booking.date)
 
   const handleCancelBooking = async () => {
+    console.log("Cancelando reserva ID:", booking.id)
     try {
-      await deleteBooking(booking.id);
-      setIsSheetOpen(false);
-      toast.success("Agendamento cancelado com sucesso!");
+      await deleteBooking(booking.id)
+      setIsSheetOpen(false)
+      toast.success("Agendamento cancelado com sucesso!")
     } catch (error) {
-      console.error(error);
-      toast.error("Erro ao cancelar reserva. Tente novamente.");
+      console.error(error)
+      toast.error("Erro ao cancelar reserva. Tente novamente.")
     }
-  };
+  }
 
   const handleSheetOpenChange = (isOpen: boolean) => {
-    setIsSheetOpen(isOpen);
-  };
+    setIsSheetOpen(isOpen)
+  }
 
   return (
     <Sheet open={isSheetOpen} onOpenChange={handleSheetOpenChange}>
-      <SheetTrigger className="w-full rounded-2xl sm:min-w-[47%] min-w-[100%]">
+      <SheetTrigger className="w-full min-w-[100%] rounded-2xl sm:min-w-[47%]">
         <Card className="min-w-[90%]">
           <CardContent className="flex justify-between p-0">
             {/* ESQUERDA */}
@@ -83,13 +84,19 @@ const BookingItem = ({ booking, isAdmin = false }: BookingItemProps) => {
               <h3 className="font-semibold">{booking.service.name}</h3>
               <div className="flex items-center gap-2">
                 <Avatar className="h-6 w-6">
-                  <AvatarImage src={booking.service.barber.imageUrl || "/default-avatar.png"} />
+                  <AvatarImage
+                    src={
+                      booking.service.barber.imageUrl || "/default-avatar.png"
+                    }
+                  />
                 </Avatar>
                 <p className="text-sm">{booking.service.barber.name}</p>
               </div>
               {isAdmin && booking.user && (
                 <div className="mt-4">
-                  <p className="text-sm font-medium">Cliente: {booking.user.name}</p>
+                  <p className="text-sm font-medium">
+                    Cliente: {booking.user.name}
+                  </p>
                 </div>
               )}
             </div>
@@ -144,7 +151,9 @@ const BookingItem = ({ booking, isAdmin = false }: BookingItemProps) => {
 
           {isAdmin && booking.user && (
             <div className="mt-4">
-              <p className="text-sm font-medium">Cliente: {booking.user.name}</p>
+              <p className="text-sm font-medium">
+                Cliente: {booking.user.name}
+              </p>
             </div>
           )}
 
@@ -207,7 +216,7 @@ const BookingItem = ({ booking, isAdmin = false }: BookingItemProps) => {
         </SheetFooter>
       </SheetContent>
     </Sheet>
-  );
-};
+  )
+}
 
-export default BookingItem;
+export default BookingItem

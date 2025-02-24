@@ -82,21 +82,21 @@ model BarberServices {
   price       Decimal   @db.Decimal(10, 2)
   barberId    String
   barber      Barber    @relation(fields: [barberId], references: [id])
-  bookings    Booking[]
+  bookings    Booking[] 
 }
 
 model Booking {
   id        String         @id @default(uuid())
   userId    String
+  barberId  String
   user      User           @relation(fields: [userId], references: [id])
   serviceId String
-  service   BarberServices @relation(fields: [serviceId], references: [id])
-  barberId  String
-  barber    Barber         @relation(fields: [barberId], references: [id])
+  service   BarberServices @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   date      DateTime
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
   type      String         @default("Reserva")
+  barber    Barber         @relation(fields: [barberId], references: [id])
 }
 
 model Block {

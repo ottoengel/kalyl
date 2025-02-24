@@ -5,7 +5,6 @@ import { Button } from "@/app/_components/ui/button"
 import { Sheet, SheetTrigger } from "@/app/_components/ui/sheet"
 import { db } from "@/app/_lib/prisma"
 import { ChevronLeftIcon, MenuIcon } from "lucide-react"
-import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
@@ -34,13 +33,7 @@ const BarbersPage = async ({ params }: BarberPageProps) => {
   return (
     <div>
       {/* IMAGEM */}
-      <div className="relative h-[350px] w-full">
-        <Image
-          alt={barber?.name}
-          src={barber?.imageUrl}
-          fill
-          className="object-cover object-[center_8%]"
-        />
+      <div className="relative h-[50px] w-full">
 
         <Button
           size="icon"

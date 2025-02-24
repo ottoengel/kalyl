@@ -91,12 +91,13 @@ const Dashboard = () => {
     })
   }
 
-  const hours = Array.from({ length: 20 }, (_, i) => {
-    const hour = 9 + Math.floor(i / 2);
-    const minutes = i % 2 === 0 ? "00" : "30";
-    return `${hour}:${minutes}`;
+  const hours = Array.from({ length: 10 }, (_, i) => {
+    const hour = 9 + i; 
+    return `${hour}:00`;
   });
+  
 
+  
   const selectedDate = useMemo(() => {
     if (!selectedDay || !selectedHour) return
     return set(selectedDay, {
@@ -320,83 +321,5 @@ interface CalendarProps {
   }>;
 }
 
-//const Calendar: React.FC<CalendarProps> = ({ adminConfirmedBlock }) => {
-// const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-// const [selectedHour, setSelectedHour] = useState<string | null>(null);
-
-// const hours = Array.from({ length: 20 }, (_, i) => {
-//   const hour = 9 + Math.floor(i / 2);
-//   const minutes = i % 2 === 0 ? "00" : "30";
-//   return `${hour}:${minutes}`;
-// });
-
-// const handleToggleAvailability = async () => {
-//   try {
-//     if (!selectedDate) {
-//       return
-//     }
-//     await createBlock({
-//       date: selectedDate,
-//     })
-//     toast.success("Reserva criada com sucesso!", {
-//       action: {
-//         label: "Ver Agendamentos",
-//         onClick: () => router.push("/block"),
-//       },
-//     })
-//   } catch (error) {
-//     console.error(error)
-//     toast.error("Erro ao criar reserva!")
-//   }
-// };
-
-{/* {selectedDate && (
-        <div>
-          <h3 className="text-lg font-semibold mt-4 mb-2 text-center">
-            Horários para {selectedDate.toLocaleDateString()}
-          </h3>
-          <div className="grid grid-cols-4 gap-4">
-            {hours.map((hour) => (
-              <button
-                key={hour}
-                className={`p-3 rounded-lg text-center transition-colors duration-200 ${selectedHour === hour
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-800 hover:bg-gray-700"
-                  }`}
-                onClick={() => setSelectedHour(hour)}
-              >
-                {hour}
-              </button>
-            ))}
-          </div>
-
-          {selectedHour && (
-            <div className="mt-6 text-center">
-              <p className="mb-4">Horário selecionado: {selectedHour}</p>
-              <button
-                onClick={handleToggleAvailability}
-                className={`px-4 py-2 rounded-lg ${adminConfirmedBookings.some(
-                  (booking) =>
-                    new Date(booking.date).toISOString() ===
-                    new Date(selectedDate).toISOString()
-                )
-                    ? "bg-red-600 hover:bg-red-700 text-white"
-                    : "bg-green-600 hover:bg-green-700 text-white"
-                  }`}
-              >
-                {adminConfirmedBookings.some(
-                  (booking) =>
-                    new Date(booking.date).toISOString() ===
-                    new Date(selectedDate).toISOString()
-                )
-                  ? "Desbloquear Horário"
-                  : "Bloquear Horário"}
-              </button>
-
-            </div>
-          )}
-        </div>
-      )} */}
-//};
 
 export default Dashboard;

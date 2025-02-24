@@ -8,10 +8,22 @@ import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog"
 import { signOut, useSession } from "next-auth/react"
 import { Avatar, AvatarImage } from "./ui/avatar"
 import SignInDialog from "./sign-in-dialog"
+import { useState } from "react"
 
 const SidebarSheet = () => {
+  const [signInDialogIsOpen, setSignInDialogIsOpen] = useState(false)
+
   const { data } = useSession()
+
   const handleLogoutClick = () => signOut()
+
+  const handleBookingClick = (e: { preventDefault: () => void }) => {
+    if (!data?.user) {
+      e.preventDefault() // Evita o redirecionamento
+      setSignInDialogIsOpen(true)
+    }
+  }
+
   return (
     <SheetContent className="overflow-y-auto">
       <SheetHeader>
@@ -19,7 +31,6 @@ const SidebarSheet = () => {
       </SheetHeader>
 
       <div className="flex items-center justify-between gap-3 border-b border-solid py-5">
-        {/* se tiver um data.user é porque você está logado e irá renderizar isso */}
         {data?.user ? (
           <div className="flex items-center gap-2">
             <Avatar>
@@ -34,7 +45,10 @@ const SidebarSheet = () => {
         ) : (
           <>
             <h2 className="font-bold">Olá, faça seu login!</h2>
-            <Dialog>
+            <Dialog 
+              open={signInDialogIsOpen}
+              onOpenChange={(open) => setSignInDialogIsOpen(open)}
+            >
               <DialogTrigger asChild>
                 <Button size="icon" className="bg-[#F6484B]" variant="outline">
                   <LogInIcon />
@@ -60,24 +74,13 @@ const SidebarSheet = () => {
         <Button className="justify-start gap-2" variant="ghost" asChild>
           <Link
             href={data?.user?.role === "ADMIN" ? "/dashboard" : "/bookings"}
+            onClick={handleBookingClick}
           >
             <CalendarIcon size={18} />
             {data?.user?.role === "ADMIN" ? "Dashboard" : "Agendamentos"}
           </Link>
         </Button>
       </div>
-
-      {/* Link "Dashboard" visível apenas para administradores */}
-      {/* {data?.user?.role === "ADMIN" && (
-        <SheetClose asChild>
-          <Button className="justify-start gap-2" variant="ghost" asChild>
-            <Link href="/dashboard">
-              <CalendarIcon size={18} />
-              Dashboard
-            </Link>
-          </Button>
-        </SheetClose>
-      )} */}
 
       {data?.user && (
         <div className="flex flex-col gap-2 py-5">
