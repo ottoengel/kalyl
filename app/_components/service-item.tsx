@@ -47,6 +47,7 @@ interface GetTimeListProps {
   bookings: Booking[]
   selectedDay: Date
   block: Block[]
+  barberId: string
 }
 
 interface Block {
@@ -57,7 +58,12 @@ interface Block {
   updatedAt: Date
 }
 
-const getTimeList = ({ block, bookings, selectedDay }: GetTimeListProps) => {
+const getTimeList = ({
+  block,
+  bookings,
+  selectedDay,
+  barberId,
+}: GetTimeListProps) => {
   return TIME_LIST.filter((time) => {
     const hour = Number(time.split(":")[0])
     const minutes = Number(time.split(":")[1])
@@ -69,7 +75,7 @@ const getTimeList = ({ block, bookings, selectedDay }: GetTimeListProps) => {
 
     const hasBookingOnCurrentTime = bookings.some(
       (booking) =>
-        booking.barberId === barber.id && // Verifica se o barbeiro é o mesmo
+        booking.barberId === barberId && // ✅ Agora está correto
         booking.date.getHours() === hour &&
         booking.date.getMinutes() === minutes,
     )
@@ -157,6 +163,7 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
         serviceId: service.id,
         date: selectedDate,
         type: "Reserva",
+        barberId: barber.id,
       })
       handleBookingSheetOpenChange()
       toast.success("Reserva criada com sucesso!", {
@@ -178,8 +185,9 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
       bookings: dayBookings,
       selectedDay,
       block: dayBlock,
+      barberId: barber.id, // ✅ Agora está passando corretamente
     })
-  }, [dayBookings, dayBlock, selectedDay])
+  }, [dayBookings, dayBlock, selectedDay, barber.id])
 
   return (
     <>
