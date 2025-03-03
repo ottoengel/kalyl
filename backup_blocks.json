@@ -1,0 +1,733 @@
+[
+  {
+    "id": "3f480488-81bc-482a-9d1e-413abe9b0f55",
+    "userId": "cm2ukm9h00000vqw7gw72u0ka",
+    "date": "2025-01-23T13:00:00.000Z",
+    "createdAt": "2025-01-19T20:59:27.793Z",
+    "updatedAt": "2025-01-19T20:59:27.793Z",
+    "user": {
+      "id": "cm2ukm9h00000vqw7gw72u0ka",
+      "name": "Samuel Guibor",
+      "email": "mucaguibor@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocKklki0uOS55XfXmwVT3Bb8XRGe1Uf7CNAvf5JJmjLmJoNOD87SlQ=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2024-10-29T14:56:31.080Z",
+      "updatedAt": "2025-01-09T19:44:40.822Z"
+    }
+  },
+  {
+    "id": "fa9fe130-4812-4cc4-8b98-9491910882c8",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-02-20T12:00:00.000Z",
+    "createdAt": "2025-02-19T01:50:00.630Z",
+    "updatedAt": "2025-02-19T01:50:00.630Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "b609196c-c7c7-4cd9-8c96-c4a50b3d6717",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-02-19T20:00:00.000Z",
+    "createdAt": "2025-02-19T11:39:22.621Z",
+    "updatedAt": "2025-02-19T11:39:22.621Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "58fc44c8-076b-41d6-a9b3-1894f04a8eaa",
+    "userId": "cm2ukm9h00000vqw7gw72u0ka",
+    "date": "2025-02-21T21:00:00.000Z",
+    "createdAt": "2025-02-20T16:15:26.434Z",
+    "updatedAt": "2025-02-20T16:15:26.434Z",
+    "user": {
+      "id": "cm2ukm9h00000vqw7gw72u0ka",
+      "name": "Samuel Guibor",
+      "email": "mucaguibor@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocKklki0uOS55XfXmwVT3Bb8XRGe1Uf7CNAvf5JJmjLmJoNOD87SlQ=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2024-10-29T14:56:31.080Z",
+      "updatedAt": "2025-01-09T19:44:40.822Z"
+    }
+  },
+  {
+    "id": "c2c6d02b-61c1-49ee-aa64-35f90c8bb2c2",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-02-22T20:00:00.000Z",
+    "createdAt": "2025-02-21T11:44:27.206Z",
+    "updatedAt": "2025-02-21T11:44:27.206Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "0d8437f4-4732-42fa-ad01-7a9685454131",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-02-22T19:00:00.000Z",
+    "createdAt": "2025-02-21T11:44:29.207Z",
+    "updatedAt": "2025-02-21T11:44:29.207Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "82276497-73b1-4f5d-ad4e-1e717f94011b",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-02-22T18:00:00.000Z",
+    "createdAt": "2025-02-21T11:44:31.108Z",
+    "updatedAt": "2025-02-21T11:44:31.108Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "4f167036-4024-438c-8de4-d5ba6d033d39",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-02-24T21:00:00.000Z",
+    "createdAt": "2025-02-21T11:44:46.968Z",
+    "updatedAt": "2025-02-21T11:44:46.968Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "04317772-2e57-4bf5-ac77-3a0524ef9671",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-01T21:00:00.000Z",
+    "createdAt": "2025-02-24T14:54:51.467Z",
+    "updatedAt": "2025-02-24T14:54:51.467Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "86e8585f-453a-4297-984b-c385615662ff",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-01T20:00:00.000Z",
+    "createdAt": "2025-02-24T14:54:53.516Z",
+    "updatedAt": "2025-02-24T14:54:53.516Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "ff7b34a3-9ed5-4d9f-b7e7-404150c5da5b",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-01T19:00:00.000Z",
+    "createdAt": "2025-02-24T14:54:55.043Z",
+    "updatedAt": "2025-02-24T14:54:55.043Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "f86ea4ab-68f0-4c7f-8389-df0665aa078e",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-03T12:00:00.000Z",
+    "createdAt": "2025-02-28T11:35:56.208Z",
+    "updatedAt": "2025-02-28T11:35:56.208Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "76e5b8d8-cdb3-46ae-bd6e-e3ae6c600585",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-03T13:00:00.000Z",
+    "createdAt": "2025-02-28T11:35:58.268Z",
+    "updatedAt": "2025-02-28T11:35:58.268Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "46ce8436-7df3-4da4-b0d8-af39ee22a0fe",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-03T14:00:00.000Z",
+    "createdAt": "2025-02-28T11:35:59.908Z",
+    "updatedAt": "2025-02-28T11:35:59.908Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "d9c3b5cd-a47f-40f2-a661-b40bd5d1390a",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-03T15:00:00.000Z",
+    "createdAt": "2025-02-28T11:36:01.237Z",
+    "updatedAt": "2025-02-28T11:36:01.237Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "4a9b6f9f-7cb9-4f6f-bccc-791b4df69620",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-03T16:00:00.000Z",
+    "createdAt": "2025-02-28T11:36:02.485Z",
+    "updatedAt": "2025-02-28T11:36:02.485Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "01249b41-d33b-410e-b1f6-d8d5d77bfdee",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-03T17:00:00.000Z",
+    "createdAt": "2025-02-28T11:36:04.001Z",
+    "updatedAt": "2025-02-28T11:36:04.001Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "b17ce775-40d0-4cec-9816-aae9f3d47005",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-03T18:00:00.000Z",
+    "createdAt": "2025-02-28T11:36:05.275Z",
+    "updatedAt": "2025-02-28T11:36:05.275Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "706a01e6-13d7-4769-8b1b-5b2cde9cb8bb",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-03T19:00:00.000Z",
+    "createdAt": "2025-02-28T11:36:06.801Z",
+    "updatedAt": "2025-02-28T11:36:06.801Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "7515ac7a-ca7f-40d4-9b36-e94d5597266f",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-03T20:00:00.000Z",
+    "createdAt": "2025-02-28T11:36:08.032Z",
+    "updatedAt": "2025-02-28T11:36:08.032Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "c6929cbb-31bd-4a3a-a335-6ad6708c687e",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-03T21:00:00.000Z",
+    "createdAt": "2025-02-28T11:36:09.289Z",
+    "updatedAt": "2025-02-28T11:36:09.289Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "5f57aa23-add5-445d-bc93-c3ee037a5b40",
+    "userId": "cm3ofcxcu0000yfk8pg5n2300",
+    "date": "2025-03-02T12:00:00.000Z",
+    "createdAt": "2025-03-01T18:37:12.262Z",
+    "updatedAt": "2025-03-01T18:37:12.262Z",
+    "user": {
+      "id": "cm3ofcxcu0000yfk8pg5n2300",
+      "name": "lucas freitas (lk)",
+      "email": "lucascfp31@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocJlEFP7mwLoVtk7XEeCNOk8Em8Jvb0ReXv89O-roHsJxHjvZApt=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2024-11-19T12:22:22.686Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "9f7dbcc7-ca72-4a95-b892-8d990756db04",
+    "userId": "cm3ofcxcu0000yfk8pg5n2300",
+    "date": "2025-03-02T12:00:00.000Z",
+    "createdAt": "2025-03-01T18:37:14.117Z",
+    "updatedAt": "2025-03-01T18:37:14.117Z",
+    "user": {
+      "id": "cm3ofcxcu0000yfk8pg5n2300",
+      "name": "lucas freitas (lk)",
+      "email": "lucascfp31@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocJlEFP7mwLoVtk7XEeCNOk8Em8Jvb0ReXv89O-roHsJxHjvZApt=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2024-11-19T12:22:22.686Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "191a4619-85c4-45b5-8002-dff168ab84b0",
+    "userId": "cm3ofcxcu0000yfk8pg5n2300",
+    "date": "2025-03-02T13:00:00.000Z",
+    "createdAt": "2025-03-01T18:37:15.860Z",
+    "updatedAt": "2025-03-01T18:37:15.860Z",
+    "user": {
+      "id": "cm3ofcxcu0000yfk8pg5n2300",
+      "name": "lucas freitas (lk)",
+      "email": "lucascfp31@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocJlEFP7mwLoVtk7XEeCNOk8Em8Jvb0ReXv89O-roHsJxHjvZApt=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2024-11-19T12:22:22.686Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "9cc9c4b3-7ee6-4d98-9c57-65ed30570528",
+    "userId": "cm3ofcxcu0000yfk8pg5n2300",
+    "date": "2025-03-02T13:00:00.000Z",
+    "createdAt": "2025-03-01T18:37:16.773Z",
+    "updatedAt": "2025-03-01T18:37:16.773Z",
+    "user": {
+      "id": "cm3ofcxcu0000yfk8pg5n2300",
+      "name": "lucas freitas (lk)",
+      "email": "lucascfp31@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocJlEFP7mwLoVtk7XEeCNOk8Em8Jvb0ReXv89O-roHsJxHjvZApt=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2024-11-19T12:22:22.686Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "3c549aec-4886-429d-bda5-95186ecd4d85",
+    "userId": "cm3ofcxcu0000yfk8pg5n2300",
+    "date": "2025-03-02T14:00:00.000Z",
+    "createdAt": "2025-03-01T18:37:20.485Z",
+    "updatedAt": "2025-03-01T18:37:20.485Z",
+    "user": {
+      "id": "cm3ofcxcu0000yfk8pg5n2300",
+      "name": "lucas freitas (lk)",
+      "email": "lucascfp31@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocJlEFP7mwLoVtk7XEeCNOk8Em8Jvb0ReXv89O-roHsJxHjvZApt=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2024-11-19T12:22:22.686Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "f824f5e9-b0ea-44a9-b8d7-fc36a8a9f3f9",
+    "userId": "cm3ofcxcu0000yfk8pg5n2300",
+    "date": "2025-03-02T15:00:00.000Z",
+    "createdAt": "2025-03-01T18:37:23.580Z",
+    "updatedAt": "2025-03-01T18:37:23.580Z",
+    "user": {
+      "id": "cm3ofcxcu0000yfk8pg5n2300",
+      "name": "lucas freitas (lk)",
+      "email": "lucascfp31@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocJlEFP7mwLoVtk7XEeCNOk8Em8Jvb0ReXv89O-roHsJxHjvZApt=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2024-11-19T12:22:22.686Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "6819d130-0791-4cd2-96ad-cf1441c2519b",
+    "userId": "cm3ofcxcu0000yfk8pg5n2300",
+    "date": "2025-03-02T16:00:00.000Z",
+    "createdAt": "2025-03-01T18:37:25.382Z",
+    "updatedAt": "2025-03-01T18:37:25.382Z",
+    "user": {
+      "id": "cm3ofcxcu0000yfk8pg5n2300",
+      "name": "lucas freitas (lk)",
+      "email": "lucascfp31@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocJlEFP7mwLoVtk7XEeCNOk8Em8Jvb0ReXv89O-roHsJxHjvZApt=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2024-11-19T12:22:22.686Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "e21bd4b6-b256-41a7-b6db-4ad98a9f9ce2",
+    "userId": "cm3ofcxcu0000yfk8pg5n2300",
+    "date": "2025-03-02T17:00:00.000Z",
+    "createdAt": "2025-03-01T18:37:26.554Z",
+    "updatedAt": "2025-03-01T18:37:26.554Z",
+    "user": {
+      "id": "cm3ofcxcu0000yfk8pg5n2300",
+      "name": "lucas freitas (lk)",
+      "email": "lucascfp31@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocJlEFP7mwLoVtk7XEeCNOk8Em8Jvb0ReXv89O-roHsJxHjvZApt=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2024-11-19T12:22:22.686Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "fb83d972-0bf5-4b5b-a46a-d980f19064a9",
+    "userId": "cm3ofcxcu0000yfk8pg5n2300",
+    "date": "2025-03-02T18:00:00.000Z",
+    "createdAt": "2025-03-01T18:37:27.241Z",
+    "updatedAt": "2025-03-01T18:37:27.241Z",
+    "user": {
+      "id": "cm3ofcxcu0000yfk8pg5n2300",
+      "name": "lucas freitas (lk)",
+      "email": "lucascfp31@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocJlEFP7mwLoVtk7XEeCNOk8Em8Jvb0ReXv89O-roHsJxHjvZApt=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2024-11-19T12:22:22.686Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "57cc46a9-6173-4467-a8c0-d8521b70a97d",
+    "userId": "cm3ofcxcu0000yfk8pg5n2300",
+    "date": "2025-03-02T19:00:00.000Z",
+    "createdAt": "2025-03-01T18:37:28.270Z",
+    "updatedAt": "2025-03-01T18:37:28.270Z",
+    "user": {
+      "id": "cm3ofcxcu0000yfk8pg5n2300",
+      "name": "lucas freitas (lk)",
+      "email": "lucascfp31@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocJlEFP7mwLoVtk7XEeCNOk8Em8Jvb0ReXv89O-roHsJxHjvZApt=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2024-11-19T12:22:22.686Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "7d85a6e4-0fd4-4123-977a-074d4934ec95",
+    "userId": "cm3ofcxcu0000yfk8pg5n2300",
+    "date": "2025-03-02T20:00:00.000Z",
+    "createdAt": "2025-03-01T18:37:29.257Z",
+    "updatedAt": "2025-03-01T18:37:29.257Z",
+    "user": {
+      "id": "cm3ofcxcu0000yfk8pg5n2300",
+      "name": "lucas freitas (lk)",
+      "email": "lucascfp31@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocJlEFP7mwLoVtk7XEeCNOk8Em8Jvb0ReXv89O-roHsJxHjvZApt=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2024-11-19T12:22:22.686Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "ea73b59c-627e-4ba6-bde8-bc879bffea6a",
+    "userId": "cm3ofcxcu0000yfk8pg5n2300",
+    "date": "2025-03-02T21:00:00.000Z",
+    "createdAt": "2025-03-01T18:37:30.061Z",
+    "updatedAt": "2025-03-01T18:37:30.061Z",
+    "user": {
+      "id": "cm3ofcxcu0000yfk8pg5n2300",
+      "name": "lucas freitas (lk)",
+      "email": "lucascfp31@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocJlEFP7mwLoVtk7XEeCNOk8Em8Jvb0ReXv89O-roHsJxHjvZApt=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2024-11-19T12:22:22.686Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "2348981c-8d0d-4711-99b1-e27829c4fa8e",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-04T16:00:00.000Z",
+    "createdAt": "2025-03-03T19:18:55.764Z",
+    "updatedAt": "2025-03-03T19:18:55.764Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "bf95553c-0537-4a77-90c4-e23e9f53a672",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-04T17:00:00.000Z",
+    "createdAt": "2025-03-03T19:19:26.411Z",
+    "updatedAt": "2025-03-03T19:19:26.411Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "1d5c7ac8-6920-49bd-aa96-b9818b0c4232",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-04T18:00:00.000Z",
+    "createdAt": "2025-03-03T19:19:28.462Z",
+    "updatedAt": "2025-03-03T19:19:28.462Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "a87c5964-99d6-4666-bcba-2accc6e38047",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-04T19:00:00.000Z",
+    "createdAt": "2025-03-03T19:19:29.885Z",
+    "updatedAt": "2025-03-03T19:19:29.885Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "9ce561c4-2d0c-4334-b034-dad5e9d93483",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-04T20:00:00.000Z",
+    "createdAt": "2025-03-03T19:19:31.229Z",
+    "updatedAt": "2025-03-03T19:19:31.229Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "90e19884-f89a-46d8-8ee8-8c9f4983c501",
+    "userId": "cm69os4kb0000tf5he2ib8civ",
+    "date": "2025-03-04T21:00:00.000Z",
+    "createdAt": "2025-03-03T19:19:32.376Z",
+    "updatedAt": "2025-03-03T19:19:32.376Z",
+    "user": {
+      "id": "cm69os4kb0000tf5he2ib8civ",
+      "name": "Kalyl Cordeiro Piekarski",
+      "email": "kalyl.piekarski@hotmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocL4qu58Nld_IPQcatnJIU6p3cVXrAjp8nkMwg9qF86bUb0s7g=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2025-01-23T18:48:42.780Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "dd48e418-5a74-4cb3-b1df-dc1de3a38765",
+    "userId": "cm3ofcxcu0000yfk8pg5n2300",
+    "date": "2025-03-04T12:00:00.000Z",
+    "createdAt": "2025-03-03T20:57:00.921Z",
+    "updatedAt": "2025-03-03T20:57:00.921Z",
+    "user": {
+      "id": "cm3ofcxcu0000yfk8pg5n2300",
+      "name": "lucas freitas (lk)",
+      "email": "lucascfp31@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocJlEFP7mwLoVtk7XEeCNOk8Em8Jvb0ReXv89O-roHsJxHjvZApt=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2024-11-19T12:22:22.686Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "a3830e2f-c1cf-4387-87d0-366379482977",
+    "userId": "cm3ofcxcu0000yfk8pg5n2300",
+    "date": "2025-03-04T13:00:00.000Z",
+    "createdAt": "2025-03-03T20:57:02.170Z",
+    "updatedAt": "2025-03-03T20:57:02.170Z",
+    "user": {
+      "id": "cm3ofcxcu0000yfk8pg5n2300",
+      "name": "lucas freitas (lk)",
+      "email": "lucascfp31@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocJlEFP7mwLoVtk7XEeCNOk8Em8Jvb0ReXv89O-roHsJxHjvZApt=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2024-11-19T12:22:22.686Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "75521d2f-75ba-4918-a4e3-ad50663bdf39",
+    "userId": "cm3ofcxcu0000yfk8pg5n2300",
+    "date": "2025-03-04T14:00:00.000Z",
+    "createdAt": "2025-03-03T20:57:04.623Z",
+    "updatedAt": "2025-03-03T20:57:04.623Z",
+    "user": {
+      "id": "cm3ofcxcu0000yfk8pg5n2300",
+      "name": "lucas freitas (lk)",
+      "email": "lucascfp31@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocJlEFP7mwLoVtk7XEeCNOk8Em8Jvb0ReXv89O-roHsJxHjvZApt=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2024-11-19T12:22:22.686Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  },
+  {
+    "id": "0c1a4ea4-400c-4557-92d3-363b019d4c9e",
+    "userId": "cm3ofcxcu0000yfk8pg5n2300",
+    "date": "2025-03-04T15:00:00.000Z",
+    "createdAt": "2025-03-03T20:57:06.167Z",
+    "updatedAt": "2025-03-03T20:57:06.167Z",
+    "user": {
+      "id": "cm3ofcxcu0000yfk8pg5n2300",
+      "name": "lucas freitas (lk)",
+      "email": "lucascfp31@gmail.com",
+      "emailVerified": null,
+      "image": "https://lh3.googleusercontent.com/a/ACg8ocJlEFP7mwLoVtk7XEeCNOk8Em8Jvb0ReXv89O-roHsJxHjvZApt=s96-c",
+      "role": "ADMIN",
+      "createdAt": "2024-11-19T12:22:22.686Z",
+      "updatedAt": "2025-01-23T18:53:30.288Z"
+    }
+  }
+]

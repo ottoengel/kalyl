@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import Header from "../_components/header";
 import { notFound } from "next/navigation";
 import { getAdminConfirmedBookings } from "../_data/get-admin-confirmed-bookings";
@@ -24,6 +24,7 @@ import { deleteBlock } from "../_actions/delete-block";
 const Dashboard = () => {
   const [adminConfirmedBlock, setAdminConfirmedBookings] = useState<Block[]>([]);
   const [adminConcludedBlock, setAdminConcludedBookings] = useState<Block[]>([]);
+  const [barber, setBarber] = useState<{ id: string } | null>(null);
 
   const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
@@ -41,6 +42,9 @@ const Dashboard = () => {
         notFound();
         return;
       }
+
+      const barberData = session.user.barberId; // Verifique se esse campo existe
+      setBarber(barberData);
 
       setIsAdmin(true);
       const confirmedBlock = await getAdminConfirmedBookings();
@@ -67,9 +71,15 @@ const Dashboard = () => {
   interface GetTimeListProps {
     block: Block[]
     selectedDay: Date
+    barberId: string
   }
 
-  const getTimeList = ({ block, selectedDay }: GetTimeListProps) => {
+  const hours = Array.from({ length: 10 }, (_, i) => {
+    const hour = 9 + i; 
+    return `${hour}:00`;
+  });
+
+  const getTimeList = useCallback(({ block, selectedDay, barberId }: GetTimeListProps) => {
     return hours.filter((time) => {
       const hour = Number(time.split(":")[0])
       const minutes = Number(time.split(":")[1])
@@ -81,6 +91,7 @@ const Dashboard = () => {
 
       const hasBookingOnCurrentTime = block.some(
         (block) =>
+          block.barberId === barberId &&
           block.date.getHours() === hour &&
           block.date.getMinutes() === minutes,
       )
@@ -89,14 +100,7 @@ const Dashboard = () => {
       // }
       return true
     })
-  }
-
-  const hours = Array.from({ length: 10 }, (_, i) => {
-    const hour = 9 + i; 
-    return `${hour}:00`;
-  });
-  
-
+  }, [hours]);
   
   const selectedDate = useMemo(() => {
     if (!selectedDay || !selectedHour) return
@@ -122,6 +126,7 @@ const Dashboard = () => {
 
         await createBlock({
           date: selectedDate,
+          barberId: barber?.id ?? ""
         });
         toast.success("Horario bloqueado com Sucesso!", {
         });
@@ -143,12 +148,14 @@ const Dashboard = () => {
   }
 
   const timeList = useMemo(() => {
-    if (!selectedDay) return []
+    if (!selectedDay) return [];
     return getTimeList({
       block: dayBlock,
       selectedDay,
-    })
-  }, [dayBlock, selectedDay])
+      barberId: barber?.id ?? "",
+    });
+  }, [dayBlock, selectedDay, barber?.id, getTimeList]);
+  
 
   if (!isAdmin) {
     return null;

@@ -8,6 +8,7 @@ import { authOptions } from "../_lib/auth"
 
 interface createBlock {
   date: Date
+  barberId: string
 }
 
 export const createBlock = async (params: createBlock) => {
