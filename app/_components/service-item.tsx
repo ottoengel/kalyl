@@ -58,7 +58,12 @@ interface Block {
   updatedAt: Date
 }
 
-const getTimeList = ({ block, bookings, selectedDay, barberId}: GetTimeListProps) => {
+const getTimeList = ({
+  block,
+  bookings,
+  selectedDay,
+  barberId,
+}: GetTimeListProps) => {
   return TIME_LIST.filter((time) => {
     const hour = Number(time.split(":")[0])
     const minutes = Number(time.split(":")[1])
@@ -73,7 +78,7 @@ const getTimeList = ({ block, bookings, selectedDay, barberId}: GetTimeListProps
         booking.barberId === barberId && // ✅ Agora está correto
         booking.date.getHours() === hour &&
         booking.date.getMinutes() === minutes,
-    )    
+    )
 
     const isBlocked = block.some(
       (block) =>
@@ -158,7 +163,7 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
         serviceId: service.id,
         date: selectedDate,
         type: "Reserva",
-        barberId: barber.id
+        barberId: barber.id,
       })
       handleBookingSheetOpenChange()
       toast.success("Reserva criada com sucesso!", {
@@ -167,7 +172,7 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
           onClick: () => router.push("/bookings"),
         },
       })
-      router.refresh();
+      router.refresh()
     } catch (error) {
       console.error(error)
       toast.error("Erro ao criar reserva!")
