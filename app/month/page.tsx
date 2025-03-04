@@ -29,6 +29,7 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "../ui/dialog"
+import Image from "next/image";
 
 const Month = () => {
     const { data } = useSession()
@@ -42,10 +43,10 @@ const Month = () => {
                 <div className="relative isolate px-6 sm:pt-20 sm:px-12 md:px-20 lg:px-36">
                     <div className="absolute inset-x-0 -top-3 -z-10 transform-gpu blur-3xl" style={{ pointerEvents: 'none' }}>
                         <div
-                            className="mx-auto aspect-[1155/678] max-w-[1155px] w-full bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
+                            className="absolute mx-auto aspect-[1255/678] max-w-[1355px] w-full bg-gradient-to-tr from-[#ff6868] to-[#9089fc] opacity-25"
                             style={{
                                 clipPath:
-                                    "polygon(74.1% 64.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 52%, 80.7% 25%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 62.5% 58.3%, 45.2% 34.5%, 97.5% 6.7%, 1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 79.1%)",
+                                "polygon(94.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 75.5% 0.1%, 85.7% 20%, 92.5% 32.5%, 2.2% 62.4%, 12.4% 78.1%, 47.5% 58.3%, 25.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 20%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
                             }}
                         ></div>
                     </div>
@@ -74,8 +75,8 @@ const Month = () => {
                             <dd className="order-first text-3xl font-semibold tracking-tight text-white sm:text-5xl">R$ 240,00</dd>
                         </div>
                         <div className="mx-auto flex max-w-xs flex-col gap-y-4">
-                            <dt className="text-base/7 text-gray-500">Tempo Total Mensalista</dt>
-                            <dd className="order-first text-3xl font-semibold tracking-tight text-white sm:text-5xl">365 Dias</dd>
+                            <dt className="text-base/7 text-gray-500">Barbeiro Mensalista</dt>
+                            <dd className="order-first text-3xl font-semibold tracking-tight text-white sm:text-5xl">Kalyl</dd>
                         </div>
                         <div className="mx-auto flex max-w-xs flex-col gap-y-4">
                             <dt className="text-base/7 text-gray-500">Plano Atual</dt>
@@ -130,12 +131,21 @@ const Month = () => {
                         <div className="flex flex-row items-center justify-center gap-3">
                             <Select>
                                 <SelectTrigger className="w-[210px]">
-                                    <SelectValue placeholder="Selecione" />
+                                    <SelectValue placeholder="Selecione o serviço" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="barba">Mensalista Barba</SelectItem>
                                     <SelectItem value="cabelo">Mensalista Cabelo</SelectItem>
                                     <SelectItem value="cabeloebarba">Mensalista Cabelo e Barba</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <Select>
+                                <SelectTrigger className="w-[210px]">
+                                    <SelectValue placeholder="Selecione o Barbeiro" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="barba">Kalyl</SelectItem>
+                                    <SelectItem value="cabelo">Lucas</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>

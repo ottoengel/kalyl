@@ -19,7 +19,7 @@ const Panel = () => {
             <Header />
             <div>
                 <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
-                    <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                    <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                         <div className="text-center">
                             <div className="flex items-center justify-center w-10 h-10 mx-auto mb-3 rounded-full bg-red-500 sm:w-12 sm:h-12">
                                 <svg className="w-8 h-8 text-deep-purple-accent-400 sm:w-10 sm:h-10" stroke="currentColor" viewBox="0 0 52 52">
@@ -27,7 +27,7 @@ const Panel = () => {
                                 </svg>
                             </div>
                             <h6 className="text-4xl font-bold text-deep-purple-accent-400">819</h6>
-                            <p className="mb-2 font-bold text-md">Downloads</p>
+                            <p className="mb-2 font-bold text-md">Usuarios</p>
                         </div>
                         <div className="text-center">
                             <div className="flex items-center justify-center w-10 h-10 mx-auto mb-3 rounded-full bg-red-500 sm:w-12 sm:h-12">
@@ -35,8 +35,8 @@ const Panel = () => {
                                     <polygon strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
                                 </svg>
                             </div>
-                            <h6 className="text-4xl font-bold text-deep-purple-accent-400">1.3K</h6>
-                            <p className="mb-2 font-bold text-md">Users</p>
+                            <h6 className="text-4xl font-bold text-deep-purple-accent-400">729</h6>
+                            <p className="mb-2 font-bold text-md">Usuarios Mensalistas</p>
                         </div>
                         <div className="text-center">
                             <div className="flex items-center justify-center w-10 h-10 mx-auto mb-3 rounded-full bg-red-500 sm:w-12 sm:h-12">
@@ -44,29 +44,25 @@ const Panel = () => {
                                     <polygon strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
                                 </svg>
                             </div>
-                            <h6 className="text-4xl font-bold text-deep-purple-accent-400">91</h6>
-                            <p className="mb-2 font-bold text-md">Subscribers</p>
-                        </div>
-                        <div className="text-center">
-                            <div className="flex items-center justify-center w-10 h-10 mx-auto mb-3 rounded-full bg-red-500 sm:w-12 sm:h-12">
-                                <svg className="w-8 h-8 text-deep-purple-accent-400 sm:w-10 sm:h-10" stroke="currentColor" viewBox="0 0 52 52">
-                                    <polygon strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
-                                </svg>
-                            </div>
-                            <h6 className="text-4xl font-bold text-deep-purple-accent-400">52</h6>
-                            <p className="mb-2 font-bold text-md">Products</p>
+                            <h6 className="text-4xl font-bold text-deep-purple-accent-400">1029</h6>
+                            <p className="mb-2 font-bold text-md">Cortes Feitos</p>
                         </div>
                     </div>
                 </div>
-
+                {/* Títulos Acima dos Gráficos */}
+                <div className="text-center mb-6">
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Visão Geral da Barbearia</h3>
+                </div>
                 {/* Gráficos */}
                 <div className="relative px-20 pb-20">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {/* Gráfico 1 */}
                         <div className="bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6">
+                            <h3 className="text-center text-xl font-bold text-gray-900 dark:text-white mb-4">Diario</h3>
                             <div className="flex justify-between">
                                 <div>
                                     <h5 className="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">32.4k</h5>
-                                    <p className="text-base font-normal text-gray-500 dark:text-gray-400">Users this week</p>
+                                    <p className="text-base font-normal text-gray-500 dark:text-gray-400">Clientes Atendidos No Dia</p>
                                 </div>
                                 <div className="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 dark:text-green-500 text-center">
                                     12%
@@ -81,11 +77,13 @@ const Panel = () => {
                             </div>
                         </div>
 
+                        {/* Gráfico 2 */}
                         <div className="bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6">
+                            <h3 className="text-center text-xl font-bold text-gray-900 dark:text-white mb-4">Tudo</h3>
                             <div className="flex justify-between">
                                 <div>
                                     <h5 className="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">45.8k</h5>
-                                    <p className="text-base font-normal text-gray-500 dark:text-gray-400">New Signups</p>
+                                    <p className="text-base font-normal text-gray-500 dark:text-gray-400">Faturamento Total</p>
                                 </div>
                                 <div className="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 dark:text-green-500 text-center">
                                     8%
@@ -100,11 +98,13 @@ const Panel = () => {
                             </div>
                         </div>
 
+                        {/* Gráfico 3 */}
                         <div className="bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6">
+                            <h3 className="text-center text-xl font-bold text-gray-900 dark:text-white mb-4">Mensal</h3>
                             <div className="flex justify-between">
                                 <div>
                                     <h5 className="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">21.3k</h5>
-                                    <p className="text-base font-normal text-gray-500 dark:text-gray-400">Active Users</p>
+                                    <p className="text-base font-normal text-gray-500 dark:text-gray-400">Clientes Atendidos no Mês</p>
                                 </div>
                                 <div className="flex items-center px-2.5 py-0.5 text-base font-semibold text-red-500 dark:text-red-500 text-center">
                                     -5%
@@ -174,8 +174,8 @@ const Panel = () => {
                                                 </div>
                                             </td>
                                             <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                                                    <Badge className="bg-emerald-600 hover:bg-emerald-500 text-white">Ativo</Badge>
+                                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                                <Badge className="bg-emerald-600 hover:bg-emerald-500 text-white">Ativo</Badge>
                                             </td>
                                             <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">Mensalista Cabelo e Barba</td>
                                             <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">authurmelo@example.com</td>

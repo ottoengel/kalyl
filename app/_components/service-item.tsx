@@ -53,6 +53,7 @@ interface GetTimeListProps {
 interface Block {
   id: string
   userId: string
+  barberId: string
   date: Date
   createdAt: Date
   updatedAt: Date
@@ -82,7 +83,9 @@ const getTimeList = ({
 
     const isBlocked = block.some(
       (block) =>
-        block.date.getHours() === hour && block.date.getMinutes() === minutes,
+        block.barberId === barberId && // ✅ Agora está correto
+        block.date.getHours() === hour &&
+        block.date.getMinutes() === minutes,
     )
 
     if (hasBookingOnCurrentTime || isBlocked) {
@@ -185,7 +188,7 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
       bookings: dayBookings,
       selectedDay,
       block: dayBlock,
-      barberId: barber.id, // ✅ Agora está passando corretamente
+      barberId: barber.id, // Passando corretamente o barberId
     })
   }, [dayBookings, dayBlock, selectedDay, barber.id])
 

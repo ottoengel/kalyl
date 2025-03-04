@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Header from "../_components/header";
 import { notFound } from "next/navigation";
 import { getAdminConfirmedBookings } from "../_data/get-admin-confirmed-bookings";
@@ -19,12 +19,27 @@ import { createBlock } from "../_actions/create-block";
 import { useRouter } from "next/navigation";
 import { isPast, isToday, set } from "date-fns";
 import { deleteBlock } from "../_actions/delete-block";
-
+import { getBarbers } from "../_actions/get-barber";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../_components/ui/select";
 
 const Dashboard = () => {
   const [adminConfirmedBlock, setAdminConfirmedBookings] = useState<Block[]>([]);
   const [adminConcludedBlock, setAdminConcludedBookings] = useState<Block[]>([]);
-  const [barber, setBarber] = useState<{ id: string } | null>(null);
+
+  const [selectedBarber, setSelectedBarber] = useState<string | undefined>(undefined);
+  const [barberss, setBarberss] = useState<{ id: string; name: string }[]>([]);
+
+  useEffect(() => {
+    const fetchBarbers = async () => {
+      try {
+        const barbersList = await getBarbers();
+        setBarberss(barbersList);
+      } catch (error) {
+        console.error("Erro ao buscar barbeiros:", error);
+      }
+    };
+    fetchBarbers();
+  }, []);
 
   const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
@@ -43,7 +58,6 @@ const Dashboard = () => {
         return;
       }
 
-      setBarber({ id: session.user.barberId }); // Garante que barberId não é null
       setIsAdmin(true);
       const confirmedBlock = await getAdminConfirmedBookings();
       const concludedBlock = await getAdminConcludedBookings();
@@ -57,14 +71,17 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      if (!selectedDay) return
+      if (!selectedDay || !selectedBarber) return;
       const blockings = await getBlock({
         date: selectedDay,
-      })
-      setDayBlock(blockings)
-    }
-    fetch()
-  }, [selectedDay])
+        barberId: selectedBarber,
+      });
+      console.log("Bloqueios retornados:", blockings);
+      setDayBlock(blockings);
+    };
+    fetch();
+  }, [selectedDay, selectedBarber]);
+
 
   interface GetTimeListProps {
     block: Block[]
@@ -72,12 +89,7 @@ const Dashboard = () => {
     barberId: string
   }
 
-  const hours = Array.from({ length: 10 }, (_, i) => {
-    const hour = 9 + i; 
-    return `${hour}:00`;
-  });
-
-  const getTimeList = useCallback(({ block, selectedDay, barberId }: GetTimeListProps) => {
+  const getTimeList = ({ block, selectedDay, barberId }: GetTimeListProps) => {
     return hours.filter((time) => {
       const hour = Number(time.split(":")[0])
       const minutes = Number(time.split(":")[1])
@@ -89,7 +101,7 @@ const Dashboard = () => {
 
       const hasBookingOnCurrentTime = block.some(
         (block) =>
-          block.barberId === barberId &&
+          block.barberId === barberId && // Filtra pelo barberId
           block.date.getHours() === hour &&
           block.date.getMinutes() === minutes,
       )
@@ -98,8 +110,13 @@ const Dashboard = () => {
       // }
       return true
     })
-  }, [hours]);
-  
+  }
+
+  const hours = Array.from({ length: 10 }, (_, i) => {
+    const hour = 9 + i;
+    return `${hour}:00`;
+  });
+
   const selectedDate = useMemo(() => {
     if (!selectedDay || !selectedHour) return
     return set(selectedDay, {
@@ -115,23 +132,20 @@ const Dashboard = () => {
     createdAt: Date;
     updatedAt: Date;
   }
-  const handleToggleAvailability = async (hasBlock: HasBlock | undefined) => {
+  const handleToggleAvailability = async (hasBlock: HasBlock | undefined, barberId: string) => {
     try {
       if (hasBlock) {
-
         await handleCancelBlock(hasBlock.id);
-      } else if (selectedDate) {
-
-        await createBlock({
-          date: selectedDate,
-          barberId: barber?.id ?? ""
-        });
-        toast.success("Horario bloqueado com Sucesso!", {
-        });
+      } else if (selectedDate && barberId) {
+        if (!selectedDate || !selectedBarber) {
+          console.error("Erro: Data ou barbeiro não selecionado.");
+          return;
+        }
+        await createBlock({ date: selectedDate, barberId: selectedBarber });
+        toast.success("Horário bloqueado com sucesso!");
       }
     } catch (error) {
-      console.error(error);
-      toast.error("Erro ao criar ou cancelar reserva!");
+      toast.error("Erro ao criar ou cancelar bloqueio!");
     }
   };
 
@@ -146,27 +160,17 @@ const Dashboard = () => {
   }
 
   const timeList = useMemo(() => {
-    if (!selectedDay || !barber) return []; 
+    if (!selectedDay || !selectedBarber) return [];
     return getTimeList({
-      block: dayBlock,
       selectedDay,
-      barberId: barber.id,
+      block: dayBlock,
+      barberId: selectedBarber,
     });
-  }, [dayBlock, selectedDay, barber, getTimeList]);
-  
-  
+  }, [dayBlock, selectedDay, selectedBarber]);
 
   if (!isAdmin) {
     return null;
   }
-
-  const blockteste = () => dayBlock.find(
-    (block) => {
-      if (!selectedDate) return
-      return new Date(block.date).toISOString() ===
-        new Date(selectedDate).toISOString()
-    }
-  )
 
   return (
     <>
@@ -175,8 +179,8 @@ const Dashboard = () => {
         <div className="sm:order-1">
           <div className="p-5 text-white rounded-lg shadow-lg">
             {/* <button
-              onClick={() => { console.log("TESTE", selectedDay, dayBlock )}}
-            >Teste</button> */}
+                onClick={() => { console.log("TESTE", selectedDay, dayBlock )}}
+              >Teste</button> */}
             <h2 className="text-2xl font-bold mb-4">Calendário</h2>
             <DayPicker
               showOutsideDays
@@ -217,7 +221,21 @@ const Dashboard = () => {
             />
 
           </div>
-
+          <div className="p-5">
+            <label className="block mb-2">Selecione o barbeiro:</label>
+            <Select onValueChange={(value) => setSelectedBarber(value)}>
+              <SelectTrigger className="p-2 border rounded">
+                <SelectValue placeholder="Selecione" />
+              </SelectTrigger>
+              <SelectContent>
+                {barberss.map((barber) => (
+                  <SelectItem key={barber.id} value={barber.id}>
+                    {barber.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
           {selectedDay && (
             <div>
               <h3 className="text-lg font-semibold mt-4 mb-2 text-center">
@@ -241,38 +259,38 @@ const Dashboard = () => {
               {selectedHour && (
                 <div className="mt-6 text-center">
                   <p className="mb-4">Horário selecionado: {selectedHour}</p>
-
                   <button
-                    //onClick={handleToggleAvailability}
-                    onClick={() => handleToggleAvailability(dayBlock.find(
-                      (block) => {
-                        if (!selectedDate) return
-                        return new Date(block.date).toISOString() ===
-                          new Date(selectedDate).toISOString()
+                    onClick={() => {
+                      if (selectedBarber && selectedDate) {
+                        handleToggleAvailability(
+                          dayBlock.find(
+                            (block) =>
+                              block.barberId === selectedBarber &&
+                              new Date(block.date).toISOString() === new Date(selectedDate).toISOString()
+                          ),
+                          selectedBarber
+                        );
+                      } else {
+                        console.error("Barbeiro ou data não definidos.");
                       }
-                    ))}
+                    }}
                     className={`px-4 py-2 rounded-lg ${dayBlock.some(
-                      (block) => {
-                        if (!selectedDate) return
-                        return new Date(block.date).toISOString() ===
-                          new Date(selectedDate).toISOString()
-                      }
+                      (block) =>
+                        block.barberId === selectedBarber &&
+                        new Date(block.date).toISOString() === new Date(selectedDate ?? new Date()).toISOString()
                     )
                       ? "bg-red-600 hover:bg-red-700 text-white"
                       : "bg-green-600 hover:bg-green-700 text-white"
                       }`}
                   >
                     {dayBlock.some(
-                      (block) => {
-                        if (!selectedDate) return
-                        return new Date(block.date).toISOString() ===
-                          new Date(selectedDate).toISOString()
-                      }
+                      (block) =>
+                        block.barberId === selectedBarber &&
+                        new Date(block.date).toISOString() === new Date(selectedDate ?? new Date()).toISOString()
                     )
                       ? "Desbloquear Horário"
                       : "Bloquear Horário"}
                   </button>
-
                 </div>
               )}
             </div>
