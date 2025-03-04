@@ -43,9 +43,7 @@ const Dashboard = () => {
         return;
       }
 
-      const barberData = session.user.barberId; // Verifique se esse campo existe
-      setBarber(barberData);
-
+      setBarber({ id: session.user.barberId }); // Garante que barberId não é null
       setIsAdmin(true);
       const confirmedBlock = await getAdminConfirmedBookings();
       const concludedBlock = await getAdminConcludedBookings();
@@ -148,13 +146,14 @@ const Dashboard = () => {
   }
 
   const timeList = useMemo(() => {
-    if (!selectedDay) return [];
+    if (!selectedDay || !barber) return []; 
     return getTimeList({
       block: dayBlock,
       selectedDay,
-      barberId: barber?.id ?? "",
+      barberId: barber.id,
     });
-  }, [dayBlock, selectedDay, barber?.id, getTimeList]);
+  }, [dayBlock, selectedDay, barber, getTimeList]);
+  
   
 
   if (!isAdmin) {
