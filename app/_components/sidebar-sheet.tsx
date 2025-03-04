@@ -45,7 +45,7 @@ const SidebarSheet = () => {
         ) : (
           <>
             <h2 className="font-bold">Olá, faça seu login!</h2>
-            <Dialog 
+            <Dialog
               open={signInDialogIsOpen}
               onOpenChange={(open) => setSignInDialogIsOpen(open)}
             >
@@ -80,6 +80,12 @@ const SidebarSheet = () => {
             {data?.user?.role === "ADMIN" ? "Dashboard" : "Agendamentos"}
           </Link>
         </Button>
+        {/* <Button className="justify-start gap-2" variant="ghost" asChild>
+          <Link href="/monthly">
+            <CreditCardIcon size={18} />
+            Mensalidade
+          </Link>
+        </Button> */}
       </div>
 
       {data?.user && (
