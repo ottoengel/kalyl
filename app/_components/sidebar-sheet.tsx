@@ -1,6 +1,12 @@
 "use client"
 
-import { CalendarIcon, HomeIcon, LogInIcon, LogOutIcon } from "lucide-react"
+import {
+  CalendarIcon,
+  CreditCardIcon,
+  HomeIcon,
+  LogInIcon,
+  LogOutIcon,
+} from "lucide-react"
 import { Button } from "./ui/button"
 import { SheetClose, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet"
 import Link from "next/link"
@@ -45,7 +51,7 @@ const SidebarSheet = () => {
         ) : (
           <>
             <h2 className="font-bold">Olá, faça seu login!</h2>
-            <Dialog 
+            <Dialog
               open={signInDialogIsOpen}
               onOpenChange={(open) => setSignInDialogIsOpen(open)}
             >
@@ -78,6 +84,12 @@ const SidebarSheet = () => {
           >
             <CalendarIcon size={18} />
             {data?.user?.role === "ADMIN" ? "Dashboard" : "Agendamentos"}
+          </Link>
+        </Button>
+        <Button className="justify-start gap-2" variant="ghost" asChild>
+          <Link href="/monthly">
+            <CreditCardIcon size={18} />
+            Mensalidade
           </Link>
         </Button>
       </div>
