@@ -11,9 +11,24 @@ import {
     PaginationPrevious,
 } from "../_components/ui/pagination"
 import { Badge } from "../_components/ui/badge"
+import { getUserTime } from '../_actions/get-user';
+import { useEffect, useState } from "react";
+
 
 
 const Panel = () => {
+    const [totalUsers, setTotalUsers] = useState<number>(0); // Agora é um número
+    
+     useEffect(() => {
+          const fetchData = async () => {
+            const data = await getUserTime();
+                if (data.totalUsers > 0){
+                    setTotalUsers(data.totalUsers);
+                }
+          };
+      
+          fetchData();
+        }, []);
     return (
         <div>
             <Header />
@@ -26,7 +41,7 @@ const Panel = () => {
                                     <polygon strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
                                 </svg>
                             </div>
-                            <h6 className="text-4xl font-bold text-deep-purple-accent-400">819</h6>
+                            <h6 className="text-4xl font-bold text-deep-purple-accent-400">{totalUsers}</h6>
                             <p className="mb-2 font-bold text-md">Usuarios</p>
                         </div>
                         <div className="text-center">

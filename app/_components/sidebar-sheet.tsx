@@ -9,6 +9,7 @@ import { signOut, useSession } from "next-auth/react"
 import { Avatar, AvatarImage } from "./ui/avatar"
 import SignInDialog from "./sign-in-dialog"
 import { useState } from "react"
+import { BadgeCheck, Gauge  } from 'lucide-react';
 
 const SidebarSheet = () => {
   const [signInDialogIsOpen, setSignInDialogIsOpen] = useState(false)
@@ -80,6 +81,28 @@ const SidebarSheet = () => {
             {data?.user?.role === "ADMIN" ? "Dashboard" : "Agendamentos"}
           </Link>
         </Button>
+        {/* <Button className="justify-start gap-2" variant="ghost" asChild>
+        <Link
+            href={data?.user?.role === "ADMIN" && "MENSALISTA" ? "/month" : "/monthly"}
+            onClick={handleBookingClick}
+          >
+            <BadgeCheck size={18} />
+            {data?.user?.role === "ADMIN" && "MENSALISTA" ? "Meu Plano" : "Plano Mensalista"}
+          </Link>
+        </Button>
+        {data?.user?.role === "ADMIN" && (
+              <>
+                <Button className="justify-start gap-2" variant="ghost" asChild>
+                  <Link
+                    href="/panel"
+                    onClick={handleBookingClick}
+                  >
+                    <Gauge size={18} />
+                    Rendimentos
+                  </Link>
+                </Button>
+              </>
+            )} */}
         {/* <Button className="justify-start gap-2" variant="ghost" asChild>
           <Link href="/monthly">
             <CreditCardIcon size={18} />

@@ -11,7 +11,6 @@ import {
     DrawerTitle,
 } from "../_components/ui/drawer";
 import { Button } from "../_components/ui/button";
-import { useState } from "react";
 import {
     Select,
     SelectContent,
@@ -29,13 +28,44 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "../ui/dialog"
-import Image from "next/image";
+import { getUserTime } from '../_actions/get-user';
+import { useEffect, useState } from 'react';
 
 const Month = () => {
     const { data } = useSession()
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isDialogOpen, setDialogOpen] = useState(false);
 
+    const [createdAt, setCreatedAt] = useState<string>("");
+
+    useEffect(() => {
+      const fetchData = async () => {
+        const data = await getUserTime();
+        if (data.users.length > 0) { // Verifica se existe pelo menos um usuário
+          const createdAtDate = new Date(data.users[0]?.createdAt); // Garantir que há usuários
+          const formattedDate = formatDate(createdAtDate);
+          setCreatedAt(formattedDate);
+        } else {
+          setCreatedAt("Data não disponível"); // Caso não haja usuários
+        }
+      };
+  
+      fetchData();
+    }, []);
+  
+    // Função para formatar a data como "21 de out de 2024"
+    const formatDate = (date: Date): string => {
+      const months = [
+        'jan', 'fev', 'mar', 'abr', 'mai', 'jun',
+        'jul', 'ago', 'set', 'out', 'nov', 'dez'
+      ];
+  
+      const day = date.getDate();
+      const month = months[date.getMonth()]; // Obtém o mês abreviado
+      const year = date.getFullYear();
+  
+      return `${day} de ${month} de ${year}`;
+    };
     return (
         <div className="relative min-h-[672px] overflow-hidden ">
             <Header />
@@ -51,11 +81,11 @@ const Month = () => {
                         ></div>
                     </div>
                 </div>
-                <Avatar>
+                <Avatar className="relative left-10 top-10 sm:left-7">
                     <AvatarImage src={data?.user?.image ?? ""} />
                 </Avatar>
                 <h2 className="text-2xl/7 font-bold text-white text-center sm:text-left sm:pl-20 sm:truncate sm:text-3xl sm:tracking-tight">
-                    Nome usuario
+                   {data?.user.name}
                 </h2>
 
                 <div className="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
@@ -63,7 +93,7 @@ const Month = () => {
                         <svg className="mr-1.5 size-5 shrink-0 text-gray-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
                             <path fill-rule="evenodd" d="M5.75 2a.75.75 0 0 1 .75.75V4h7V2.75a.75.75 0 0 1 1.5 0V4h.25A2.75 2.75 0 0 1 18 6.75v8.5A2.75 2.75 0 0 1 15.25 18H4.75A2.75 2.75 0 0 1 2 15.25v-8.5A2.75 2.75 0 0 1 4.75 4H5V2.75A.75.75 0 0 1 5.75 2Zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75Z" clip-rule="evenodd" />
                         </svg>
-                        Usuario desde, 9 Jan 2025
+                        Fodinha desde, {createdAt}
                     </div>
                 </div>
             </div>

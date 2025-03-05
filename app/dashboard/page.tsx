@@ -9,7 +9,7 @@ import { getAdminConfirmedBookings } from "../_data/get-admin-confirmed-bookings
 import { getAdminConcludedBookings } from "../_data/get-admin-concluded-bookings";
 import BookingItem from "../_components/booking-item";
 import { DayPicker } from "react-day-picker";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Filter } from "lucide-react";
 import { cn } from "@/app/_lib/utils";
 import { buttonVariants } from "@/app/_components/ui/button";
 import { toast } from "sonner";
@@ -21,6 +21,9 @@ import { isPast, isToday, set } from "date-fns";
 import { deleteBlock } from "../_actions/delete-block";
 import { getBarbers } from "../_actions/get-barber";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../_components/ui/select";
+import { ScrollArea } from "../_components/ui/scroll-area";
+import { pt } from 'date-fns/locale';
+
 
 const Dashboard = () => {
   const [adminConfirmedBlock, setAdminConfirmedBookings] = useState<Block[]>([]);
@@ -28,6 +31,24 @@ const Dashboard = () => {
 
   const [selectedBarber, setSelectedBarber] = useState<string | undefined>(undefined);
   const [barberss, setBarberss] = useState<{ id: string; name: string }[]>([]);
+
+  
+  // filtro barber
+
+  const filterBookings = (bookings: Block[], selectedBarber: string | undefined) => {
+    if (selectedBarber === "todos" || selectedBarber === undefined) {
+      return bookings; // Retorna todos os agendamentos se "todos" estiver selecionado
+    }
+    return bookings.filter((booking) => booking.barberId === selectedBarber); // Filtra os agendamentos pelo barbeiro selecionado
+  };
+
+  const filteredConfirmedBookings = useMemo(() => {
+    return filterBookings(adminConfirmedBlock, selectedBarber);
+  }, [adminConfirmedBlock, selectedBarber]);
+  
+  const filteredConcludedBookings = useMemo(() => {
+    return filterBookings(adminConcludedBlock, selectedBarber);
+  }, [adminConcludedBlock, selectedBarber]);
 
   useEffect(() => {
     const fetchBarbers = async () => {
@@ -171,7 +192,7 @@ const Dashboard = () => {
   if (!isAdmin) {
     return null;
   }
-
+  
   return (
     <>
       <Header />
@@ -187,6 +208,7 @@ const Dashboard = () => {
               mode="single"
               selected={selectedDay}
               onSelect={setSelectedDate}
+              locale={pt} 
               className="p-3"
               classNames={{
                 months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
@@ -297,39 +319,66 @@ const Dashboard = () => {
           )}
         </div>
         <div className="space-y-3 sm:order-2">
-          <h1 className="text-xl font-bold">Agendamentos</h1>
+          <div className="flex flex-row justify-between">
+            <h1 className="text-xl font-bold">Agendamentos</h1>
+            <div>
+              <h3 className="mb-3 text-[14px] font-semibold text-gray-400">Selecione o Barbeiro</h3>
+              <Select defaultValue="todos" onValueChange={(value) => setSelectedBarber(value)}>
+                <SelectTrigger className="p-2 border rounded w-[150px]">
+                  <SelectValue placeholder="Barbeiro" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="todos">
+                    Todos
+                  </SelectItem>
+                  {barberss.map((barber) => (
+                    <SelectItem key={barber.id} value={barber.id}>
+                      {barber.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
 
-          {adminConfirmedBlock.length === 0 &&
-            adminConcludedBlock.length === 0 && (
-              <p className="text-gray-400">Nenhum agendamento encontrado.</p>
-            )}
+          {filteredConfirmedBookings.length === 0 && filteredConcludedBookings.length === 0 && (
+            <p className="text-gray-400">Nenhum agendamento encontrado.</p>
+          )}
 
-          {adminConfirmedBlock.length > 0 && (
+          {filteredConfirmedBookings.length > 0 && (
             <>
               <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
                 Confirmados
               </h2>
-              {adminConfirmedBlock.map((booking) => (
-                <BookingItem
-                  key={booking.id}
-                  booking={JSON.parse(JSON.stringify(booking))}
-                  isAdmin={true} // Define como admin
-                />
-              ))}
+              <ScrollArea className="h-[500px] w-full">
+                <div className="flex flex-col space-y-4 p-4 pt-0">
+                  {filteredConfirmedBookings.map((booking) => (
+                    <BookingItem
+                      key={booking.id}
+                      booking={JSON.parse(JSON.stringify(booking))}
+                      isAdmin={true}
+                    />
+                  ))}
+                </div>
+              </ScrollArea>
             </>
           )}
-          {adminConcludedBlock.length > 0 && (
+          {filteredConcludedBookings.length > 0 && (
             <>
-              <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+              <h2 className="mb-3 mt-6 pt-4 text-xs font-bold uppercase text-gray-400">
                 Finalizados
               </h2>
-              {adminConcludedBlock.map((booking) => (
-                <BookingItem
-                  key={booking.id}
-                  booking={JSON.parse(JSON.stringify(booking))}
-                  isAdmin={true} // Define como admin
-                />
-              ))}
+              <ScrollArea className="h-[260px] w-full">
+                <div className="flex flex-col space-y-4 p-4 pt-0">
+                  {filteredConcludedBookings.map((booking) => (
+                    <BookingItem
+                      key={booking.id}
+                      booking={JSON.parse(JSON.stringify(booking))}
+                      isAdmin={true}
+                    />
+                  ))}
+                </div>
+              </ScrollArea>
             </>
           )}
         </div>
@@ -344,6 +393,4 @@ interface CalendarProps {
     date: string;
   }>;
 }
-
-
 export default Dashboard;
