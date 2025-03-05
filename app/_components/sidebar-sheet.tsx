@@ -9,7 +9,6 @@ import { signOut, useSession } from "next-auth/react"
 import { Avatar, AvatarImage } from "./ui/avatar"
 import SignInDialog from "./sign-in-dialog"
 import { useState } from "react"
-import { BadgeCheck, Gauge  } from 'lucide-react';
 
 const SidebarSheet = () => {
   const [signInDialogIsOpen, setSignInDialogIsOpen] = useState(false)
