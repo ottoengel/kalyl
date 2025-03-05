@@ -13,22 +13,40 @@ import {
 import { Badge } from "../_components/ui/badge"
 import { getUserTime } from '../_actions/get-user';
 import { useEffect, useState } from "react";
+import { countBookings } from "../_actions/get-books"
 
 
 
 const Panel = () => {
     const [totalUsers, setTotalUsers] = useState<number>(0); // Agora é um número
-    
-     useEffect(() => {
-          const fetchData = async () => {
+    const [totalBookings, setTotalBookings] = useState<number>(0); // Agora é um número
+    const [totalMensalistas, setTotalMensal] = useState<number>(0);
+
+    useEffect(() => {
+        const fetchData = async () => {
             const data = await getUserTime();
-                if (data.totalUsers > 0){
-                    setTotalUsers(data.totalUsers);
-                }
-          };
-      
-          fetchData();
-        }, []);
+            if (data.totalUsers > 0) {
+                setTotalUsers(data.totalUsers);
+            }
+
+            const mensal = await getUserTime();
+            if(mensal.totalMensalistas > 0) {
+                setTotalMensal(mensal.totalMensalistas)
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const total = await countBookings();
+            if (total > 0) {
+                setTotalBookings(total); // Define o valor corretamente
+            }
+        };
+        fetchData();
+    }, []);
     return (
         <div>
             <Header />
@@ -50,7 +68,7 @@ const Panel = () => {
                                     <polygon strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
                                 </svg>
                             </div>
-                            <h6 className="text-4xl font-bold text-deep-purple-accent-400">729</h6>
+                            <h6 className="text-4xl font-bold text-deep-purple-accent-400">{totalMensalistas}</h6>
                             <p className="mb-2 font-bold text-md">Usuarios Mensalistas</p>
                         </div>
                         <div className="text-center">
@@ -59,7 +77,7 @@ const Panel = () => {
                                     <polygon strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
                                 </svg>
                             </div>
-                            <h6 className="text-4xl font-bold text-deep-purple-accent-400">1029</h6>
+                            <h6 className="text-4xl font-bold text-deep-purple-accent-400">{totalBookings}</h6>
                             <p className="mb-2 font-bold text-md">Cortes Feitos</p>
                         </div>
                     </div>
