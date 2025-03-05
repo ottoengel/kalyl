@@ -1,12 +1,6 @@
 "use client"
 
-import {
-  CalendarIcon,
-  CreditCardIcon,
-  HomeIcon,
-  LogInIcon,
-  LogOutIcon,
-} from "lucide-react"
+import { CalendarIcon, HomeIcon, LogInIcon, LogOutIcon } from "lucide-react"
 import { Button } from "./ui/button"
 import { SheetClose, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet"
 import Link from "next/link"
@@ -86,12 +80,34 @@ const SidebarSheet = () => {
             {data?.user?.role === "ADMIN" ? "Dashboard" : "Agendamentos"}
           </Link>
         </Button>
-        <Button className="justify-start gap-2" variant="ghost" asChild>
+        {/* <Button className="justify-start gap-2" variant="ghost" asChild>
+        <Link
+            href={data?.user?.role === "ADMIN" && "MENSALISTA" ? "/month" : "/monthly"}
+            onClick={handleBookingClick}
+          >
+            <BadgeCheck size={18} />
+            {data?.user?.role === "ADMIN" && "MENSALISTA" ? "Meu Plano" : "Plano Mensalista"}
+          </Link>
+        </Button>
+        {data?.user?.role === "ADMIN" && (
+              <>
+                <Button className="justify-start gap-2" variant="ghost" asChild>
+                  <Link
+                    href="/panel"
+                    onClick={handleBookingClick}
+                  >
+                    <Gauge size={18} />
+                    Rendimentos
+                  </Link>
+                </Button>
+              </>
+            )} */}
+        {/* <Button className="justify-start gap-2" variant="ghost" asChild>
           <Link href="/monthly">
             <CreditCardIcon size={18} />
             Mensalidade
           </Link>
-        </Button>
+        </Button> */}
       </div>
 
       {data?.user && (

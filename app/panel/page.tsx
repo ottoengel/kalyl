@@ -11,14 +11,28 @@ import {
   PaginationPrevious,
 } from "../_components/ui/pagination"
 import { Badge } from "../_components/ui/badge"
+import { getUserTime } from "../_actions/get-user"
+import { useEffect, useState } from "react"
 
 const Panel = () => {
+  const [totalUsers, setTotalUsers] = useState<number>(0) // Agora é um número
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getUserTime()
+      if (data.totalUsers > 0) {
+        setTotalUsers(data.totalUsers)
+      }
+    }
+
+    fetchData()
+  }, [])
   return (
     <div>
       <Header />
       <div>
         <div className="mx-auto px-4 py-16 sm:max-w-xl md:max-w-full md:px-24 lg:max-w-screen-xl lg:px-8 lg:py-20">
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             <div className="text-center">
               <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-red-500 sm:h-12 sm:w-12">
                 <svg
@@ -36,9 +50,9 @@ const Panel = () => {
                 </svg>
               </div>
               <h6 className="text-deep-purple-accent-400 text-4xl font-bold">
-                819
+                {totalUsers}
               </h6>
-              <p className="text-md mb-2 font-bold">Downloads</p>
+              <p className="text-md mb-2 font-bold">Usuarios</p>
             </div>
             <div className="text-center">
               <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-red-500 sm:h-12 sm:w-12">
@@ -57,9 +71,9 @@ const Panel = () => {
                 </svg>
               </div>
               <h6 className="text-deep-purple-accent-400 text-4xl font-bold">
-                1.3K
+                729
               </h6>
-              <p className="text-md mb-2 font-bold">Users</p>
+              <p className="text-md mb-2 font-bold">Usuarios Mensalistas</p>
             </div>
             <div className="text-center">
               <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-red-500 sm:h-12 sm:w-12">
@@ -78,45 +92,33 @@ const Panel = () => {
                 </svg>
               </div>
               <h6 className="text-deep-purple-accent-400 text-4xl font-bold">
-                91
+                1029
               </h6>
-              <p className="text-md mb-2 font-bold">Subscribers</p>
-            </div>
-            <div className="text-center">
-              <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-red-500 sm:h-12 sm:w-12">
-                <svg
-                  className="text-deep-purple-accent-400 h-8 w-8 sm:h-10 sm:w-10"
-                  stroke="currentColor"
-                  viewBox="0 0 52 52"
-                >
-                  <polygon
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    fill="none"
-                    points="29 13 14 29 25 29 23 39 38 23 27 23"
-                  ></polygon>
-                </svg>
-              </div>
-              <h6 className="text-deep-purple-accent-400 text-4xl font-bold">
-                52
-              </h6>
-              <p className="text-md mb-2 font-bold">Products</p>
+              <p className="text-md mb-2 font-bold">Cortes Feitos</p>
             </div>
           </div>
         </div>
-
+        {/* Títulos Acima dos Gráficos */}
+        <div className="mb-6 text-center">
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+            Visão Geral da Barbearia
+          </h3>
+        </div>
         {/* Gráficos */}
         <div className="relative px-20 pb-20">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {/* Gráfico 1 */}
             <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800 md:p-6">
+              <h3 className="mb-4 text-center text-xl font-bold text-gray-900 dark:text-white">
+                Diario
+              </h3>
               <div className="flex justify-between">
                 <div>
                   <h5 className="pb-2 text-3xl font-bold leading-none text-gray-900 dark:text-white">
                     32.4k
                   </h5>
                   <p className="text-base font-normal text-gray-500 dark:text-gray-400">
-                    Users this week
+                    Clientes Atendidos No Dia
                   </p>
                 </div>
                 <div className="flex items-center px-2.5 py-0.5 text-center text-base font-semibold text-green-500 dark:text-green-500">
@@ -144,14 +146,18 @@ const Panel = () => {
               </div>
             </div>
 
+            {/* Gráfico 2 */}
             <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800 md:p-6">
+              <h3 className="mb-4 text-center text-xl font-bold text-gray-900 dark:text-white">
+                Tudo
+              </h3>
               <div className="flex justify-between">
                 <div>
                   <h5 className="pb-2 text-3xl font-bold leading-none text-gray-900 dark:text-white">
                     45.8k
                   </h5>
                   <p className="text-base font-normal text-gray-500 dark:text-gray-400">
-                    New Signups
+                    Faturamento Total
                   </p>
                 </div>
                 <div className="flex items-center px-2.5 py-0.5 text-center text-base font-semibold text-green-500 dark:text-green-500">
@@ -179,14 +185,18 @@ const Panel = () => {
               </div>
             </div>
 
+            {/* Gráfico 3 */}
             <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800 md:p-6">
+              <h3 className="mb-4 text-center text-xl font-bold text-gray-900 dark:text-white">
+                Mensal
+              </h3>
               <div className="flex justify-between">
                 <div>
                   <h5 className="pb-2 text-3xl font-bold leading-none text-gray-900 dark:text-white">
                     21.3k
                   </h5>
                   <p className="text-base font-normal text-gray-500 dark:text-gray-400">
-                    Active Users
+                    Clientes Atendidos no Mês
                   </p>
                 </div>
                 <div className="flex items-center px-2.5 py-0.5 text-center text-base font-semibold text-red-500 dark:text-red-500">

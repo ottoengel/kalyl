@@ -11,7 +11,6 @@ import {
   DrawerTitle,
 } from "../_components/ui/drawer"
 import { Button } from "../_components/ui/button"
-import { useState } from "react"
 import {
   Select,
   SelectContent,
@@ -27,14 +26,56 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "../ui/dialog"
+import { getUserTime } from "../_actions/get-user"
+import { useEffect, useState } from "react"
 
 const Month = () => {
   const { data } = useSession()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [isDialogOpen, setDialogOpen] = useState(false)
 
+  const [createdAt, setCreatedAt] = useState<string>("")
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getUserTime()
+      if (data.users.length > 0) {
+        // Verifica se existe pelo menos um usuário
+        const createdAtDate = new Date(data.users[0]?.createdAt) // Garantir que há usuários
+        const formattedDate = formatDate(createdAtDate)
+        setCreatedAt(formattedDate)
+      } else {
+        setCreatedAt("Data não disponível") // Caso não haja usuários
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  // Função para formatar a data como "21 de out de 2024"
+  const formatDate = (date: Date): string => {
+    const months = [
+      "jan",
+      "fev",
+      "mar",
+      "abr",
+      "mai",
+      "jun",
+      "jul",
+      "ago",
+      "set",
+      "out",
+      "nov",
+      "dez",
+    ]
+
+    const day = date.getDate()
+    const month = months[date.getMonth()] // Obtém o mês abreviado
+    const year = date.getFullYear()
+
+    return `${day} de ${month} de ${year}`
+  }
   return (
     <div className="relative min-h-[672px] overflow-hidden">
       <Header />
@@ -45,19 +86,19 @@ const Month = () => {
             style={{ pointerEvents: "none" }}
           >
             <div
-              className="mx-auto aspect-[1155/678] w-full max-w-[1155px] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
+              className="absolute mx-auto aspect-[1255/678] w-full max-w-[1355px] bg-gradient-to-tr from-[#ff6868] to-[#9089fc] opacity-25"
               style={{
                 clipPath:
-                  "polygon(74.1% 64.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 52%, 80.7% 25%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 62.5% 58.3%, 45.2% 34.5%, 97.5% 6.7%, 1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 79.1%)",
+                  "polygon(94.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 75.5% 0.1%, 85.7% 20%, 92.5% 32.5%, 2.2% 62.4%, 12.4% 78.1%, 47.5% 58.3%, 25.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 20%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
               }}
             ></div>
           </div>
         </div>
-        <Avatar>
+        <Avatar className="relative left-10 top-10 sm:left-7">
           <AvatarImage src={data?.user?.image ?? ""} />
         </Avatar>
         <h2 className="text-center text-2xl/7 font-bold text-white sm:truncate sm:pl-20 sm:text-left sm:text-3xl sm:tracking-tight">
-          Nome usuario
+          {data?.user.name}
         </h2>
 
         <div className="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
@@ -75,7 +116,7 @@ const Month = () => {
                 clip-rule="evenodd"
               />
             </svg>
-            Usuario desde, 9 Jan 2025
+            Fodinha desde, {createdAt}
           </div>
         </div>
       </div>
@@ -91,11 +132,9 @@ const Month = () => {
               </dd>
             </div>
             <div className="mx-auto flex max-w-xs flex-col gap-y-4">
-              <dt className="text-base/7 text-gray-500">
-                Tempo Total Mensalista
-              </dt>
+              <dt className="text-base/7 text-gray-500">Barbeiro Mensalista</dt>
               <dd className="order-first text-3xl font-semibold tracking-tight text-white sm:text-5xl">
-                365 Dias
+                Kalyl
               </dd>
             </div>
             <div className="mx-auto flex max-w-xs flex-col gap-y-4">
@@ -159,7 +198,7 @@ const Month = () => {
             <div className="flex flex-row items-center justify-center gap-3">
               <Select>
                 <SelectTrigger className="w-[210px]">
-                  <SelectValue placeholder="Selecione" />
+                  <SelectValue placeholder="Selecione o serviço" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="barba">Mensalista Barba</SelectItem>
@@ -167,6 +206,15 @@ const Month = () => {
                   <SelectItem value="cabeloebarba">
                     Mensalista Cabelo e Barba
                   </SelectItem>
+                </SelectContent>
+              </Select>
+              <Select>
+                <SelectTrigger className="w-[210px]">
+                  <SelectValue placeholder="Selecione o Barbeiro" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="barba">Kalyl</SelectItem>
+                  <SelectItem value="cabelo">Lucas</SelectItem>
                 </SelectContent>
               </Select>
             </div>

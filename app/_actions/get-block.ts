@@ -5,9 +5,10 @@ import { db } from "../_lib/prisma"
 
 interface GetBlockProps {
   date: Date
+  barberId?: string
 }
  // pegar seção do create
-export const getBlock = ({ date }: GetBlockProps) => {
+export const  getBlock = ({ date }: GetBlockProps) => {
   return db.block.findMany({
     where: {
       date: {
