@@ -24,6 +24,7 @@ import SignInDialog from "./sign-in-dialog"
 import BookingSummary from "./booking-summary"
 import { useRouter } from "next/navigation"
 import { getBlock } from "../_actions/get-block"
+import { sendConfirmationEmail } from "../_actions/send-email"
 
 interface ServiceItemProps {
   service: BarberServices
@@ -157,30 +158,42 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
     setSelectedTime(time)
   }
 
-  const handleCreateBooking = async () => {
-    // 1. Não exibir horários que já foram agendados
-    try {
-      if (!selectedDate) return
-
-      await createBooking({
-        serviceId: service.id,
-        date: selectedDate,
-        type: "Reserva",
-        barberId: barber.id,
-      })
-      handleBookingSheetOpenChange()
-      toast.success("Reserva criada com sucesso!", {
-        action: {
-          label: "Ver Agendamentos",
-          onClick: () => router.push("/bookings"),
-        },
-      })
-      router.refresh()
-    } catch (error) {
-      console.error(error)
-      toast.error("Erro ao criar reserva!")
+const handleCreateBooking = async () => {
+  console.log("handleCreateBooking foi chamado!");
+  
+  try {
+    if (!selectedDate) {
+      return;
     }
+    if (!data?.user?.email) {
+      return;
+    }
+    await createBooking({
+      serviceId: service.id,
+      date: selectedDate,
+      type: "Reserva",
+      barberId: barber.id,
+    });
+
+    if (!selectedDay || !selectedTime) {
+      return;
+    }
+    await sendConfirmationEmail(data.user.email, selectedDay, selectedTime);    
+    handleBookingSheetOpenChange();
+    toast.success("Reserva criada com sucesso!", {
+      action: {
+        label: "Ver Agendamentos",
+        onClick: () => router.push("/bookings"),
+      },
+    });
+
+    router.refresh();
+  } catch (error) {
+    console.error("Erro ao criar reserva!", error);
+    toast.error("Erro ao criar reserva!");
   }
+};
+
 
   const timeList = useMemo(() => {
     if (!selectedDay) return []

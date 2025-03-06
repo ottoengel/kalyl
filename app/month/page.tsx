@@ -116,7 +116,7 @@ const Month = () => {
                 clip-rule="evenodd"
               />
             </svg>
-            Fodinha desde, {createdAt}
+            Usuario desde, {createdAt}
           </div>
         </div>
       </div>
