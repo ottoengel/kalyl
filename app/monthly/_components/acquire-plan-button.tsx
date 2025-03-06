@@ -15,6 +15,7 @@ import { Button } from "@/app/_components/ui/button"
 
 interface AquirePlanButtonProps {
   open: boolean
+  // eslint-disable-next-line no-unused-vars
   onOpenChange: (open: boolean) => void // Agora aceita uma função
 }
 

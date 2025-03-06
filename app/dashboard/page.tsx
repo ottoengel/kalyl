@@ -200,7 +200,6 @@ const Dashboard = () => {
       block: dayBlock,
       barberId: selectedBarber,
     })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dayBlock, selectedDay, selectedBarber])
 
   if (!isAdmin) {

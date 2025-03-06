@@ -18,6 +18,7 @@ export const createBlock = async (params: CreateBlock) => {
   }
 
   await db.block.create({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: { ...params, userId: (user.user as any).id },
   });
 
