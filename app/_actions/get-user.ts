@@ -1,17 +1,18 @@
-// app/_actions/get-barber.ts
-'use server'
+"use server";
 import { db } from "../_lib/prisma"; // Certifique-se de que o Prisma esteja configurado corretamente
 
 interface UserTimeResponse {
-  users: { createdAt: Date }[]; // A estrutura do users, que contém a data de criação
-  totalUsers: number; 
-  totalMensalistas: number;     // Contagem total de usuários com a role "MENSALISTA"
-  // Contagem total de usuários
+  users: { createdAt: Date }[]; 
+  totalUsers: number;
+  totalMensalistas: number; 
+}
+
+interface UserInfoResponse {
+  userInfo: { id: string, name: string | null; image: string | null, role: string; email: string }[];
 }
 
 export const getUserTime = async (): Promise<UserTimeResponse> => {
-    
-    const users = await db.user.findMany({
+  const users = await db.user.findMany({
     select: { createdAt: true },
   });
 
@@ -19,9 +20,25 @@ export const getUserTime = async (): Promise<UserTimeResponse> => {
 
   const totalMensalistas = await db.user.count({
     where: {
-      role: "MENSALISTA",
+      role: {
+        in: ["MENSALISTAC", "MENSALISTAB", "MENSALISTACB"],
+      },
     },
   });
-  // Retorna o valor
-  return { users, totalUsers, totalMensalistas};
+
+  return { users, totalUsers, totalMensalistas };
+};
+
+export const getUserInfo = async (): Promise<UserInfoResponse> => {
+  const userInfo = await db.user.findMany({
+    select: {
+    id: true,
+      name: true,
+      image: true,
+      role: true,
+      email: true,
+    },
+  });
+
+  return { userInfo };
 };

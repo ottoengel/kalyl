@@ -200,6 +200,7 @@ const Dashboard = () => {
       block: dayBlock,
       barberId: selectedBarber,
     })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dayBlock, selectedDay, selectedBarber])
 
   if (!isAdmin) {
@@ -211,6 +212,27 @@ const Dashboard = () => {
       <Header />
       <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2">
         <div className="sm:order-1">
+        <div className="flex flex-col items-center">
+              <h3 className="mb-3 text-[14px] font-semibold text-gray-400">
+                Selecione o Barbeiro
+              </h3>
+              <Select
+                defaultValue="todos"
+                onValueChange={(value) => setSelectedBarber(value)}
+              >
+                <SelectTrigger className="w-[200px] sm:w-[350px] rounded border p-2 shadow-slate-600 shadow-sm">
+                  <SelectValue placeholder="Barbeiro" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="todos">Todos</SelectItem>
+                  {barberss.map((barber) => (
+                    <SelectItem key={barber.id} value={barber.id}>
+                      {barber.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           <div className="rounded-lg p-5 text-white shadow-lg">
             {/* <button
                 onClick={() => { console.log("TESTE", selectedDay, dayBlock )}}
@@ -255,21 +277,6 @@ const Dashboard = () => {
                 IconRight: () => <ChevronRight className="h-4 w-4" />,
               }}
             />
-          </div>
-          <div className="p-5">
-            <label className="mb-2 block">Selecione o barbeiro:</label>
-            <Select onValueChange={(value) => setSelectedBarber(value)}>
-              <SelectTrigger className="rounded border p-2">
-                <SelectValue placeholder="Selecione" />
-              </SelectTrigger>
-              <SelectContent>
-                {barberss.map((barber) => (
-                  <SelectItem key={barber.id} value={barber.id}>
-                    {barber.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
           </div>
           {selectedDay && (
             <div>
@@ -339,7 +346,7 @@ const Dashboard = () => {
         <div className="space-y-3 sm:order-2">
           <div className="flex flex-row justify-between">
             <h1 className="text-xl font-bold">Agendamentos</h1>
-            <div>
+            {/* <div>
               <h3 className="mb-3 text-[14px] font-semibold text-gray-400">
                 Selecione o Barbeiro
               </h3>
@@ -359,7 +366,7 @@ const Dashboard = () => {
                   ))}
                 </SelectContent>
               </Select>
-            </div>
+            </div> */}
           </div>
 
           {filteredConfirmedBookings.length === 0 &&

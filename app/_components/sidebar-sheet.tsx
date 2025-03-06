@@ -1,6 +1,7 @@
 "use client"
 
-import { CalendarIcon, HomeIcon, LogInIcon, LogOutIcon } from "lucide-react"
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+import { CalendarIcon, HomeIcon, LogInIcon, LogOutIcon, BadgeCheck, Gauge } from "lucide-react"
 import { Button } from "./ui/button"
 import { SheetClose, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet"
 import Link from "next/link"
