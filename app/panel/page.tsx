@@ -113,7 +113,7 @@ const Panel = () => {
                     <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Visão Geral da Barbearia</h3>
                 </div>
                 {/* Gráficos */}
-                <div className="relative px-20 pb-20">
+                <div className="relative px-20 pb-20 w-[90%]">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {/* Gráfico 1 */}
                         <div className="bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6">
@@ -135,8 +135,7 @@ const Panel = () => {
                                 <AreaChart />
                             </div>
                         </div>
-
-                        {/* Gráfico 2 */}
+{/* 
                         <div className="bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6">
                             <h3 className="text-center text-xl font-bold text-gray-900 dark:text-white mb-4">Tudo</h3>
                             <div className="flex justify-between">
@@ -151,13 +150,11 @@ const Panel = () => {
                                     </svg>
                                 </div>
                             </div>
-                            {/* Gráfico */}
                             <div id="area-chart">
                                 <AreaChart />
                             </div>
                         </div>
 
-                        {/* Gráfico 3 */}
                         <div className="bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6">
                             <h3 className="text-center text-xl font-bold text-gray-900 dark:text-white mb-4">Mensal</h3>
                             <div className="flex justify-between">
@@ -172,14 +169,14 @@ const Panel = () => {
                                     </svg>
                                 </div>
                             </div>
-                            {/* Gráfico */}
                             <div id="area-chart">
                                 <AreaChart />
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
+
             <section className="container px-4 mx-auto overflow-x-hidden">
                 <div className="flex items-center gap-x-3">
                     <h2 className="text-lg font-medium text-gray-800 dark:text-white">Mensalistas</h2>

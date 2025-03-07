@@ -17,13 +17,20 @@ interface AquirePlanButtonProps {
   open: boolean
   // eslint-disable-next-line no-unused-vars
   onOpenChange: (open: boolean) => void // Agora aceita uma função
+  link: string
 }
 
-const AquirePlanButton = ({ open, onOpenChange }: AquirePlanButtonProps) => {
+const AquirePlanButton = ({ link, open, onOpenChange }: AquirePlanButtonProps) => {
   const handleAqcuirePlan = async () => {
+    console.log("Redirecionado para" + link)
     const { sessionId } = await createStripeCheckout()
     if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
       throw new Error("Sem publishbbble")
+    }
+    if (link) {
+      setTimeout(() => {
+        window.location.href = link
+      }, 10000) // Delay de 10 segundos
     }
     const stripe = await loadStripe(
       process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,

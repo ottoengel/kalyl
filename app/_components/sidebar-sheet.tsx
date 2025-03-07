@@ -81,7 +81,7 @@ const SidebarSheet = () => {
             {data?.user?.role === "ADMIN" ? "Dashboard" : "Agendamentos"}
           </Link>
         </Button>
-        {/* <Button className="justify-start gap-2" variant="ghost" asChild>
+        <Button className="justify-start gap-2" variant="ghost" asChild>
         <Link
             href={data?.user?.role === "ADMIN" && "MENSALISTA" ? "/month" : "/monthly"}
             onClick={handleBookingClick}
@@ -100,9 +100,9 @@ const SidebarSheet = () => {
                     <Gauge size={18} />
                     Rendimentos
                   </Link>
-                </Button>
+                </Button> 
               </>
-            )} */}
+            )}
         {/* <Button className="justify-start gap-2" variant="ghost" asChild>
           <Link href="/monthly">
             <CreditCardIcon size={18} />
