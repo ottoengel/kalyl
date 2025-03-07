@@ -1,46 +1,86 @@
-"use server"
-
-import { db } from "@/app/_lib/prisma"
+import { getServerSession } from "next-auth"
 import Stripe from "stripe"
 
-export const createStripeCheckout = async () => {
-  const user = await db.user.findFirst()
-  if (!user) {
-    throw new Error("Unauthorized")
+import { PrismaClient } from "@prisma/client"
+import { randomUUID } from "crypto"
+import { authOptions } from "@/app/_lib/auth"
+const prisma = new PrismaClient()
+
+//price_1NarR3APMZcBliJSoefCKTi5
+
+export const stripe = new Stripe(String(process.env.STRIPE_SECRET), {
+  apiVersion: "2025-02-24.acacia",
+})
+
+export async function hasSubscription() {
+  const session = await getServerSession(authOptions)
+
+  if (session) {
+    const user = await prisma.user.findFirst({
+      where: { email: session.user?.email },
+    })
+
+    const subscriptions = await stripe.subscriptions.list({
+      customer: String(user?.stripe_customer_id),
+    })
+
+    return subscriptions.data.length > 0
   }
 
-  if (!process.env.STRIPE_SECRET_KEY) {
-    throw new Error("Stripe key not found")
-  }
+  return false
+}
 
-  if (!process.env.STRIPE_PRICE_ID_CABELO) {
-    throw new Error("Stripe price ID not found")
-  }
-
-  if (!process.env.APP_URL) {
-    throw new Error("APP_URL is not defined")
-  }
-
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-    apiVersion: "2025-02-24.acacia",
-  })
-
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card"],
-    mode: "subscription",
+export async function createCheckoutLink(customer: string) {
+  const checkout = await stripe.checkout.sessions.create({
     success_url: process.env.APP_URL,
-    cancel_url: process.env.APP_URL,
-    subscription_data: {
-      metadata: {
-        user_id: user.id, // Corrigindo para acessar `id` do usuário
-      },
-    },
+    cancel_url: "http://localhost:3000/dashboard/billing?success=true",
+    customer: customer,
     line_items: [
       {
-        price: process.env.STRIPE_PRICE_ID_CABELO as string, // Corrigindo variável de ambiente
-        quantity: 1,
+        price: process.env.STRIPE_PRICE_ID_CABELO,
       },
     ],
+    mode: "subscription",
   })
-  return { sessionId: session.id }
+
+  return checkout.url
+}
+
+export async function createCustomerIfNull() {
+  const session = await getServerSession(authOptions)
+
+  if (session) {
+    const user = await prisma.user.findFirst({
+      where: { email: session.user?.email },
+    })
+
+    if (!user?.api_key) {
+      await prisma.user.update({
+        where: {
+          id: user?.id,
+        },
+        data: {
+          api_key: "secret_" + randomUUID(),
+        },
+      })
+    }
+    if (!user?.stripe_customer_id) {
+      const customer = await stripe.customers.create({
+        email: String(user?.email),
+      })
+
+      await prisma.user.update({
+        where: {
+          id: user?.id,
+        },
+        data: {
+          stripe_customer_id: customer.id,
+        },
+      })
+    }
+    const user2 = await prisma.user.findFirst({
+      where: { email: session.user?.email },
+    })
+    return user2?.stripe_customer_id
+  }
 }

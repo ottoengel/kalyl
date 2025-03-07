@@ -1,5 +1,6 @@
-import { loadStripe } from "@stripe/stripe-js"
-import { createStripeCheckout } from "../_actions/create-stripe-checkout"
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import {
   Drawer,
   DrawerClose,
@@ -15,25 +16,40 @@ import { Button } from "@/app/_components/ui/button"
 
 interface AquirePlanButtonProps {
   open: boolean
-  onOpenChange: (open: boolean) => void // Agora aceita uma função
+  onOpenChange: (open: boolean) => void
+  selectedPlan: "mensalCabelo" | "mensalBarba" | "mensalCabeloeBarba" | null
+  checkoutLink: string | null
 }
 
-const AquirePlanButton = ({ open, onOpenChange }: AquirePlanButtonProps) => {
-  const handleAqcuirePlan = async () => {
-    const { sessionId } = await createStripeCheckout()
-    if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
-      throw new Error("Sem publishbbble")
+const AquirePlanButton = ({
+  open,
+  onOpenChange,
+  selectedPlan,
+}: AquirePlanButtonProps) => {
+  const plans = {
+    mensalCabelo: "https://buy.stripe.com/test_4gw3d32r5dhd9dS6oo",
+    mensalBarba: "https://buy.stripe.com/test_6oEaFv0iXelh3TyeUV",
+    mensalCabeloeBarba: "https://buy.stripe.com/test_3csbJz9TxelhgGkcMO",
+  } as const
+
+  // Apenas abre o drawer
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleAqcuirePlan = () => {
+    if (selectedPlan) {
+      onOpenChange(true) // Agora só abre o drawer
     }
-    const stripe = await loadStripe(
-      process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
-    )
-    if (!stripe) {
-      throw new Error("Stripe not found")
-    }
-    await stripe.redirectToCheckout({ sessionId })
   }
+
+  // Faz o redirecionamento ao Stripe
+  const handleCheckout = () => {
+    if (selectedPlan && plans[selectedPlan]) {
+      window.location.href = plans[selectedPlan] // Redireciona para o checkout correto
+    }
+  }
+
   return (
-    <div>
+    <>
+      {/* Drawer de pagamento */}
       <Drawer open={open} onOpenChange={onOpenChange}>
         <DrawerContent>
           <DrawerHeader className="mx-auto justify-center">
@@ -43,7 +59,11 @@ const AquirePlanButton = ({ open, onOpenChange }: AquirePlanButtonProps) => {
             </DrawerDescription>
           </DrawerHeader>
           <div className="flex flex-row items-center justify-center gap-3">
-            <Card className="cursor-pointer hover:bg-gray-800">
+            {/* Cartão de crédito */}
+            <Card
+              className="cursor-pointer hover:bg-gray-800"
+              onClick={handleCheckout}
+            >
               <CardContent>
                 <Image
                   src="credit-card.svg"
@@ -51,11 +71,15 @@ const AquirePlanButton = ({ open, onOpenChange }: AquirePlanButtonProps) => {
                   height={20}
                   width={20}
                   className="pt-7"
-                  onClick={handleAqcuirePlan}
                 />
               </CardContent>
             </Card>
-            <Card className="cursor-pointer hover:bg-gray-800">
+
+            {/* Pix */}
+            <Card
+              className="cursor-pointer hover:bg-gray-800"
+              onClick={handleCheckout}
+            >
               <CardContent>
                 <Image
                   src="pix.svg"
@@ -76,7 +100,7 @@ const AquirePlanButton = ({ open, onOpenChange }: AquirePlanButtonProps) => {
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
-    </div>
+    </>
   )
 }
 

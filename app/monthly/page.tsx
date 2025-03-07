@@ -6,24 +6,16 @@ import AquirePlanButton from "./_components/acquire-plan-button"
 
 const Monthly = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [selectedPlan, setSelectedPlan] = useState<
+    "mensalCabelo" | "mensalBarba" | "mensalCabeloeBarba" | null
+  >(null)
+  const [checkoutLink, setCheckoutLink] = useState<string | null>(null)
 
   return (
     <div>
       <Header />
       <div className="items-center text-center">
         <div className="relative isolate h-[750px] overflow-hidden px-6 pt-[19px] lg:px-8">
-          <div
-            className="absolute inset-x-0 -top-3 -z-10 transform-gpu px-36 blur-3xl"
-            aria-hidden="true"
-          >
-            <div
-              className="mx-auto aspect-[1155/678] w-[72.1875rem] bg-gradient-to-tr from-[#9089fc] to-[#ffffff] opacity-50"
-              style={{
-                clipPath:
-                  "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 75.5% 0.1%, 80.7% 2%, 92.5% 32.5%, 2.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 25.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 20%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
-              }}
-            ></div>
-          </div>
           <div className="mx-auto max-w-4xl text-center">
             <p className="mt-2 text-5xl font-semibold tracking-tight text-indigo-600 sm:text-6xl">
               Seja um Mensalista
@@ -41,7 +33,14 @@ const Monthly = () => {
               price="R$180,00"
               features={["4 Cortes de barba por mês"]}
               buttonText="Assine agora"
-              onClick={() => setIsDrawerOpen(true)}
+              link="https://buy.stripe.com/test_6oEaFv0iXelh3TyeUV"
+              onClick={() => {
+                setSelectedPlan("mensalBarba")
+                setCheckoutLink(
+                  "https://buy.stripe.com/test_6oEaFv0iXelh3TyeUV",
+                )
+                setIsDrawerOpen(true)
+              }}
             />
             <PlanCard
               id="mensalCabelo"
@@ -49,8 +48,15 @@ const Monthly = () => {
               price="R$240,00"
               features={["4 Cortes de cabelo por mês"]}
               buttonText="Assine agora"
+              link="https://buy.stripe.com/test_fZecOw0iXfS1cAE9AB"
               dark
-              onClick={() => setIsDrawerOpen(true)}
+              onClick={() => {
+                setSelectedPlan("mensalCabelo")
+                setCheckoutLink(
+                  "https://buy.stripe.com/test_fZecOw0iXfS1cAE9AB",
+                )
+                setIsDrawerOpen(true)
+              }}
             />
             <PlanCard
               id="mensalCabeloeBarba"
@@ -58,11 +64,23 @@ const Monthly = () => {
               price="R$340,00"
               features={["4 Cortes de cabelo e barba por mês"]}
               buttonText="Assine agora"
-              onClick={() => setIsDrawerOpen(true)}
+              link="https://buy.stripe.com/test_4gwbJw5cR9N2b4weUV"
+              onClick={() => {
+                setSelectedPlan("mensalCabeloeBarba")
+                setCheckoutLink(
+                  "https://buy.stripe.com/test_4gwbJw5cR9N2b4weUV",
+                )
+                setIsDrawerOpen(true)
+              }}
             />
           </div>
         </div>
-        <AquirePlanButton open={isDrawerOpen} onOpenChange={setIsDrawerOpen} />
+        <AquirePlanButton
+          open={isDrawerOpen}
+          onOpenChange={setIsDrawerOpen}
+          selectedPlan={selectedPlan}
+          checkoutLink={checkoutLink} // Passamos o link para ser usado no drawer
+        />
       </div>
     </div>
   )
@@ -75,7 +93,8 @@ interface PlanCardProps {
   features: string[]
   buttonText: string
   dark?: boolean
-  onClick?: () => void // Adiciona a função onClick como opcional
+  link: string
+  onClick?: () => void
 }
 
 const PlanCard: React.FC<PlanCardProps> = ({
