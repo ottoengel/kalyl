@@ -15,7 +15,7 @@ const Monthly = () => {
     <div>
       <Header />
       <div className="items-center text-center">
-        <div className="relative isolate h-[750px] overflow-hidden px-6 pt-[19px] lg:px-8">
+        <div className="relative isolate h-[750px] px-6 pt-[19px] lg:px-8">
           <div
             className="absolute inset-x-0 -top-3 -z-10 transform-gpu blur-3xl"
             style={{ pointerEvents: "none" }}

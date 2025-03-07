@@ -8,18 +8,19 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  image         String?
-  role          String    @default("USER") // Campo para indicar o papel do usuário
-  accounts      Account[]
-  sessions      Session[]
-  bookings      Booking[]
-  block         Block[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id               String    @id @default(cuid())
+  name             String?
+  email            String    @unique
+  emailVerified    DateTime?
+  image            String?
+  role             String    @default("USER") // Campo para indicar o papel do usuário
+  stripeCustomerId String? // Adicionando o campo para armazenar o customerId
+  accounts         Account[]
+  sessions         Session[]
+  bookings         Booking[]
+  block            Block[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 }
 
 model Account {
@@ -72,7 +73,7 @@ model Barber {
   updatedAt DateTime         @updatedAt
   services  BarberServices[]
   bookings  Booking[]
-  blocks    Block[] 
+  blocks    Block[]
 }
 
 model BarberServices {
@@ -83,7 +84,7 @@ model BarberServices {
   price       Decimal   @db.Decimal(10, 2)
   barberId    String
   barber      Barber    @relation(fields: [barberId], references: [id])
-  bookings    Booking[] 
+  bookings    Booking[]
 }
 
 model Booking {
@@ -97,16 +98,16 @@ model Booking {
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
   type      String         @default("Reserva")
-  barber    Barber         @relation(fields: [barberId], references: [id])
+  barber    Barber         @relation(fields: [barberId], references: [id])
 }
 
 model Block {
-  id        String         @id @default(uuid())
+  id        String   @id @default(uuid())
   userId    String
-  user      User           @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
   date      DateTime
   barberId  String
-  barber    Barber         @relation(fields: [barberId], references: [id])
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+  barber    Barber   @relation(fields: [barberId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
