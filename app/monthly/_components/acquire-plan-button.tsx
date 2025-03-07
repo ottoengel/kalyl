@@ -13,6 +13,7 @@ import {
 import { Card, CardContent } from "@/app/_components/ui/card"
 import Image from "next/image"
 import { Button } from "@/app/_components/ui/button"
+import { useSession } from "next-auth/react"
 
 interface AquirePlanButtonProps {
   open: boolean
@@ -26,6 +27,7 @@ const AquirePlanButton = ({
   onOpenChange,
   selectedPlan,
 }: AquirePlanButtonProps) => {
+  const { data: session } = useSession()
   const plans = {
     mensalCabelo: "https://buy.stripe.com/test_4gw3d32r5dhd9dS6oo",
     mensalBarba: "https://buy.stripe.com/test_6oEaFv0iXelh3TyeUV",
@@ -43,7 +45,14 @@ const AquirePlanButton = ({
   // Faz o redirecionamento ao Stripe
   const handleCheckout = () => {
     if (selectedPlan && plans[selectedPlan]) {
-      window.location.href = plans[selectedPlan] // Redireciona para o checkout correto
+      let checkoutUrl: string = plans[selectedPlan]
+
+      // Adiciona o e-mail do usuário ao link de checkout, se disponível
+      if (session?.user?.email) {
+        checkoutUrl = `${checkoutUrl}?prefilled_email=${session.user.email}`
+      }
+
+      window.location.href = checkoutUrl // Redireciona para o checkout correto
     }
   }
 
@@ -76,10 +85,7 @@ const AquirePlanButton = ({
             </Card>
 
             {/* Pix */}
-            <Card
-              className="cursor-pointer hover:bg-gray-800"
-              onClick={handleCheckout}
-            >
+            <Card className="cursor-pointer hover:bg-gray-800">
               <CardContent>
                 <Image
                   src="pix.svg"
