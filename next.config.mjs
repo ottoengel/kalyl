@@ -11,6 +11,9 @@ const nextConfig = {
       {
         hostname: "freesvg.org",
       },
+      {
+        hostname: "lh3.googleusercontent.com", // Adicione o domínio do Google
+      }
     ],
   },
 }
