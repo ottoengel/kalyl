@@ -16,6 +16,18 @@ const Monthly = () => {
       <Header />
       <div className="items-center text-center">
         <div className="relative isolate h-[750px] overflow-hidden px-6 pt-[19px] lg:px-8">
+          <div
+            className="absolute inset-x-0 -top-3 -z-10 transform-gpu blur-3xl"
+            style={{ pointerEvents: "none" }}
+          >
+            <div
+              className="absolute mx-auto aspect-[1255/678] w-full max-w-[1355px] bg-gradient-to-tr from-[#ff6868] to-[#9089fc] opacity-25"
+              style={{
+                clipPath:
+                  "polygon(94.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 75.5% 0.1%, 85.7% 20%, 92.5% 32.5%, 2.2% 62.4%, 12.4% 78.1%, 47.5% 58.3%, 25.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 20%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+              }}
+            ></div>
+          </div>
           <div className="mx-auto max-w-4xl text-center">
             <p className="mt-2 text-5xl font-semibold tracking-tight text-indigo-600 sm:text-6xl">
               Seja um Mensalista
