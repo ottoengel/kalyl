@@ -158,42 +158,41 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
     setSelectedTime(time)
   }
 
-const handleCreateBooking = async () => {
-  console.log("handleCreateBooking foi chamado!");
-  
-  try {
-    if (!selectedDate) {
-      return;
-    }
-    if (!data?.user?.email) {
-      return;
-    }
-    await createBooking({
-      serviceId: service.id,
-      date: selectedDate,
-      type: "Reserva",
-      barberId: barber.id,
-    });
+  const handleCreateBooking = async () => {
+    console.log("handleCreateBooking foi chamado!")
 
-    if (!selectedDay || !selectedTime) {
-      return;
-    }
-    await sendConfirmationEmail(data.user.email, selectedDay, selectedTime);    
-    handleBookingSheetOpenChange();
-    toast.success("Reserva criada com sucesso!", {
-      action: {
-        label: "Ver Agendamentos",
-        onClick: () => router.push("/bookings"),
-      },
-    });
+    try {
+      if (!selectedDate) {
+        return
+      }
+      if (!data?.user?.email) {
+        return
+      }
+      await createBooking({
+        serviceId: service.id,
+        date: selectedDate,
+        type: "Reserva",
+        barberId: barber.id,
+      })
 
-    router.refresh();
-  } catch (error) {
-    console.error("Erro ao criar reserva!", error);
-    toast.error("Erro ao criar reserva!");
+      if (!selectedDay || !selectedTime) {
+        return
+      }
+      await sendConfirmationEmail(data.user.email, selectedDay, selectedTime)
+      handleBookingSheetOpenChange()
+      toast.success("Reserva criada com sucesso!", {
+        action: {
+          label: "Ver Agendamentos",
+          onClick: () => router.push("/bookings"),
+        },
+      })
+
+      router.refresh()
+    } catch (error) {
+      console.error("Erro ao criar reserva!", error)
+      toast.error("Erro ao criar reserva!")
+    }
   }
-};
-
 
   const timeList = useMemo(() => {
     if (!selectedDay) return []
@@ -269,6 +268,7 @@ const handleCreateBooking = async () => {
                         selected={selectedDay}
                         onSelect={handleDateSelect}
                         fromDate={new Date()}
+                        disabled={(date) => date.getDay() === 0}
                       />
                     </div>
 
