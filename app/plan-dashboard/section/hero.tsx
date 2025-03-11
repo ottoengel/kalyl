@@ -5,7 +5,7 @@ const Hero = () => {
         <h1 className="bg-white bg-[radial-gradient(100%_100%_at_top_left,white,#ffcccc,#991b1b)] bg-clip-text text-center text-8xl font-semibold tracking-tighter text-transparent">
           Plano Mensal
         </h1>
-        <p className="mt-5 text-center text-lg text-white/70">
+        <p className="mx-auto mt-5 max-w-xl text-center text-lg text-white/70 md:max-w-2xl md:text-2xl">
           Com esse plano você garante até quatro agendamentos por mês e ainda
           desbloqueia vantagens especiais todos os meses na nossa barbearia.
         </p>
