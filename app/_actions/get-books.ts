@@ -8,7 +8,7 @@ export const countBookings = async () => {
   const dailyBookings = await db.booking.groupBy({
     by: ["date"],
     _count: { id: true },
-    _sum: { service: { price: true } },
+    //_sum: { service: { price: true } },
   })
 
   const monthlyBookings = await db.booking.groupBy({
