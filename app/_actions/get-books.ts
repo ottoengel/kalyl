@@ -17,7 +17,7 @@ export const countBookings = async () => {
   })
 
   const totalRevenue = await db.booking.aggregate({
-    _sum: { service: { price: true } },
+    // _sum: { service: { price: true } },
   })
 
   return {
