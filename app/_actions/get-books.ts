@@ -24,9 +24,9 @@ export const countBookings = async () => {
     dailyBookings: dailyBookings.map((b) => ({
       date: b.date,
       count: b._count.id,
-      revenue: b._sum.service?.price || 0,
+      // revenue: b._sum.service?.price || 0,
     })),
-    totalRevenue: totalRevenue._sum.service?.price || 0,
+    // totalRevenue: totalRevenue._sum.service?.price || 0,
     monthlyBookings: monthlyBookings.length,
   }
 }
