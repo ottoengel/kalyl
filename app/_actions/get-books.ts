@@ -16,6 +16,7 @@ export const countBookings = async () => {
     _count: { id: true },
   })
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const totalRevenue = await db.booking.aggregate({
     // _sum: { service: { price: true } },
   })
