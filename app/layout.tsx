@@ -22,6 +22,9 @@ export const metadata: Metadata = {
   icons: {
     icon: "/iconl.png",
   },
+  twitter: {
+    card: "summary_large_image",
+  },
 }
 
 export default function RootLayout({
