@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 import { signIn } from "next-auth/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "./ui/button"
 import { DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog"
 import { Input } from "./ui/input"
@@ -28,6 +28,14 @@ type LoginForm = z.infer<typeof loginSchema>
 type RegisterForm = z.infer<typeof registerSchema>
 
 const SignInDialog = () => {
+  useEffect(() => {
+    setTimeout(() => {
+      const activeElement = document.activeElement as HTMLElement;
+      if (activeElement && typeof activeElement.blur === "function") {
+        activeElement.blur();
+      }
+    }, 0);
+  }, []);
   const [isLogin, setIsLogin] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -57,19 +65,19 @@ const SignInDialog = () => {
   async function handleRegister(values: RegisterForm) {
     setError(null);
     const isValidEmail = await checkEmail(values.email);
-  
+
     if (!isValidEmail) {
       toast.error("E-mail inválido! Verifique e tente novamente.");
       return;
     }
-  
+
     try {
       await createUser({
         name: values.name,
         email: values.email,
         password: values.password,
       });
-  
+
       toast.success("Usuário cadastrado! Faça login para continuar.");
       setIsLogin(true);
     } catch (error: any) {
@@ -91,14 +99,13 @@ const SignInDialog = () => {
         </DialogDescription>
       </DialogHeader>
       {isLogin ? (
-  <Form {...loginForm} key="login">
-    <form onSubmit={loginForm.handleSubmit(handleLogin)}>
-
+        <Form {...loginForm} key="login">
+          <form onSubmit={loginForm.handleSubmit(handleLogin)}>
             <FormField control={loginForm.control} name="email" render={({ field }) => (
               <FormItem>
                 <FormLabel>E-mail</FormLabel>
                 <FormControl>
-                  <Input type="email" {...field} />
+                  <Input type="email" {...field}  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -121,7 +128,7 @@ const SignInDialog = () => {
       ) : (
         <Form {...registerForm} key="register">
           <form onSubmit={registerForm.handleSubmit(handleRegister)}>
-      
+
             <FormField control={registerForm.control} name="name" render={({ field }) => (
               <FormItem>
                 <FormLabel>Nome</FormLabel>
