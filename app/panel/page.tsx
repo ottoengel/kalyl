@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @next/next/no-img-element */
 "use client"
 import Header from "../_components/header"
@@ -67,15 +65,15 @@ const Panel = () => {
     fetchData()
   }, [])
 
-  // useEffect(() => {
-  //     const fetchData = async () => {
-  //         const total = await countBookings();
-  //         if (total > 0) {
-  //             setTotalBookings(total); // Define o valor corretamente
-  //         }
-  //     };
-  //     fetchData();
-  // }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      const total = await countBookings()
+      if (total > 0) {
+        setTotalBookings(total) // Define o valor corretamente
+      }
+    }
+    fetchData()
+  }, [])
 
   return (
     <div>
@@ -155,7 +153,7 @@ const Panel = () => {
           </h3>
         </div>
         {/* Gráficos */}
-        <div className="relative w-[90%] px-20 pb-20">
+        <div className="relative w-[] px-20 pb-20">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {/* Gráfico 1 */}
             <div className="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800 md:p-6">
