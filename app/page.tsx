@@ -13,7 +13,7 @@ import FAQ from "./_components/faq-item"
 const Home = async () => {
   //pegar o usuário logado
   const session = await getServerSession(authOptions)
-  //chamar o banco
+  //chamar o banco  
   const barbers = await db.barber.findMany({})
   const confirmedBookings = await getConfirmedBookings()
 

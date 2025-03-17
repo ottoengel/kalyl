@@ -12,6 +12,7 @@ model User {
   name             String?
   email            String    @unique
   emailVerified    DateTime?
+  password         String?  // Adiciona o campo para senha
   image            String?
   role             String    @default("USER") // Campo para indicar o papel do usuário
   stripeCustomerId String? // Adicionando o campo para armazenar o customerId

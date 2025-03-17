@@ -17,32 +17,6 @@ import { useSession } from "next-auth/react"
 
 interface AquirePlanButtonProps {
   open: boolean
-<<<<<<< HEAD
-  // eslint-disable-next-line no-unused-vars
-  onOpenChange: (open: boolean) => void // Agora aceita uma função
-  link: string
-}
-
-const AquirePlanButton = ({ link, open, onOpenChange }: AquirePlanButtonProps) => {
-  const handleAqcuirePlan = async () => {
-    console.log("Redirecionado para" + link)
-    const { sessionId } = await createStripeCheckout()
-    if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
-      throw new Error("Sem publishbbble")
-    }
-    if (link) {
-      setTimeout(() => {
-        window.location.href = link
-      }, 10000) // Delay de 10 segundos
-    }
-    const stripe = await loadStripe(
-      process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
-    )
-    if (!stripe) {
-      throw new Error("Stripe not found")
-    }
-    await stripe.redirectToCheckout({ sessionId })
-=======
   onOpenChange: (open: boolean) => void
   selectedPlan: "mensalCabelo" | "mensalBarba" | "mensalCabeloeBarba" | null
   checkoutLink: string | null
@@ -66,7 +40,6 @@ const AquirePlanButton = ({
     if (selectedPlan) {
       onOpenChange(true) // Agora só abre o drawer
     }
->>>>>>> 1cc76e5c8894413e973e2ecbf077061ce68c9977
   }
 
   // Faz o redirecionamento ao Stripe

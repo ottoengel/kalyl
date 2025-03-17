@@ -6,9 +6,12 @@ const prisma = new PrismaClient();
 const backupTable = async () => {
   try {
     // Buscar todos os registros da tabela Block, incluindo relacionamentos
-    const blocks = await prisma.block.findMany({
+    const blocks = await prisma.user.findMany({
       include: {
-        user: true, // Ajuste conforme a estrutura do seu banco
+        accounts: true,
+        sessions: true,
+        bookings: true,
+        block: true
       },
     });
 
@@ -16,7 +19,7 @@ const backupTable = async () => {
     const jsonData = JSON.stringify(blocks, null, 2);
 
     // Escrever no arquivo
-    fs.writeFileSync("backup_blocks.json", jsonData);
+    fs.writeFileSync("backup_user.json", jsonData);
 
     console.log("Backup realizado com sucesso!");
   } catch (error) {
