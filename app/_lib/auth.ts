@@ -1,20 +1,25 @@
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { AuthOptions } from "next-auth"
-import { db } from "./prisma"
-import { Adapter } from "next-auth/adapters"
-import GoogleProvider from "next-auth/providers/google"
-import FacebookProvider from "next-auth/providers/facebook"
-//import { EmailProvider } from "next-auth/providers/email"
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { AuthOptions } from "next-auth";
+import { db } from "./prisma";
+import { Adapter } from "next-auth/adapters";
+import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
+import CredentialsProvider from "next-auth/providers/credentials";
 
-
-import CredentialsProvider from "next-auth/providers/credentials"
+async function getUserRole(userId: string) {
+  const user = await db.user.findUnique({
+    where: { id: userId },
+    select: { role: true },
+  });
+  return user?.role; // Se o usuário não tiver um papel definido, assume "USER"
+}
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(db) as Adapter,
   session: {
-    strategy: "jwt", // Garante que a sessão use JWT
-    maxAge: 30 * 24 * 60 * 60, // Sessão dura 30 dias
-    updateAge: 24 * 60 * 60, // Atualiza o token a cada 24h
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60,
+    updateAge: 24 * 60 * 60,
   },
   providers: [
     GoogleProvider({
@@ -32,42 +37,47 @@ export const authOptions: AuthOptions = {
         password: { label: "Senha", type: "password" },
       },
       async authorize(credentials) {
-        console.log("Tentando autenticar:", credentials)
-        
+        console.log("Tentando autenticar:", credentials);
+
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("E-mail e senha são obrigatórios!")
+          throw new Error("E-mail e senha são obrigatórios!");
         }
-        console.log("Buscando usuário no banco...")
+        console.log("Buscando usuário no banco...");
         const user = await db.user.findUnique({
           where: { email: credentials.email },
-          select: { id: true, name: true, email: true, password: true, role: true }
-        })
-     
+          select: { id: true, name: true, email: true, password: true, role: true },
+        });
+
         if (!user?.password) {
-          console.error("Usuário não encontrado:", credentials.email)
-          throw new Error("Usuário não encontrado!")
+          console.error("Usuário não encontrado:", credentials.email);
+          throw new Error("Usuário não encontrado!");
         }
 
-        console.log({ id: user.id, name: user.name, email: user.email, role: user.role })
-     
-        console.log("Usuário autenticado com sucesso!");
-
-        return { id: user.id, name: user.name, email: user.email, password: user.password, role: user.role }
+        return { id: user.id, name: user.name, email: user.email, password: user.password, role: user.role };
       },
     }),
   ],
   callbacks: {
+    async jwt({ token, user }) {
+
+      if (user) {
+        token.id = user.id;
+        token.role = user.role;
+      } else if (!token.role && token.sub) {
+        token.role = await getUserRole(token.sub); // Buscar role do banco se não estiver no token
+      }
+
+      return token;
+    },
     async session({ session, token }) {
-      console.log("🟢 Sessão ativa:", session);
-      
+
       session.user = {
         ...session.user,
-        id: token.id,  
-        role: token.role, 
-      }
-    
+        id: token.sub || null,
+        role: token.role || null,
+      };
       return session;
-    },  
+    },
   },
   secret: process.env.NEXTAUTH_SECRET,
-}
+};

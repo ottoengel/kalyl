@@ -29,8 +29,10 @@ import {
 } from "../_components/ui/select"
 import { ScrollArea } from "../_components/ui/scroll-area"
 import { pt } from "date-fns/locale"
+import { useSession } from "next-auth/react"
 
 const Dashboard = () => {
+  const { data } = useSession();
   const [adminConfirmedBlock, setAdminConfirmedBookings] = useState<Block[]>([])
   const [adminConcludedBlock, setAdminConcludedBookings] = useState<Block[]>([])
 
@@ -84,11 +86,11 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       const session = await fetch("/api/auth/session").then((res) => res.json())
-
-      if (!session?.user || session.user.role !== "ADMIN") {
+      if (!session?.user || !session.user.role || !data?.user?.role || data.user.role !== "ADMIN") {
         notFound()
-        return
-      }
+        return;
+    }
+    
 
       setIsAdmin(true)
       const confirmedBlock = await getAdminConfirmedBookings()
@@ -99,7 +101,7 @@ const Dashboard = () => {
     }
 
     fetchData()
-  }, [])
+  }, [data?.user?.role])
 
   useEffect(() => {
     const fetch = async () => {
