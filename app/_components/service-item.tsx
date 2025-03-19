@@ -79,7 +79,7 @@ const getTimeList = ({
     } else if (dayOfWeek === 5) {
       availableTimes = availableTimes.filter((time) => {
         const hour = Number(time.split(":")[0]);
-        return hour >= 9 && hour <= 13;
+        return hour >= 13;
       });
     } 
   }
