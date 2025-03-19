@@ -32,7 +32,6 @@ interface ServiceItemProps {
 }
 
 const TIME_LIST = [
-  "09:00",
   "10:00",
   "11:00",
   "12:00",
@@ -42,6 +41,7 @@ const TIME_LIST = [
   "16:00",
   "17:00",
   "18:00",
+  "19:00",
 ]
 
 interface GetTimeListProps {
@@ -65,36 +65,70 @@ const getTimeList = ({
   bookings,
   selectedDay,
   barberId,
-}: GetTimeListProps) => {
-  return TIME_LIST.filter((time) => {
-    const hour = Number(time.split(":")[0])
-    const minutes = Number(time.split(":")[1])
+}: GetTimeListProps) => { 
+  const dayOfWeek = selectedDay.getDay();
+  const specialBarberId = "4df3ad06-7a67-4941-901a-d8c166139673";
+  const barberWithLimitedTime = "9059b8db-51a1-44da-b79b-f63ac251413e";
 
-    const timeIsOnThePast = isPast(set(new Date(), { hours: hour, minutes }))
+  let availableTimes = [...TIME_LIST];
+  if (barberId === specialBarberId) {
+    availableTimes.unshift("08:00", "09:00"); 
+
+    if (dayOfWeek === 2 || dayOfWeek === 4) {
+      availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) > 11);
+    } else if (dayOfWeek === 5) {
+      availableTimes = availableTimes.filter((time) => {
+        const hour = Number(time.split(":")[0]);
+        return hour >= 9 && hour <= 13;
+      });
+    } 
+  }
+
+  if (dayOfWeek === 6) {
+    if (barberId === barberWithLimitedTime) {
+      availableTimes.unshift("09:00");
+      }  
+    availableTimes = availableTimes.filter((time) => {
+      const hour = Number(time.split(":")[0]);
+      
+      if (barberId === barberWithLimitedTime) {
+        return hour >= 9 && hour <= 15;
+      } else {
+        return hour >= 8 && hour <= 17; 
+      }
+    });
+  }
+
+  return availableTimes.filter((time) => {
+    const hour = Number(time.split(":")[0]);
+    const minutes = Number(time.split(":")[1]);
+
+    const timeIsOnThePast = isPast(set(new Date(), { hours: hour, minutes }));
     if (timeIsOnThePast && isToday(selectedDay)) {
-      return false
+      return false;
     }
 
     const hasBookingOnCurrentTime = bookings.some(
       (booking) =>
-        booking.barberId === barberId && // ✅ Agora está correto
+        booking.barberId === barberId &&
         booking.date.getHours() === hour &&
-        booking.date.getMinutes() === minutes,
-    )
+        booking.date.getMinutes() === minutes
+    );
 
     const isBlocked = block.some(
       (block) =>
-        block.barberId === barberId && // ✅ Agora está correto
+        block.barberId === barberId &&
         block.date.getHours() === hour &&
-        block.date.getMinutes() === minutes,
-    )
+        block.date.getMinutes() === minutes
+    );
 
     if (hasBookingOnCurrentTime || isBlocked) {
-      return false
+      return false;
     }
-    return true
-  })
-}
+    return true;
+  });
+};
+
 
 const ServiceItem = ({ service, barber }: ServiceItemProps) => {
   const { data } = useSession()
@@ -200,7 +234,7 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
       bookings: dayBookings,
       selectedDay,
       block: dayBlock,
-      barberId: barber.id, // Passando corretamente o barberId
+      barberId: barber.id,
     })
   }, [dayBookings, dayBlock, selectedDay, barber.id])
 
