@@ -145,8 +145,8 @@ const Dashboard = () => {
     })
   }
 
-  const hours = Array.from({ length: 10 }, (_, i) => {
-    const hour = 10 + i
+  const hours = Array.from({ length: 12 }, (_, i) => {
+    const hour = 8 + i
     return `${hour}:00`
   })
 
