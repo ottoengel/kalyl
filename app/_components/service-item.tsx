@@ -75,7 +75,7 @@ const getTimeList = ({
     availableTimes.unshift("08:00", "09:00"); 
 
     if (dayOfWeek === 2 || dayOfWeek === 4) {
-      availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) > 11);
+      availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) < 13);
     } else if (dayOfWeek === 5) {
       availableTimes = availableTimes.filter((time) => {
         const hour = Number(time.split(":")[0]);
