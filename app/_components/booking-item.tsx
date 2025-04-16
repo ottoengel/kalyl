@@ -41,13 +41,12 @@ interface BookingItemProps {
           barber: true
         }
       }
-      user: true // Inclua o usuário associado à reserva
+      user: true
     }
   }>
-  isAdmin?: boolean // Prop para identificar se é um administrador
+  isAdmin?: boolean
 }
 
-// TODO: receber agendamento como prop
 const BookingItem = ({ booking, isAdmin = false }: BookingItemProps) => {
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const isConfirmed = isFuture(booking.date)

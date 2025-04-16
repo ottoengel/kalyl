@@ -4,16 +4,15 @@
 
 import { useState, useEffect, useMemo } from "react"
 import Header from "../_components/header"
-import { notFound } from "next/navigation"
 import { getAdminConfirmedBookings } from "../_data/get-admin-confirmed-bookings"
 import { getAdminConcludedBookings } from "../_data/get-admin-concluded-bookings"
 import BookingItem from "../_components/booking-item"
 import { DayPicker } from "react-day-picker"
-import { ChevronLeft, ChevronRight, Filter } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/app/_lib/utils"
 import { buttonVariants } from "@/app/_components/ui/button"
 import { toast } from "sonner"
-import { Block } from "@prisma/client"
+import { Block, Prisma } from "@prisma/client"
 import { getBlock } from "../_actions/get-block"
 import { createBlock } from "../_actions/create-block"
 import { useRouter } from "next/navigation"
@@ -31,35 +30,44 @@ import { ScrollArea } from "../_components/ui/scroll-area"
 import { pt } from "date-fns/locale"
 import { useSession } from "next-auth/react"
 
-const Dashboard = () => {
-  const { data } = useSession();
-  const [adminConfirmedBlock, setAdminConfirmedBookings] = useState<Block[]>([])
-  const [adminConcludedBlock, setAdminConcludedBookings] = useState<Block[]>([])
-
-  const [selectedBarber, setSelectedBarber] = useState<string | undefined>(
-    undefined,
-  )
-  const [barberss, setBarberss] = useState<{ id: string; name: string }[]>([])
-
-  // filtro barber
-
-  const filterBookings = (
-    bookings: Block[],
-    selectedBarber: string | undefined,
-  ) => {
-    if (selectedBarber === "todos" || selectedBarber === undefined) {
-      return bookings // Retorna todos os agendamentos se "todos" estiver selecionado
+type BookingWithRelations = Prisma.BookingGetPayload<{
+  include: {
+    service: {
+      include: {
+        barber: true
+      }
     }
-    return bookings.filter((booking) => booking.barberId === selectedBarber) // Filtra os agendamentos pelo barbeiro selecionado
+    user: true
+  }
+}>
+
+const Dashboard = () => {
+  const { data, status } = useSession()
+  const [adminConfirmedBookings, setAdminConfirmedBookings] = useState<BookingWithRelations[]>([])
+  const [adminConcludedBookings, setAdminConcludedBookings] = useState<BookingWithRelations[]>([])
+  const [selectedBarber, setSelectedBarber] = useState<string | undefined>(undefined)
+  const [barberss, setBarberss] = useState<{ id: string; name: string }[]>([])
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [selectedDay, setSelectedDate] = useState<Date | undefined>(undefined)
+  const [selectedHour, setSelectedHour] = useState<string | undefined>(undefined)
+  const [dayBlock, setDayBlock] = useState<Block[]>([])
+  const router = useRouter()
+
+  // Filtro de barbeiros
+  const filterBookings = (bookings: BookingWithRelations[], selectedBarber: string | undefined) => {
+    if (selectedBarber === "todos" || selectedBarber === undefined) {
+      return bookings
+    }
+    return bookings.filter((booking) => booking.service.barberId === selectedBarber)
   }
 
   const filteredConfirmedBookings = useMemo(() => {
-    return filterBookings(adminConfirmedBlock, selectedBarber)
-  }, [adminConfirmedBlock, selectedBarber])
+    return filterBookings(adminConfirmedBookings, selectedBarber)
+  }, [adminConfirmedBookings, selectedBarber])
 
   const filteredConcludedBookings = useMemo(() => {
-    return filterBookings(adminConcludedBlock, selectedBarber)
-  }, [adminConcludedBlock, selectedBarber])
+    return filterBookings(adminConcludedBookings, selectedBarber)
+  }, [adminConcludedBookings, selectedBarber])
 
   useEffect(() => {
     const fetchBarbers = async () => {
@@ -73,35 +81,24 @@ const Dashboard = () => {
     fetchBarbers()
   }, [])
 
-  const [isAdmin, setIsAdmin] = useState(false)
-  const router = useRouter()
-
-  const [selectedDay, setSelectedDate] = useState<Date | undefined>(undefined)
-  const [selectedHour, setSelectedHour] = useState<string | undefined>(
-    undefined,
-  )
-
-  const [dayBlock, setDayBlock] = useState<Block[]>([])
-
   useEffect(() => {
     const fetchData = async () => {
-      const session = await fetch("/api/auth/session").then((res) => res.json())
-      if (!session?.user || !session.user.role || !data?.user?.role || data.user.role !== "ADMIN") {
-        notFound()
-        return;
-    }
-    
+      if (status === "loading") return
+
+      if (!data?.user?.role || data.user.role !== "ADMIN") {
+        return
+      }
 
       setIsAdmin(true)
-      const confirmedBlock = await getAdminConfirmedBookings()
-      const concludedBlock = await getAdminConcludedBookings()
+      const confirmedBookings = await getAdminConfirmedBookings()
+      const concludedBookings = await getAdminConcludedBookings()
 
-      setAdminConfirmedBookings(confirmedBlock)
-      setAdminConcludedBookings(concludedBlock)
+      setAdminConfirmedBookings(confirmedBookings)
+      setAdminConcludedBookings(concludedBookings)
     }
 
     fetchData()
-  }, [data?.user?.role])
+  }, [data?.user?.role, status, router])
 
   useEffect(() => {
     const fetch = async () => {
@@ -110,7 +107,6 @@ const Dashboard = () => {
         date: selectedDay,
         barberId: selectedBarber,
       })
-      console.log("Bloqueios retornados:", blockings)
       setDayBlock(blockings)
     }
     fetch()
@@ -134,14 +130,11 @@ const Dashboard = () => {
 
       const hasBookingOnCurrentTime = block.some(
         (block) =>
-          block.barberId === barberId && // Filtra pelo barberId
+          block.barberId === barberId &&
           block.date.getHours() === hour &&
           block.date.getMinutes() === minutes,
       )
-      // if (hasBookingOnCurrentTime) {
-      //   return false
-      // }
-      return true
+      return !hasBookingOnCurrentTime
     })
   }
 
@@ -165,10 +158,8 @@ const Dashboard = () => {
     createdAt: Date
     updatedAt: Date
   }
-  const handleToggleAvailability = async (
-    hasBlock: HasBlock | undefined,
-    barberId: string,
-  ) => {
+
+  const handleToggleAvailability = async (hasBlock: HasBlock | undefined, barberId: string) => {
     try {
       if (hasBlock) {
         await handleCancelBlock(hasBlock.id)
@@ -213,31 +204,28 @@ const Dashboard = () => {
       <Header />
       <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2">
         <div className="sm:order-1">
-        <div className="flex flex-col items-center">
-              <h3 className="mb-3 text-[14px] font-semibold text-gray-400">
-                Selecione o Barbeiro
-              </h3>
-              <Select
-                defaultValue="todos"
-                onValueChange={(value) => setSelectedBarber(value)}
-              >
-                <SelectTrigger className="w-[200px] sm:w-[350px] rounded border p-2 shadow-slate-600 shadow-sm">
-                  <SelectValue placeholder="Barbeiro" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="todos">Todos</SelectItem>
-                  {barberss.map((barber) => (
-                    <SelectItem key={barber.id} value={barber.id}>
-                      {barber.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="flex flex-col items-center">
+            <h3 className="mb-3 text-[14px] font-semibold text-gray-400">
+              Selecione o Barbeiro
+            </h3>
+            <Select
+              defaultValue="todos"
+              onValueChange={(value) => setSelectedBarber(value)}
+            >
+              <SelectTrigger className="w-[200px] sm:w-[350px] rounded border p-2 shadow-slate-600 shadow-sm">
+                <SelectValue placeholder="Barbeiro" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="todos">Todos</SelectItem>
+                {barberss.map((barber) => (
+                  <SelectItem key={barber.id} value={barber.id}>
+                    {barber.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
           <div className="rounded-lg p-5 text-white shadow-lg">
-            {/* <button
-                onClick={() => { console.log("TESTE", selectedDay, dayBlock )}}
-              >Teste</button> */}
             <h2 className="mb-4 text-2xl font-bold">Calendário</h2>
             <DayPicker
               showOutsideDays
@@ -247,8 +235,7 @@ const Dashboard = () => {
               locale={pt}
               className="p-3"
               classNames={{
-                months:
-                  "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
+                months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
                 month: "space-y-4",
                 caption: "flex justify-center pt-1 relative items-center",
                 caption_label: "text-sm font-medium",
@@ -261,8 +248,7 @@ const Dashboard = () => {
                 nav_button_next: "absolute right-1",
                 table: "w-full border-collapse space-y-1",
                 head_row: "flex",
-                head_cell:
-                  "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
+                head_cell: "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
                 row: "flex w-full mt-2",
                 cell: "h-9 w-9 text-center text-sm p-0 relative",
                 day: cn(
@@ -316,7 +302,7 @@ const Dashboard = () => {
                           selectedBarber,
                         )
                       } else {
-                        console.error("Barbeiro ou data não definidos.")
+                        alert("Barbeiro ou data não definidos.")
                       }
                     }}
                     className={`rounded-lg px-4 py-2 ${
@@ -347,27 +333,6 @@ const Dashboard = () => {
         <div className="space-y-3 sm:order-2">
           <div className="flex flex-row justify-between">
             <h1 className="text-xl font-bold">Agendamentos</h1>
-            {/* <div>
-              <h3 className="mb-3 text-[14px] font-semibold text-gray-400">
-                Selecione o Barbeiro
-              </h3>
-              <Select
-                defaultValue="todos"
-                onValueChange={(value) => setSelectedBarber(value)}
-              >
-                <SelectTrigger className="w-[150px] rounded border p-2">
-                  <SelectValue placeholder="Barbeiro" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="todos">Todos</SelectItem>
-                  {barberss.map((barber) => (
-                    <SelectItem key={barber.id} value={barber.id}>
-                      {barber.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div> */}
           </div>
 
           {filteredConfirmedBookings.length === 0 &&
@@ -417,10 +382,4 @@ const Dashboard = () => {
   )
 }
 
-interface CalendarProps {
-  adminConfirmedBlock: Array<{
-    id: string
-    date: string
-  }>
-}
 export default Dashboard

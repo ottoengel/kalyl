@@ -35,6 +35,7 @@ export const getAdminConcludedBookings = async () => {
           barber: true,
         },
       },
+      user: true, 
     },
     orderBy: {
       date: "desc",
