@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import { Barber, BarberServices, Booking } from "@prisma/client"
@@ -19,7 +21,14 @@ import { createBooking } from "../_actions/create-booking"
 import { useSession } from "next-auth/react"
 import { toast } from "sonner"
 import { getBookings } from "../_actions/get-bookings"
-import { Dialog, DialogContent } from "./ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog"
 import SignInDialog from "./sign-in-dialog"
 import BookingSummary from "./booking-summary"
 import { useRouter } from "next/navigation"
@@ -65,36 +74,36 @@ const getTimeList = ({
   bookings,
   selectedDay,
   barberId,
-}: GetTimeListProps) => { 
+}: GetTimeListProps) => {
   const dayOfWeek = selectedDay.getDay();
   const specialBarberId = "4df3ad06-7a67-4941-901a-d8c166139673";
   const barberWithLimitedTime = "9059b8db-51a1-44da-b79b-f63ac251413e";
 
   let availableTimes = [...TIME_LIST];
   if (barberId === specialBarberId) {
-    availableTimes.unshift("08:00", "09:00"); 
-    
-    if (dayOfWeek === 2 || dayOfWeek === 4 ) {
+    availableTimes.unshift("08:00", "09:00");
+
+    if (dayOfWeek === 2 || dayOfWeek === 4) {
       availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) < 13);
     } else if (dayOfWeek === 5) {
       availableTimes = availableTimes.filter((time) => {
         const hour = Number(time.split(":")[0]);
         return hour >= 13;
       });
-    } 
+    }
   }
 
   if (dayOfWeek === 6) {
     if (barberId === barberWithLimitedTime) {
       availableTimes.unshift("09:00");
-      }  
+    }
     availableTimes = availableTimes.filter((time) => {
       const hour = Number(time.split(":")[0]);
-      
+
       if (barberId === barberWithLimitedTime) {
         return hour >= 9 && hour <= 15;
       } else {
-        return hour >= 8 && hour <= 17; 
+        return hour >= 8 && hour <= 17;
       }
     });
   }
@@ -134,6 +143,7 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
   const { data } = useSession()
   const router = useRouter()
   const [signInDialogIsOpen, setSignInDialogIsOpen] = useState(false)
+  const [alertDialogOpen, setAlertDialogOpen] = useState(false)
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined)
   const [selectedTime, setSelectedTime] = useState<string | undefined>(
     undefined,
@@ -175,6 +185,10 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
       return setBookingSheetIsOpen(true)
     }
     return setSignInDialogIsOpen(true)
+  }
+
+  const alertDialog = () => {
+    return setAlertDialogOpen(true)
   }
 
   const handleBookingSheetOpenChange = () => {
@@ -221,7 +235,7 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
         },
       })
 
-      router.refresh()
+      return setAlertDialogOpen(false)
     } catch (error) {
       console.error("Erro ao criar reserva!", error)
       toast.error("Erro ao criar reserva!")
@@ -344,7 +358,7 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
                   {/* BOTÃO DE CONFIRMAR */}
                   <SheetFooter className="mt-5 flex justify-center px-5">
                     <Button
-                      onClick={handleCreateBooking}
+                      onClick={alertDialog}
                       disabled={!selectedDay || !selectedTime}
                       className="w-full max-w-sm"
                     >
@@ -357,6 +371,24 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
           </div>
         </CardContent>
       </Card>
+
+      <Dialog open={alertDialogOpen} onOpenChange={(open) => setAlertDialogOpen(open)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex justify-center">AVISO !</DialogTitle>
+              <div className="flex justify-center py-4">
+              <Image src="/logo.png" width={200} height={200} alt=""/>
+              </div>
+            <DialogDescription>
+              Importante: Caso o cliente não compareça no horário agendado sem aviso prévio, será cobrada uma taxa de 50% do valor do corte.
+              Agradecemos a compreensão!
+            </DialogDescription>
+            <div className="flex justify-center pt-10">
+              <Button onClick={handleCreateBooking} className="w-full max-w-sm">Confirmar</Button>
+            </div>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
 
       <Dialog
         open={signInDialogIsOpen}

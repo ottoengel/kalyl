@@ -17,7 +17,10 @@ const SidebarSheet = () => {
 
   const { data } = useSession()
 
-  const handleLogoutClick = () => signOut()
+
+  const handleLogoutClick = () => {
+    signOut({ callbackUrl: "/" })
+  }
 
   const handleBookingClick = (e: { preventDefault: () => void }) => {
     if (!data?.user) {
