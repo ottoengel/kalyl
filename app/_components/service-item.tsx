@@ -375,12 +375,12 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
       <Dialog open={alertDialogOpen} onOpenChange={(open) => setAlertDialogOpen(open)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="flex justify-center">AVISO !</DialogTitle>
+            <DialogTitle className="flex justify-center">AVISO</DialogTitle>
               <div className="flex justify-center py-4">
               <Image src="/logo.png" width={200} height={200} alt=""/>
               </div>
-            <DialogDescription>
-              Importante: Caso o cliente não compareça no horário agendado sem aviso prévio, será cobrada uma taxa de 50% do valor do corte.
+            <DialogDescription className="text-white w-[450px] pl-8">
+              <span className="text-white font-semibold">IMPORTANTE:</span> Caso o cliente não compareça no horário agendado sem aviso prévio, será cobrada uma taxa de 50% do valor do corte.
               Agradecemos a compreensão!
             </DialogDescription>
             <div className="flex justify-center pt-10">
