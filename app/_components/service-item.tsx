@@ -27,13 +27,13 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "./ui/dialog"
 import SignInDialog from "./sign-in-dialog"
 import BookingSummary from "./booking-summary"
 import { useRouter } from "next/navigation"
 import { getBlock } from "../_actions/get-block"
 import { sendConfirmationEmail } from "../_actions/send-email"
+import { Loader2 } from "lucide-react" // Import do Loader2
 
 interface ServiceItemProps {
   service: BarberServices
@@ -75,46 +75,46 @@ const getTimeList = ({
   selectedDay,
   barberId,
 }: GetTimeListProps) => {
-  const dayOfWeek = selectedDay.getDay();
-  const specialBarberId = "4df3ad06-7a67-4941-901a-d8c166139673";
-  const barberWithLimitedTime = "9059b8db-51a1-44da-b79b-f63ac251413e";
+  const dayOfWeek = selectedDay.getDay()
+  const specialBarberId = "4df3ad06-7a67-4941-901a-d8c166139673"
+  const barberWithLimitedTime = "9059b8db-51a1-44da-b79b-f63ac251413e"
 
-  let availableTimes = [...TIME_LIST];
+  let availableTimes = [...TIME_LIST]
   if (barberId === specialBarberId) {
-    availableTimes.unshift("08:00", "09:00");
+    availableTimes.unshift("08:00", "09:00")
 
     if (dayOfWeek === 2 || dayOfWeek === 4) {
-      availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) < 12);
+      availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) < 12)
     } else if (dayOfWeek === 5) {
       availableTimes = availableTimes.filter((time) => {
-        const hour = Number(time.split(":")[0]);
-        return hour >= 13;
-      });
+        const hour = Number(time.split(":")[0])
+        return hour >= 13
+      })
     }
   }
 
   if (dayOfWeek === 6) {
     if (barberId === barberWithLimitedTime) {
-      availableTimes.unshift("09:00");
+      availableTimes.unshift("09:00")
     }
     availableTimes = availableTimes.filter((time) => {
-      const hour = Number(time.split(":")[0]);
+      const hour = Number(time.split(":")[0])
 
       if (barberId === barberWithLimitedTime) {
-        return hour >= 9 && hour <= 15;
+        return hour >= 9 && hour <= 15
       } else {
-        return hour >= 8 && hour <= 17;
+        return hour >= 8 && hour <= 17
       }
-    });
+    })
   }
 
   return availableTimes.filter((time) => {
-    const hour = Number(time.split(":")[0]);
-    const minutes = Number(time.split(":")[1]);
+    const hour = Number(time.split(":")[0])
+    const minutes = Number(time.split(":")[1])
 
-    const timeIsOnThePast = isPast(set(new Date(), { hours: hour, minutes }));
+    const timeIsOnThePast = isPast(set(new Date(), { hours: hour, minutes }))
     if (timeIsOnThePast && isToday(selectedDay)) {
-      return false;
+      return false
     }
 
     const hasBookingOnCurrentTime = bookings.some(
@@ -122,22 +122,21 @@ const getTimeList = ({
         booking.barberId === barberId &&
         booking.date.getHours() === hour &&
         booking.date.getMinutes() === minutes
-    );
+    )
 
     const isBlocked = block.some(
       (block) =>
         block.barberId === barberId &&
         block.date.getHours() === hour &&
         block.date.getMinutes() === minutes
-    );
+    )
 
     if (hasBookingOnCurrentTime || isBlocked) {
-      return false;
+      return false
     }
-    return true;
-  });
-};
-
+    return true
+  })
+}
 
 const ServiceItem = ({ service, barber }: ServiceItemProps) => {
   const { data } = useSession()
@@ -145,13 +144,11 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
   const [signInDialogIsOpen, setSignInDialogIsOpen] = useState(false)
   const [alertDialogOpen, setAlertDialogOpen] = useState(false)
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined)
-  const [selectedTime, setSelectedTime] = useState<string | undefined>(
-    undefined,
-  )
+  const [selectedTime, setSelectedTime] = useState<string | undefined>(undefined)
   const [dayBlock, setDayBlock] = useState<Block[]>([])
-
   const [dayBookings, setDayBookings] = useState<Booking[]>([])
   const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false) // Novo estado para loading
 
   useEffect(() => {
     const fetch = async () => {
@@ -178,8 +175,6 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
     })
   }, [selectedDay, selectedTime])
 
-  //se tiver um usuario logado abrir o Sheet de agendamento
-  // se não abrir o dialog de login
   const handleBookingClick = () => {
     if (data?.user) {
       return setBookingSheetIsOpen(true)
@@ -208,37 +203,41 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
 
   const handleCreateBooking = async () => {
     console.log("handleCreateBooking foi chamado!")
+    setIsLoading(true) // Atbehaviors Ativa o estado de carregamento
 
     try {
-      if (!selectedDate) {
+      if (!selectedDate || !data?.user?.email || !selectedDay || !selectedTime) {
+        setIsLoading(false)
         return
       }
-      if (!data?.user?.email) {
-        return
-      }
-      await createBooking({
-        serviceId: service.id,
-        date: selectedDate,
-        type: "Reserva",
-        barberId: barber.id,
-      })
 
-      if (!selectedDay || !selectedTime) {
-        return
-      }
-      await sendConfirmationEmail(data.user.email, selectedDay, selectedTime)
+      // Usar Promise.all para executar as chamadas em paralelo
+      await Promise.all([
+        createBooking({
+          serviceId: service.id,
+          date: selectedDate,
+          type: "Reserva",
+          barberId: barber.id,
+        }),
+        sendConfirmationEmail(data.user.email, selectedDay, selectedTime),
+      ])
+
+      // Fecha o diálogo e limpa os estados
       handleBookingSheetOpenChange()
+      setAlertDialogOpen(false)
+
+      // Exibe o toast de sucesso
       toast.success("Reserva criada com sucesso!", {
         action: {
           label: "Ver Agendamentos",
           onClick: () => router.push("/bookings"),
         },
       })
-
-      return setAlertDialogOpen(false)
     } catch (error) {
       console.error("Erro ao criar reserva!", error)
       toast.error("Erro ao criar reserva!")
+    } finally {
+      setIsLoading(false) // Desativa o estado de carregamento
     }
   }
 
@@ -298,7 +297,6 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
                   Reservar
                 </Button>
 
-                {/* Modal ocupando a altura total */}
                 <SheetContent className="flex h-full w-full max-w-2xl flex-col px-4">
                   <SheetHeader>
                     <SheetTitle className="text-xl font-bold">
@@ -306,9 +304,7 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
                     </SheetTitle>
                   </SheetHeader>
 
-                  {/* Conteúdo com rolagem interna */}
                   <div className="scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-100 flex-1 overflow-y-auto">
-                    {/* CALENDÁRIO */}
                     <div className="border-b py-5">
                       <Calendar
                         mode="single"
@@ -320,7 +316,6 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
                       />
                     </div>
 
-                    {/* HORÁRIOS DISPONÍVEIS */}
                     {selectedDay && (
                       <div className="flex flex-wrap gap-3 border-b py-5">
                         {timeList.length > 0 ? (
@@ -355,7 +350,6 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
                     )}
                   </div>
 
-                  {/* BOTÃO DE CONFIRMAR */}
                   <SheetFooter className="mt-5 flex justify-center px-5">
                     <Button
                       onClick={alertDialog}
@@ -396,8 +390,16 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
               <Button
                 onClick={handleCreateBooking}
                 className="w-full max-w-[80%] sm:max-w-[300px] py-2 text-sm sm:text-base"
+                disabled={isLoading} // Desativa o botão durante o carregamento
               >
-                Confirmar
+                {isLoading ? (
+                  <div className="flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>Confirmando...</span>
+                  </div>
+                ) : (
+                  "Confirmar"
+                )}
               </Button>
             </div>
           </DialogHeader>
