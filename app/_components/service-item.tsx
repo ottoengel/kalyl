@@ -82,7 +82,7 @@ const getTimeList = ({
   let availableTimes = [...TIME_LIST];
   if (barberId === specialBarberId) {
     availableTimes.unshift("08:00", "09:00");
-    
+
     if (dayOfWeek === 2 || dayOfWeek === 4) {
       availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) < 12);
     } else if (dayOfWeek === 5) {
@@ -373,18 +373,32 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
       </Card>
 
       <Dialog open={alertDialogOpen} onOpenChange={(open) => setAlertDialogOpen(open)}>
-        <DialogContent>
+        <DialogContent className="max-w-[90vw] sm:max-w-[450px] p-4 sm:p-6">
           <DialogHeader>
-            <DialogTitle className="flex justify-center">AVISO</DialogTitle>
-              <div className="flex justify-center py-4">
-              <Image src="/logo.png" width={200} height={200} alt=""/>
-              </div>
-            <DialogDescription className="text-white w-[450px] pl-8">
-              <span className="text-white font-semibold">IMPORTANTE:</span> Caso o cliente não compareça no horário agendado sem aviso prévio, será cobrada uma taxa de 50% do valor do corte.
-              Agradecemos a compreensão!
+            <DialogTitle className="flex justify-center text-lg sm:text-xl font-bold">
+              AVISO
+            </DialogTitle>
+            <div className="flex justify-center py-4">
+              <Image
+                src="/logo.png"
+                width={150}
+                height={150}
+                alt="Logo"
+                className="w-[100px] sm:w-[150px] h-auto"
+              />
+            </div>
+            <DialogDescription className="text-white text-sm sm:text-base w-full px-2 sm:pl-8">
+              <span className="font-semibold">IMPORTANTE:</span> Caso o cliente não
+              compareça no horário agendado sem aviso prévio, será cobrada uma taxa de
+              50% do valor do corte. Agradecemos a compreensão!
             </DialogDescription>
-            <div className="flex justify-center pt-10">
-              <Button onClick={handleCreateBooking} className="w-full max-w-sm">Confirmar</Button>
+            <div className="flex justify-center pt-6 sm:pt-10">
+              <Button
+                onClick={handleCreateBooking}
+                className="w-full max-w-[80%] sm:max-w-[300px] py-2 text-sm sm:text-base"
+              >
+                Confirmar
+              </Button>
             </div>
           </DialogHeader>
         </DialogContent>
