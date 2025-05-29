@@ -85,11 +85,11 @@ const getTimeList = ({
 
     if (dayOfWeek === 2 || dayOfWeek === 4) {
       availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) < 12)
-    } else if (dayOfWeek === 5) {
-      availableTimes = availableTimes.filter((time) => {
-        const hour = Number(time.split(":")[0])
-        return hour >= 13
-      })
+    // } else if (dayOfWeek === 5) {
+    //   availableTimes = availableTimes.filter((time) => {
+    //     const hour = Number(time.split(":")[0])
+    //     return hour >= 13
+    //   })
     }
   }
 
@@ -148,7 +148,7 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
   const [dayBlock, setDayBlock] = useState<Block[]>([])
   const [dayBookings, setDayBookings] = useState<Booking[]>([])
   const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false) // Novo estado para loading
+  const [isLoading, setIsLoading] = useState(false) 
 
   useEffect(() => {
     const fetch = async () => {
@@ -202,8 +202,7 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
   }
 
   const handleCreateBooking = async () => {
-    console.log("handleCreateBooking foi chamado!")
-    setIsLoading(true) // Atbehaviors Ativa o estado de carregamento
+    setIsLoading(true)
 
     try {
       if (!selectedDate || !data?.user?.email || !selectedDay || !selectedTime) {
@@ -211,7 +210,6 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
         return
       }
 
-      // Usar Promise.all para executar as chamadas em paralelo
       await Promise.all([
         createBooking({
           serviceId: service.id,
@@ -222,11 +220,9 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
         sendConfirmationEmail(data.user.email, selectedDay, selectedTime),
       ])
 
-      // Fecha o diálogo e limpa os estados
       handleBookingSheetOpenChange()
       setAlertDialogOpen(false)
 
-      // Exibe o toast de sucesso
       toast.success("Reserva criada com sucesso!", {
         action: {
           label: "Ver Agendamentos",
@@ -237,7 +233,7 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
       console.error("Erro ao criar reserva!", error)
       toast.error("Erro ao criar reserva!")
     } finally {
-      setIsLoading(false) // Desativa o estado de carregamento
+      setIsLoading(false) 
     }
   }
 
