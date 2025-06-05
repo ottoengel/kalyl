@@ -88,7 +88,7 @@ const getTimeList = ({
     } else if (dayOfWeek === 5) {
       availableTimes = availableTimes.filter((time) => {
         const hour = Number(time.split(":")[0])
-        return hour >= 9
+        return hour >= 13
       })
     }
   }
@@ -103,7 +103,7 @@ const getTimeList = ({
       if (barberId === barberWithLimitedTime) {
         return hour >= 9 && hour <= 15
       } else {
-        return hour >= 8 && hour <= 17
+        return hour >= 8 && hour <= 16
       }
     })
   }
