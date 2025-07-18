@@ -86,12 +86,12 @@ const getTimeList = ({
     // if (dayOfWeek === 2 || dayOfWeek === 4) {
     //   availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) < 12)
     // } else 
-     if (dayOfWeek === 5) {
-      availableTimes = availableTimes.filter((time) => {
-        const hour = Number(time.split(":")[0])
-        return hour >= 14
-      })
-    }
+    //  if (dayOfWeek === 5) {
+    //   availableTimes = availableTimes.filter((time) => {
+    //     const hour = Number(time.split(":")[0])
+    //     return hour >= 14
+    //   })
+    // }
   }
 
   if (dayOfWeek === 6) {
