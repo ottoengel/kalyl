@@ -80,19 +80,23 @@ const getTimeList = ({
   const barberWithLimitedTime = "9059b8db-51a1-44da-b79b-f63ac251413e"
 
   let availableTimes = [...TIME_LIST]
-  if (barberId === specialBarberId) {
-    availableTimes.unshift("08:00", "09:00")
+if (barberId === specialBarberId) {
+  availableTimes.unshift("08:00", "09:00");
 
-    // if (dayOfWeek === 2 || dayOfWeek === 4) {
-    //   availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) < 12)
-    // } else 
-    //  if (dayOfWeek === 5) {
-    //   availableTimes = availableTimes.filter((time) => {
-    //     const hour = Number(time.split(":")[0])
-    //     return hour >= 14
-    //   })
-    // }
+  if (dayOfWeek === 2) {
+    // Terça-feira: horários a partir das 13h
+    availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) >= 13);
+  } else if (dayOfWeek === 4) {
+    // Quinta-feira: nenhum horário disponível
+    availableTimes = [];
+  } else if (dayOfWeek === 5) {
+    // Sexta-feira: apenas até 12h (inclusive)
+    availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) <= 12);
+  } else if (dayOfWeek === 3) {
+    // Quarta-feira: horários após 11h
+    availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) > 11);
   }
+}
 
   if (dayOfWeek === 6) {
     if (barberId === barberWithLimitedTime) {
