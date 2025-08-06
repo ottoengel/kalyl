@@ -92,10 +92,7 @@ if (barberId === specialBarberId) {
   } else if (dayOfWeek === 5) {
     // Sexta-feira: apenas até 12h (inclusive)
     availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) <= 12);
-  } else if (dayOfWeek === 3) {
-    // Quarta-feira: horários após 11h
-    availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) > 11);
-  }
+  } 
 }
 
   if (dayOfWeek === 6) {
