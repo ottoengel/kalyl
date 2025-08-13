@@ -85,13 +85,13 @@ if (barberId === specialBarberId) {
 
   if (dayOfWeek === 2) {
     // Terça-feira: horários a partir das 13h
-    availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) >= 13);
+    availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) <= 13);
   } else if (dayOfWeek === 4) {
     // Quinta-feira: nenhum horário disponível
     availableTimes = [];
   } else if (dayOfWeek === 5) {
     // Sexta-feira: apenas até 12h (inclusive)
-    availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) <= 12);
+    availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) >= 12);
   } 
 }
 
