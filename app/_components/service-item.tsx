@@ -85,7 +85,7 @@ if (barberId === specialBarberId) {
 
   if (dayOfWeek === 2) {
     // Terça-feira: horários a partir das 13h
-    availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) <= 11);
+    availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) <= 14);
   } else if (dayOfWeek === 4) {
     // Quinta-feira: nenhum horário disponível
     availableTimes = [];
