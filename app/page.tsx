@@ -75,9 +75,18 @@ const Home = async () => {
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
           Barbeiros
         </h2>
-        <div className="flex gap-4 sm:gap-40 overflow-auto [&::-webkit-scrollbar]:hidden justify-center items-center">
-          {barbers.map((barbers) => (
-            <BarberItem key={barbers.id} barbers={barbers} />
+        <div className="grid grid-cols-2 gap-6 justify-items-center">
+          {barbers.map((barber, index) => (
+            <div
+              key={barber.id}
+              className={`w-full flex justify-center ${
+                index === barbers.length - 1 && barbers.length % 2 !== 0
+                  ? "col-span-2 justify-center"
+                  : ""
+              }`}
+            >
+              <BarberItem barbers={barber} />
+            </div>
           ))}
         </div>
 
