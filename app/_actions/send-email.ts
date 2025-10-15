@@ -15,17 +15,12 @@ export const sendConfirmationEmail = async (
       booking_time: selectedTime,
     };
     
-    
-    console.log("Tentando enviar email com os seguintes parâmetros:", templateParams);
-
     await emailjs.send(
       "service_1gvqecc",   // Service ID
       "template_mbbmyyv",  // Template ID
       templateParams,
       "40IxkVcO3KPJtrHD8"     // Substitua pelo seu Public Key do EmailJS
     );
-
-    console.log("Email enviado com sucesso!");
   } catch (error) {
     console.error("Erro ao enviar email:", error);
   }

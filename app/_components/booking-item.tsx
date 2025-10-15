@@ -32,6 +32,7 @@ import { deleteBooking } from "../_actions/delete-booking"
 import { toast } from "sonner"
 import { useState } from "react"
 import BookingSummary from "./booking-summary"
+import Link from "next/link"
 
 interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
@@ -120,13 +121,14 @@ const BookingItem = ({ booking, isAdmin = false }: BookingItemProps) => {
         </SheetHeader>
 
         <div className="relative mt-6 flex h-[180px] w-full items-end">
-          <Image
-            alt="Mapa da barbearia"
-            src="/mapskl.png"
-            fill
-            className="rounded-xl object-cover"
-          />
-
+          <Link target="_blank" href="https://www.google.com/maps/place/Barbearia+Kalyl/@-25.4167769,-49.2546765,17z/data=!3m1!4b1!4m6!3m5!1s0x94dce592cbbdeedf:0xda8c6fc77c01c1b!8m2!3d-25.4167769!4d-49.2546765!16s%2Fg%2F11mqh_zvk7?entry=ttu&g_ep=EgoyMDI1MTAxMi4wIKXMDSoASAFQAw%3D%3D">
+            <Image
+              alt="Mapa da barbearia"
+              src="/mapskl.png"
+              fill
+              className="rounded-xl object-cover"
+            />
+          </Link>
           <Card className="z-50 mx-5 mb-3 w-full rounded-xl">
             <CardContent className="flex items-center gap-3 px-5 py-3">
               <Avatar>

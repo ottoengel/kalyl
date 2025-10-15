@@ -5,6 +5,7 @@ import { MenuIcon } from "lucide-react"
 import { Sheet, SheetTrigger } from "./ui/sheet"
 import SidebarSheet from "./sidebar-sheet"
 import Link from "next/link"
+import { FaInstagram } from "react-icons/fa";
 
 const Header = () => {
   return (
@@ -13,6 +14,12 @@ const Header = () => {
         <Link href="/">
           <Image src="/logo.png" height={18} width={70} alt="Barbearia Kalyl" />
         </Link>
+
+        <div className="mx-auto">
+          <Link href="https://www.instagram.com/barbeariakalyl/">
+            <FaInstagram className="hover:text-slate-300" size={30} />
+          </Link>
+        </div>
 
         <Sheet>
           <SheetTrigger asChild>
