@@ -45,7 +45,7 @@ export default function Phone() {
         try {
             const response = await updateNumber(formData)
             toast.success(response.message)
-            setInterval(() => {
+            setTimeout(() => {
                 router.push("/")
             }, 400)
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
