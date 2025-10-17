@@ -155,6 +155,9 @@ const BookingItem = ({ booking, isAdmin = false }: BookingItemProps) => {
               <p className="text-sm font-medium">
                 Cliente: {booking.user.name}
               </p>
+              <p className="text-sm font-medium">
+                Telefone: {booking.user.number}
+              </p>
             </div>
           )}
 

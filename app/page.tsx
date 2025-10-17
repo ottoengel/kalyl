@@ -9,6 +9,7 @@ import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import { getConfirmedBookings } from "./_data/get-confirmed-bookings"
 import FAQ from "./_components/faq-item"
+import CheckPhoneNumber from "./_components/checkNumber"
 
 const Home = async () => {
   //pegar o usuário logado
@@ -16,10 +17,11 @@ const Home = async () => {
   //chamar o banco  
   const barbers = await db.barber.findMany({})
   const confirmedBookings = await getConfirmedBookings()
-
+  
   return (
     <div>
       {/* HEADER */}
+      <CheckPhoneNumber />
       <Header />
       <div className="p-5">
         {/* TEXTO */}
