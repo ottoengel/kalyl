@@ -78,23 +78,29 @@ const getTimeList = ({
   const dayOfWeek = selectedDay.getDay()
   const specialBarberId = "4df3ad06-7a67-4941-901a-d8c166139673"
   const barberWithLimitedTime = "9059b8db-51a1-44da-b79b-f63ac251413e"
+  const otherBarber = "ecc5f06c-1cc3-4ddd-a418-37b95a193f86"
+
 
   let availableTimes = [...TIME_LIST]
-if (barberId === specialBarberId) {
-  availableTimes.unshift("08:00", "09:00");
+  if (barberId === otherBarber) {
+    availableTimes.unshift("10:30", "11:30", "12:30", "13:30", "14:30", "15:30", "16:30", "17:30", "18:30");
+  }
 
-  if (dayOfWeek === 6) {
-    // Terça-feira: horários a partir das 13h
-    availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) <= 15);
-  } 
-  //else if (dayOfWeek === 4) {
-//     // Quinta-feira: nenhum horário disponível
-//     availableTimes = [];
-//   } else if (dayOfWeek === 5) {
-//     // Sexta-feira: apenas até 12h (inclusive)
-//     availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) >= 11);
-//   } 
-}
+  if (barberId === specialBarberId) {
+    availableTimes.unshift("08:00", "09:00");
+
+    if (dayOfWeek === 6) {
+      // Terça-feira: horários a partir das 13h
+      availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) <= 15);
+    }
+    //else if (dayOfWeek === 4) {
+    //     // Quinta-feira: nenhum horário disponível
+    //     availableTimes = [];
+    //   } else if (dayOfWeek === 5) {
+    //     // Sexta-feira: apenas até 12h (inclusive)
+    //     availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) >= 11);
+    //   } 
+  }
 
   if (dayOfWeek === 6) {
     if (barberId === barberWithLimitedTime) {
@@ -151,14 +157,14 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
   const [dayBlock, setDayBlock] = useState<Block[]>([])
   const [dayBookings, setDayBookings] = useState<Booking[]>([])
   const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false) 
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const fetch = async () => {
       if (!selectedDay) return
       const bookings = await getBookings({
         date: selectedDay,
-        serviceId: service.id,
+        // serviceId: service.id,
         barberId: barber.id,
       })
       setDayBookings(bookings)
@@ -213,13 +219,32 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
         return
       }
 
-      await Promise.all([
-        createBooking({
+      const specialServiceId = "8bc967aa-a009-4283-bf9c-930b5d539536"
+      const otherBarberId = "ecc5f06c-1cc3-4ddd-a418-37b95a193f86"
+
+      const bookingsToCreate = [
+        {
           serviceId: service.id,
           date: selectedDate,
           type: "Reserva",
           barberId: barber.id,
-        }),
+        },
+      ]
+
+      if (barber.id === otherBarberId && service.id === specialServiceId) {
+        const nextSlot = new Date(selectedDate)
+        nextSlot.setMinutes(nextSlot.getMinutes() + 30)
+
+        bookingsToCreate.push({
+          serviceId: service.id,
+          date: nextSlot,
+          type: "Reserva",
+          barberId: barber.id,
+        })
+      }
+
+      await Promise.all([
+        ...bookingsToCreate.map((booking) => createBooking(booking)),
         sendConfirmationEmail(data.user.email, selectedDay, selectedTime),
       ])
 
@@ -236,7 +261,7 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
       console.error("Erro ao criar reserva!", error)
       toast.error("Erro ao criar reserva!")
     } finally {
-      setIsLoading(false) 
+      setIsLoading(false)
     }
   }
 
