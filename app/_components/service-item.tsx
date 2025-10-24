@@ -80,10 +80,10 @@ const getTimeList = ({
   const barberWithLimitedTime = "9059b8db-51a1-44da-b79b-f63ac251413e"
   const otherBarber = "ecc5f06c-1cc3-4ddd-a418-37b95a193f86"
 
-
   let availableTimes = [...TIME_LIST]
+
   if (barberId === otherBarber) {
-    availableTimes.unshift("10:30", "11:30", "12:30", "13:30", "14:30", "15:30", "16:30", "17:30", "18:30");
+    availableTimes = ["10:00","10:30","11:00","11:30","12:00", "12:30","13:00", "13:30","14:00", "14:30","15:00", "15:30","16:00", "16:30","17:00", "17:30","18:00", "18:30", "19:00"];
   }
 
   if (barberId === specialBarberId) {
