@@ -95,7 +95,7 @@ const Booking = ({ service, barber }: ServiceItemProps) => {
         }
 
         const allBookings = await getBookings({
-          serviceId,
+          // serviceId,
           date: selectedDay,
           barberId: barber.id,
         })
