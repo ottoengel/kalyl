@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useTransition } from "react"
 import Header from "../_components/header"
 import { getAdminConfirmedBookings } from "../_data/get-admin-confirmed-bookings"
 import { getAdminConcludedBookings } from "../_data/get-admin-concluded-bookings"
@@ -52,7 +52,7 @@ const Dashboard = () => {
   const [selectedHour, setSelectedHour] = useState<string | undefined>(undefined)
   const [dayBlock, setDayBlock] = useState<Block[]>([])
   const router = useRouter()
-
+  const [isPending, startTransition] = useTransition()
   // Filtro de barbeiros
   const filterBookings = (bookings: BookingWithRelations[], selectedBarber: string | undefined) => {
     if (selectedBarber === "todos" || selectedBarber === undefined) {
@@ -101,15 +101,18 @@ const Dashboard = () => {
   }, [data?.user?.role, status, router])
 
   useEffect(() => {
-    const fetch = async () => {
-      if (!selectedDay || !selectedBarber) return
-      const blockings = await getBlock({
+    const fetchBlocks = async () => {
+      if (!selectedDay || !selectedBarber) {
+        setDayBlock([])
+        return
+      }
+      const blocks = await getBlock({
         date: selectedDay,
         barberId: selectedBarber,
       })
-      setDayBlock(blockings)
+      setDayBlock(blocks)
     }
-    fetch()
+    fetchBlocks()
   }, [selectedDay, selectedBarber])
 
   interface GetTimeListProps {
@@ -118,24 +121,33 @@ const Dashboard = () => {
     barberId: string
   }
 
-  const getTimeList = ({ block, selectedDay, barberId }: GetTimeListProps) => {
-    return hours.filter((time) => {
-      const hour = Number(time.split(":")[0])
-      const minutes = Number(time.split(":")[1])
+  type TimeSlot = {
+    time: string
+    isBlocked: boolean
+  }
 
-      const timeIsOnThePast = isPast(set(new Date(), { hours: hour, minutes }))
-      if (timeIsOnThePast && isToday(selectedDay)) {
-        return false
-      }
+  const getTimeList = (blocks: Block[], selectedDay: Date, barberId: string): TimeSlot[] => {
+    return hours
+      .map((time): TimeSlot => {
+        const [hourStr, minStr] = time.split(":")
+        const hour = Number(hourStr)
+        const minutes = Number(minStr)
+   
+        const timeIsPast = isPast(set(new Date(), { hours: hour, minutes }))
+        if (timeIsPast && isToday(selectedDay)) {
+          return { time, isBlocked: true }  
+        }
 
-      const hasBookingOnCurrentTime = block.some(
-        (block) =>
-          block.barberId === barberId &&
-          block.date.getHours() === hour &&
-          block.date.getMinutes() === minutes,
-      )
-      return !hasBookingOnCurrentTime
-    })
+        const isRealBlocked = blocks.some(
+          (block) =>
+            block.barberId === barberId &&
+            block.date.getHours() === hour &&
+            block.date.getMinutes() === minutes
+        )
+
+        return { time, isBlocked: isRealBlocked }
+      })
+      .filter(({ isBlocked }) => !isBlocked || true) 
   }
 
   const hours = Array.from({ length: 12 }, (_, i) => {
@@ -144,11 +156,9 @@ const Dashboard = () => {
   })
 
   const selectedDate = useMemo(() => {
-    if (!selectedDay || !selectedHour) return
-    return set(selectedDay, {
-      hours: Number(selectedHour?.split(":")[0]),
-      minutes: Number(selectedHour?.split(":")[1]),
-    })
+    if (!selectedDay || !selectedHour) return undefined
+    const [h, m] = selectedHour.split(":")
+    return set(selectedDay, { hours: Number(h), minutes: Number(m) })
   }, [selectedDay, selectedHour])
 
   interface HasBlock {
@@ -159,40 +169,66 @@ const Dashboard = () => {
     updatedAt: Date
   }
 
-  const handleToggleAvailability = async (hasBlock: HasBlock | undefined, barberId: string) => {
-    try {
-      if (hasBlock) {
-        await handleCancelBlock(hasBlock.id)
-      } else if (selectedDate && barberId) {
-        if (!selectedDate || !selectedBarber) {
-          console.error("Erro: Data ou barbeiro não selecionado.")
-          return
+  // const handleToggleAvailability = async (hasBlock: HasBlock | undefined, barberId: string) => {
+  //   try {
+  //     if (hasBlock) {
+  //       await handleCancelBlock(hasBlock.id)
+  //     } else if (selectedDate && barberId) {
+  //       if (!selectedDate || !selectedBarber) {
+  //         console.error("Erro: Data ou barbeiro não selecionado.")
+  //         return
+  //       }
+  //       await createBlock({ date: selectedDate, barberId: selectedBarber })
+  //       toast.success("Horário bloqueado com sucesso!")
+  //     }
+  //   } catch (error) {
+  //     toast.error("Erro ao criar ou cancelar bloqueio!")
+  //   }
+  // }
+
+  // const handleCancelBlock = async (block: string) => {
+  //   try {
+  //     await deleteBlock(block)
+  //     toast.success("Horario desbloqueado com sucesso!")
+  //   } catch (error) {
+  //     console.error(error)
+  //     toast.error("Erro ao cancelar reserva. Tente novamente.")
+  //   }
+  // }
+
+  const handleToggleBlock = async (timeSlot: TimeSlot) => {
+    startTransition(async () => { 
+      try {
+        if (timeSlot.isBlocked) {
+          const blockToDelete = dayBlock.find(
+            (b) => b.date.getHours() === Number(timeSlot.time.split(":")[0]) &&
+              b.date.getMinutes() === 0
+          )
+          if (blockToDelete) {
+            await deleteBlock(blockToDelete.id)
+            toast.success("✅ Horário desbloqueado!")
+          }
+        } else {
+          if (!selectedDate || !selectedBarber) return
+          await createBlock({ date: selectedDate, barberId: selectedBarber })
+          toast.success("✅ Horário bloqueado!")
         }
-        await createBlock({ date: selectedDate, barberId: selectedBarber })
-        toast.success("Horário bloqueado com sucesso!")
+
+        const newBlocks = await getBlock({
+          date: selectedDay!,
+          barberId: selectedBarber!,
+        })
+        setDayBlock(newBlocks)
+        setSelectedHour(undefined) 
+      } catch (error) {
+        toast.error("❌ Erro ao bloquear/desbloquear!")
       }
-    } catch (error) {
-      toast.error("Erro ao criar ou cancelar bloqueio!")
-    }
-  }
-
-  const handleCancelBlock = async (block: string) => {
-    try {
-      await deleteBlock(block)
-      toast.success("Horario desbloqueado com sucesso!")
-    } catch (error) {
-      console.error(error)
-      toast.error("Erro ao cancelar reserva. Tente novamente.")
-    }
-  }
-
-  const timeList = useMemo(() => {
-    if (!selectedDay || !selectedBarber) return []
-    return getTimeList({
-      selectedDay,
-      block: dayBlock,
-      barberId: selectedBarber,
     })
+  }
+
+  const timeList: TimeSlot[] = useMemo(() => {
+    if (!selectedDay || !selectedBarber) return []
+    return getTimeList(dayBlock, selectedDay, selectedBarber)
   }, [dayBlock, selectedDay, selectedBarber])
 
   if (!isAdmin) {
@@ -270,60 +306,48 @@ const Dashboard = () => {
               <h3 className="mb-2 mt-4 text-center text-lg font-semibold">
                 Horários para {selectedDay.toLocaleDateString()}
               </h3>
-              <div className="grid grid-cols-4 gap-4">
-                {timeList.map((hour) => (
-                  <button
-                    key={hour}
-                    className={`rounded-lg p-3 text-center transition-colors duration-200 ${
-                      selectedHour === hour
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-800 hover:bg-gray-700"
-                    }`}
-                    onClick={() => setSelectedHour(hour)}
-                  >
-                    {hour}
-                  </button>
-                ))}
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 md:gap-4">
+                {timeList.map(({ time, isBlocked }) => {
+                  const isSelected = selectedHour === time && !isBlocked
+                  return (
+                    <button
+                      key={time}
+                      disabled={isPending}
+                      onClick={() => {
+                        if (isBlocked) {
+                          handleToggleBlock({ time, isBlocked: true })
+                        } else {
+                          setSelectedHour(time)
+                        }
+                      }}
+                      className={cn(
+                        "rounded-lg p-3 text-center font-medium transition-all duration-200 shadow-sm",
+                        isPending && "opacity-50 cursor-not-allowed",
+                        isSelected
+                          ? "bg-blue-500 text-white shadow-md shadow-blue-500/25"
+                          : isBlocked
+                            ? "bg-red-500/20 text-red-400 border-2 border-red-500/50 line-through hover:bg-red-500/30"
+                            : "bg-gray-800 hover:bg-gray-700 border border-gray-600 hover:border-gray-500"
+                      )}
+                    >
+                      {time}
+                      {isBlocked && <span className="ml-1 text-xs">🔒</span>}
+                    </button>
+                  )
+                })}
               </div>
 
-              {selectedHour && (
+              {selectedHour && !timeList.find(t => t.time === selectedHour)?.isBlocked && (
                 <div className="mt-6 text-center">
-                  <p className="mb-4">Horário selecionado: {selectedHour}</p>
+                  <p className="mb-4 text-sm text-gray-300">
+                    Horário selecionado: <strong>{selectedHour}</strong>
+                  </p>
                   <button
-                    onClick={() => {
-                      if (selectedBarber && selectedDate) {
-                        handleToggleAvailability(
-                          dayBlock.find(
-                            (block) =>
-                              block.barberId === selectedBarber &&
-                              new Date(block.date).toISOString() ===
-                                new Date(selectedDate).toISOString(),
-                          ),
-                          selectedBarber,
-                        )
-                      } else {
-                        alert("Barbeiro ou data não definidos.")
-                      }
-                    }}
-                    className={`rounded-lg px-4 py-2 ${
-                      dayBlock.some(
-                        (block) =>
-                          block.barberId === selectedBarber &&
-                          new Date(block.date).toISOString() ===
-                            new Date(selectedDate ?? new Date()).toISOString(),
-                      )
-                        ? "bg-red-600 text-white hover:bg-red-700"
-                        : "bg-green-600 text-white hover:bg-green-700"
-                    }`}
+                    onClick={() => handleToggleBlock({ time: selectedHour!, isBlocked: false })}
+                    disabled={isPending}
+                    className="rounded-lg bg-green-600 px-6 py-2 font-semibold text-white shadow-lg hover:bg-green-700 disabled:opacity-50"
                   >
-                    {dayBlock.some(
-                      (block) =>
-                        block.barberId === selectedBarber &&
-                        new Date(block.date).toISOString() ===
-                          new Date(selectedDate ?? new Date()).toISOString(),
-                    )
-                      ? "Desbloquear Horário"
-                      : "Bloquear Horário"}
+                    {isPending ? "..." : "🔒 Bloquear Horário"}
                   </button>
                 </div>
               )}
