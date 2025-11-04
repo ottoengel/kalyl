@@ -11,6 +11,53 @@ import { getConfirmedBookings } from "./_data/get-confirmed-bookings"
 import FAQ from "./_components/faq-item"
 import CheckPhoneNumber from "./_components/checkNumber"
 
+export const metadata = {
+  title: "Barbearia Kalyl - Estilo, Tradição e Atendimento de Qualidade",
+  description:
+    "A Barbearia Kalyl oferece cortes de cabelo, barba e cuidados masculinos com estilo, tradição e atendimento personalizado. Agende seu horário e eleve seu visual.",
+  alternates: {
+    canonical: "https://www.barbeariakalyl.com.br/",
+  },
+  openGraph: {
+    title: "Barbearia Kalyl - Estilo e Tradição em Cada Corte",
+    description:
+      "Cortes modernos, barba bem feita e atendimento de primeira. Na Barbearia Kalyl, você encontra o cuidado que merece. Venha viver a experiência Kalyl!",
+    url: "https://www.barbeariakalyl.com.br/",
+    siteName: "Barbearia Kalyl",
+    images: [
+      {
+        url: "https://www.barbeariakalyl.com.br/logo.png",
+        secure_url: "https://www.barbeariakalyl.com.br/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Barbearia Kalyl - Corte e Barba com Estilo",
+      },
+    ],
+    locale: "pt_BR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Barbearia Kalyl - Corte e Barba com Estilo",
+    description:
+      "Transforme seu visual com a Barbearia Kalyl. Especialistas em cortes masculinos, barba e estilo. Agende seu horário agora!",
+    creator: "@barbeariakalyl",
+    images: ["https://www.barbeariakalyl.com.br/logo.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  viewport: "width=device-width, initial-scale=1",
+};
+
 const Home = async () => {
   //pegar o usuário logado
   const session = await getServerSession(authOptions)
