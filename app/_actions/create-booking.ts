@@ -19,7 +19,7 @@ export const createBooking = async (params: CreateBookingParams) => {
   }
   await db.booking.create({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    data: { ...params, userId: (user.user as any).id },
+    data: { ...params, date: new Date(params.date.toISOString()), userId: (user.user as any).id },
   })
   revalidatePath("/barbers/[id]")
   revalidatePath("/bookings")

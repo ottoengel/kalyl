@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
@@ -83,7 +84,7 @@ const getTimeList = ({
   let availableTimes = [...TIME_LIST]
 
   if (barberId === otherBarber) {
-    availableTimes = ["10:00","10:30","11:00","11:30","12:00", "12:30","13:00", "13:30","14:00", "14:30","15:00", "15:30","16:00", "16:30","17:00", "17:30","18:00", "18:30", "19:00"];
+    availableTimes = ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"];
   }
 
   if (barberId === specialBarberId) {
@@ -159,22 +160,31 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
   const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(() => {
-    const fetch = async () => {
-      if (!selectedDay) return
-      const bookings = await getBookings({
-        date: selectedDay,
-        // serviceId: service.id,
-        barberId: barber.id,
-      })
-      setDayBookings(bookings)
-      const blockings: Block[] = await getBlock({
-        date: selectedDay,
-      })
-      setDayBlock(blockings)
-    }
-    fetch()
-  }, [selectedDay, service.id, barber.id])
+ const loadBookings = async () => {
+  if (!selectedDay) return
+  const bookings = await getBookings({
+    date: selectedDay,
+    barberId: barber.id,
+  })
+  setDayBookings(bookings)
+
+  const blockings: Block[] = await getBlock({
+    date: selectedDay,
+  })
+  setDayBlock(blockings)
+}
+
+useEffect(() => {
+  loadBookings()
+}, [selectedDay, service.id, barber.id])
+
+useEffect(() => {
+  if (!selectedDay) return
+  const interval = setInterval(() => {
+    loadBookings()
+  }, 5000) 
+  return () => clearInterval(interval)
+}, [selectedDay])
 
   const selectedDate = useMemo(() => {
     if (!selectedDay || !selectedTime) return
@@ -352,7 +362,10 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
                               className="rounded-full px-4 py-2"
                               onClick={() => handleTimeSelect(time)}
                             >
-                              {time}
+                              {<p>
+                                {time}
+                              </p>
+                              }
                             </Button>
                           ))
                         ) : (
