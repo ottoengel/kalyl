@@ -42,6 +42,7 @@ interface ServiceItemProps {
 }
 
 const TIME_LIST = [
+  "09:00",
   "10:00",
   "11:00",
   "12:00",
@@ -52,6 +53,7 @@ const TIME_LIST = [
   "17:00",
   "18:00",
   "19:00",
+  "20:00"
 ]
 
 interface GetTimeListProps {
@@ -84,16 +86,16 @@ const getTimeList = ({
   let availableTimes = [...TIME_LIST]
 
   if (barberId === otherBarber) {
-    availableTimes = ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"];
+    availableTimes = ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00"];
   }
 
   if (barberId === specialBarberId) {
-    availableTimes.unshift("08:00", "09:00");
+    availableTimes.unshift("08:00");
 
-    if (dayOfWeek === 6) {
-      // Terça-feira: horários a partir das 13h
-      availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) <= 15);
-    }
+    // if (dayOfWeek === 6) {
+    //   // Terça-feira: horários a partir das 13h
+    //   availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) <= 15);
+    // }
     //else if (dayOfWeek === 4) {
     //     // Quinta-feira: nenhum horário disponível
     //     availableTimes = [];
@@ -102,11 +104,17 @@ const getTimeList = ({
     //     availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) >= 11);
     //   } 
   }
+  if (dayOfWeek === 1 || dayOfWeek === 2 || dayOfWeek === 3 || dayOfWeek === 4 || dayOfWeek === 5) {
+    availableTimes = availableTimes.filter((time) => {
+      const hour = Number(time.split(":")[0])
 
-  if (dayOfWeek === 6) {
-    if (barberId === barberWithLimitedTime) {
-      availableTimes.unshift("09:00")
-    }
+      if (barberId === barberWithLimitedTime) {
+        return hour >= 9 && hour <= 19
+      } else {
+        return hour >= 8 && hour <= 20
+      }
+    })
+  }  else if (dayOfWeek === 6) {
     availableTimes = availableTimes.filter((time) => {
       const hour = Number(time.split(":")[0])
 
