@@ -52,8 +52,7 @@ const TIME_LIST = [
   "16:00",
   "17:00",
   "18:00",
-  "19:00",
-  "20:00"
+  "19:00"
 ]
 
 interface GetTimeListProps {
@@ -102,12 +101,12 @@ const getTimeList = ({
   }
 
   if (barberId === specialBarberId) {
-    availableTimes.unshift("08:00");
+    availableTimes.unshift("08:00", "09:00");
 
-    // if (dayOfWeek === 6) {
-    //   // Terça-feira: horários a partir das 13h
-    //   availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) <= 15);
-    // }
+    if (dayOfWeek === 6) {
+      // Terça-feira: horários a partir das 13h
+      availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) <= 15);
+    }
     //else if (dayOfWeek === 4) {
     //     // Quinta-feira: nenhum horário disponível
     //     availableTimes = [];
@@ -116,17 +115,11 @@ const getTimeList = ({
     //     availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) >= 11);
     //   } 
   }
-  if (dayOfWeek === 1 || dayOfWeek === 2 || dayOfWeek === 3 || dayOfWeek === 4 || dayOfWeek === 5) {
-    availableTimes = availableTimes.filter((time) => {
-      const hour = Number(time.split(":")[0])
 
-      if (barberId === barberWithLimitedTime) {
-        return hour >= 9 && hour <= 19
-      } else {
-        return hour >= 8 && hour <= 20
-      }
-    })
-  }  else if (dayOfWeek === 6) {
+  if (dayOfWeek === 6) {
+    if (barberId === barberWithLimitedTime) {
+      availableTimes.unshift("09:00")
+    }
     availableTimes = availableTimes.filter((time) => {
       const hour = Number(time.split(":")[0])
 
