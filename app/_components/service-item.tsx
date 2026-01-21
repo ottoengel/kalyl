@@ -42,7 +42,6 @@ interface ServiceItemProps {
 }
 
 const TIME_LIST = [
-  "09:00",
   "10:00",
   "11:00",
   "12:00",
@@ -117,14 +116,11 @@ const getTimeList = ({
   }
 
   if (dayOfWeek === 6) {
-    if (barberId === barberWithLimitedTime) {
-      availableTimes.unshift("09:00")
-    }
     availableTimes = availableTimes.filter((time) => {
       const hour = Number(time.split(":")[0])
 
       if (barberId === barberWithLimitedTime) {
-        return hour >= 9 && hour <= 15
+        return hour >= 10 && hour <= 15
       } else {
         return hour >= 8 && hour <= 16
       }
