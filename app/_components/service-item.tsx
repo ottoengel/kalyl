@@ -81,31 +81,32 @@ const getTimeList = ({
   const barberWithLimitedTime = "9059b8db-51a1-44da-b79b-f63ac251413e"
   const otherBarber = "ecc5f06c-1cc3-4ddd-a418-37b95a193f86"
 
+  // Normaliza o barberId para evitar problemas de comparação
+  const normalizedBarberId = String(barberId).trim()
+
   let availableTimes = [...TIME_LIST]
 
-  if (barberId === otherBarber) {
-        // availableTimes = ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00"];
+  // Aplicar condições de forma mutuamente exclusiva
+  if (normalizedBarberId === otherBarber) {
+    // availableTimes = ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00"];
     availableTimes = ["09:00",
-  "10:00",
-  "11:00",
-  "12:00",
-  "13:00",
-  "14:00",
-  "15:00",
-  "16:00",
-  "17:00",
-  "18:00",
-  "19:00",
-  "20:00"];
-  }
-
-  if (barberId === specialBarberId) {
+      "10:00",
+      "11:00",
+      "12:00",
+      "13:00",
+      "14:00",
+      "15:00",
+      "16:00",
+      "17:00",
+      "18:00",
+      "19:00",
+      "20:00"];
+  } else if (normalizedBarberId === specialBarberId) {
     availableTimes.unshift("08:00", "09:00");
-
-    if (dayOfWeek === 6) {
-      // Terça-feira: horários a partir das 13h
-      availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) <= 15);
-    }
+    // if (dayOfWeek === 6) {
+    //   // Terça-feira: horários a partir das 13h
+    //   availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) <= 15);
+    // }
     //else if (dayOfWeek === 4) {
     //     // Quinta-feira: nenhum horário disponível
     //     availableTimes = [];
@@ -119,7 +120,7 @@ const getTimeList = ({
     availableTimes = availableTimes.filter((time) => {
       const hour = Number(time.split(":")[0])
 
-      if (barberId === barberWithLimitedTime) {
+      if (normalizedBarberId === barberWithLimitedTime) {
         return hour >= 10 && hour <= 15
       } else {
         return hour >= 8 && hour <= 16
@@ -138,14 +139,14 @@ const getTimeList = ({
 
     const hasBookingOnCurrentTime = bookings.some(
       (booking) =>
-        booking.barberId === barberId &&
+        String(booking.barberId).trim() === normalizedBarberId &&
         booking.date.getHours() === hour &&
         booking.date.getMinutes() === minutes
     )
 
     const isBlocked = block.some(
       (block) =>
-        block.barberId === barberId &&
+        String(block.barberId).trim() === normalizedBarberId &&
         block.date.getHours() === hour &&
         block.date.getMinutes() === minutes
     )
