@@ -121,9 +121,11 @@ const getTimeList = ({
       const hour = Number(time.split(":")[0])
 
       if (normalizedBarberId === barberWithLimitedTime) {
-        return hour >= 9 && hour <= 15
+        return hour >= 9 && hour <= 14
+      } else if ( normalizedBarberId === otherBarber ) {
+        return hour >= 10 && hour <= 15
       } else {
-        return hour >= 8 && hour <= 16
+        return hour >= 8 && hour <= 15
       }
     })
   }
