@@ -32,7 +32,7 @@ const Hero = () => {
             </Button>
           </div>
 
-          <p className='mx-auto mt-5 max-w-xl text-center text-sm text-white/70 md:max-w-2xl md:text-2xl top-5 relative'>
+          <p className='mx-auto mt-5 max-w-xl text-center text-sm  text-white/70 md:max-w-2xl md:text-2xl top-5 relative'>
             ou
           </p>
 

@@ -12,7 +12,7 @@ import SignInDialog from "./sign-in-dialog"
 import { useState } from "react"
 
 const SidebarSheet = () => {
-  
+
   const [signInDialogIsOpen, setSignInDialogIsOpen] = useState(false)
 
   const { data } = useSession()
@@ -85,6 +85,19 @@ const SidebarSheet = () => {
             {data?.user?.role === "ADMIN" ? "Dashboard" : "Agendamentos"}
           </Link>
         </Button>
+        {data?.user?.role === "ADMIN" && (
+          <>
+            <Button className="justify-start gap-2" variant="ghost" asChild>
+              <Link
+                href="/panel"
+                onClick={handleBookingClick}
+              >
+                <Gauge size={18} />
+                Rendimentos
+              </Link>
+            </Button>
+          </>
+        )}
         {/* <Button className="justify-start gap-2" variant="ghost" asChild>
         <Link
             href={data?.user?.role === "ADMIN" && "MENSALISTA" ? "/month" : "/monthly"}
