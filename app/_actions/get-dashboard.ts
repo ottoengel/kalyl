@@ -7,8 +7,6 @@ export async function getDashboardData(): Promise<DashboardResponse> {
   const now = new Date();
 
   const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
   // Buscar barbeiros com serviços e bookings
   const barbers = await db.barber.findMany({
     include: {
@@ -25,10 +23,12 @@ export async function getDashboardData(): Promise<DashboardResponse> {
     const monthBookings = barber.bookings.filter(
       (booking) =>
         booking.date >= firstDayOfMonth &&
-        booking.date <= lastDayOfMonth
+        booking.date <= now
     );
 
-    const totalBookings = barber.bookings;
+    const totalBookings = barber.bookings.filter(
+      (booking) => booking.date <= now
+    );
 
     // Agrupar por serviço
     const services = barber.services.map((service) => {
