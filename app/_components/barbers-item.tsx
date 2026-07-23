@@ -1,37 +1,45 @@
-  import { Barber } from "@prisma/client"
-  import { Card, CardContent } from "./ui/card"
-  import Image from "next/image"
-  import { Button } from "./ui/button"
-  import Link from "next/link"
+import { Barber } from "@prisma/client"
+import { Card, CardContent } from "./ui/card"
+import Image from "next/image"
+import { Button } from "./ui/button"
+import Link from "next/link"
+import { CalendarDays } from "lucide-react"
 
-  interface BarberItemProps {
-    barbers: Barber
-  }
+interface BarberItemProps {
+  barbers: Barber
+}
 
-  const BarberItem = ({ barbers }: BarberItemProps) => {
-    return (
-      <Card className="min-w-[167px] rounded-2xl lg:min-w-[310px]">
-        <CardContent className="p-0 px-1 pt-1">
-          {/* IMAGEM */}
-          <div className="relative h-[279px] w-full aspect-w-16 aspect-h-9">
-            <Image
-              fill
-              className="rounded-2xls object-cover"
-              src={barbers.imageUrl}
-              alt={barbers.name}
-            />
-          </div>
+const BarberItem = ({ barbers }: BarberItemProps) => {
+  return (
+    <Card className="card-hover group w-full overflow-hidden rounded-2xl border-border/60">
+      <CardContent className="p-0">
+        {/* IMAGEM */}
+        <div className="relative aspect-[3/4] w-full overflow-hidden">
+          <Image
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            src={barbers.imageUrl}
+            alt={barbers.name}
+            sizes="(max-width: 640px) 50vw, 33vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
+        </div>
 
-          {/* TEXTO */}
-          <div className="px-1 py-3">
-            <h3 className="truncate font-semibold">{barbers.name}</h3>
-            <Button variant="secondary" className="mt-3 w-full" asChild>
-              <Link href={`/barbers/${barbers.id}`}>Reservar</Link>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
+        {/* TEXTO */}
+        <div className="space-y-3 p-3 sm:p-4">
+          <h3 className="truncate font-display text-xl tracking-wide">
+            {barbers.name}
+          </h3>
+          <Button className="w-full font-semibold" asChild>
+            <Link href={`/barbers/${barbers.id}`}>
+              <CalendarDays className="mr-1" />
+              Reservar
+            </Link>
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
 
-  export default BarberItem
+export default BarberItem

@@ -90,17 +90,19 @@ model BarberServices {
 }
 
 model Booking {
-  id        String         @id @default(uuid())
-  userId    String
-  barberId  String
-  user      User           @relation(fields: [userId], references: [id])
-  serviceId String
-  service   BarberServices @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-  date      DateTime
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-  type      String         @default("Reserva")
-  barber    Barber         @relation(fields: [barberId], references: [id])
+  id              String         @id @default(uuid())
+  userId          String
+  barberId        String
+  user            User           @relation(fields: [userId], references: [id])
+  serviceId       String
+  service         BarberServices @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  date            DateTime
+  durationMinutes Int            @default(30)
+  observation     String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  type            String         @default("Reserva")
+  barber          Barber         @relation(fields: [barberId], references: [id])
 }
 
 model Block {

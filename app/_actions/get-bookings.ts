@@ -4,17 +4,17 @@ import { endOfDay, startOfDay } from "date-fns"
 import { db } from "../_lib/prisma"
 
 interface GetBookingsProps {
-  // serviceId: string
   date: Date
   barberId?: string
 }
 
-export const getBookings = ({ date }: GetBookingsProps) => {
+export const getBookings = ({ date, barberId }: GetBookingsProps) => {
   return db.booking.findMany({
     where: {
+      ...(barberId ? { barberId } : {}),
       date: {
-        lte: endOfDay(date), //mennor ou igual
-        gte: startOfDay(date), //maior ou igual
+        lte: endOfDay(date),
+        gte: startOfDay(date),
       },
     },
   })

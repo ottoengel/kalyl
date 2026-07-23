@@ -7,13 +7,14 @@ interface GetBlockProps {
   date: Date
   barberId?: string
 }
- // pegar seção do create
-export const  getBlock = ({ date }: GetBlockProps) => {
+
+export const getBlock = ({ date, barberId }: GetBlockProps) => {
   return db.block.findMany({
     where: {
+      ...(barberId ? { barberId } : {}),
       date: {
-        lte: endOfDay(date), //mennor ou igual
-        gte: startOfDay(date), //maior ou igual
+        lte: endOfDay(date),
+        gte: startOfDay(date),
       },
     },
   })

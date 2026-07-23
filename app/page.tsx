@@ -10,6 +10,9 @@ import { ptBR } from "date-fns/locale"
 import { getConfirmedBookings } from "./_data/get-confirmed-bookings"
 import FAQ from "./_components/faq-item"
 import CheckPhoneNumber from "./_components/checkNumber"
+import { Button } from "./_components/ui/button"
+import Link from "next/link"
+import { CalendarDays, MapPin, Scissors } from "lucide-react"
 
 export const metadata = {
   title: "Barbearia Kalyl - Estilo, Tradição e Atendimento de Qualidade",
@@ -59,58 +62,80 @@ export const metadata = {
 };
 
 const Home = async () => {
-  //pegar o usuário logado
   const session = await getServerSession(authOptions)
-  //chamar o banco  
-  const barbers = await db.barber.findMany({})
-  const confirmedBookings = await getConfirmedBookings()
-  
+  const [barbers, confirmedBookings] = await Promise.all([
+    db.barber.findMany({}),
+    getConfirmedBookings(),
+  ])
+
   return (
     <div>
-      {/* HEADER */}
       <CheckPhoneNumber />
       <Header />
-      <div className="p-5">
-        {/* TEXTO */}
-        <h2 className="text-xl font-bold">
-          Olá, {session?.user ? session.user.name : "bem vindo"}
-        </h2>
-        <p>
-          <span className="capitalize">
-            {format(new Date(), "EEEE, dd", { locale: ptBR })}
-          </span>
-          <span>&nbsp;de&nbsp;</span>
-          <span className="capitalize">
-            {format(new Date(), "MMMM", { locale: ptBR })}
-          </span>
-        </p>
 
-        {/* IMAGEM */}
-        <div className="flex justify-center items-center">
+      {/* HERO */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0">
           <Image
-            alt="Agende nos melhores com o Kalyls"
-            src="/banner-02.png"
-
-            className="rounded-xl object-cover"
-
-            width={780}
-            height={500}
+            alt="Barbearia Kalyl"
+            src="/banner_main.jpg"
+            fill
+            priority
+            className="object-cover object-center opacity-40"
           />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background" />
         </div>
 
-        {/* <div className={styles.container}>
+        <div className="relative mx-auto max-w-6xl px-5 py-20 sm:py-28">
+          <p className="mb-3 flex items-center gap-2 text-sm font-medium uppercase tracking-widest text-primary">
+            <Scissors size={16} />
+            Barbearia Kalyl
+          </p>
+          <h1 className="font-display text-5xl leading-none text-foreground sm:text-7xl">
+            Estilo e tradição
+            <br />
+            <span className="text-gold-gradient">em cada corte</span>
+          </h1>
+          <p className="mt-4 max-w-xl text-base text-muted-foreground sm:text-lg">
+            Olá, {session?.user ? session.user.name : "seja bem-vindo"}!{" "}
+            <span className="capitalize">
+              {format(new Date(), "EEEE, dd", { locale: ptBR })}
+            </span>
+            {" de "}
+            <span className="capitalize">
+              {format(new Date(), "MMMM", { locale: ptBR })}
+            </span>
+            . Escolha seu barbeiro e garanta seu horário em segundos.
+          </p>
 
-            <Image src={Banner} width={400} height={300}
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Button size="lg" className="font-semibold" asChild>
+              <Link href="#barbeiros">
+                <CalendarDays className="mr-1" />
+                Agendar agora
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <Link
+                href="https://www.google.com/maps/place/Barbearia+Kalyl/@-25.4167769,-49.2546765,17z"
+                target="_blank"
+              >
+                <MapPin className="mr-1" />
+                Como chegar
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
 
-          </div> */}
+      <div className="mx-auto max-w-6xl px-5">
+        {/* AGENDAMENTOS */}
         {confirmedBookings.length > 0 && (
-          <>
-            <h2 className="relative mb-3 mt-6 text-xs font-bold uppercase text-gray-400 justify-center items-center">
-              Agendamentos
+          <section className="mt-10">
+            <h2 className="mb-4 font-display text-2xl tracking-wide text-foreground">
+              Seus <span className="text-primary">agendamentos</span>
             </h2>
-
-            {/* AGENDAMENTO */}
-            <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+            <div className="scrollbar-hidden flex gap-4 overflow-x-auto pb-2">
               {confirmedBookings.map((booking) => (
                 <BookingItem
                   key={booking.id}
@@ -118,31 +143,28 @@ const Home = async () => {
                 />
               ))}
             </div>
-          </>
+          </section>
         )}
 
-        <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
-          Barbeiros
-        </h2>
-        <div className="grid grid-cols-2 gap-6 justify-items-center">
-          {barbers.map((barber, index) => (
-            <div
-              key={barber.id}
-              className={`w-full flex justify-center ${
-                index === barbers.length - 1 && barbers.length % 2 !== 0
-                  ? "col-span-2 justify-center"
-                  : ""
-              }`}
-            >
-              <BarberItem barbers={barber} />
-            </div>
-          ))}
-        </div>
+        {/* BARBEIROS */}
+        <section id="barbeiros" className="mt-12 scroll-mt-24">
+          <h2 className="mb-1 font-display text-3xl tracking-wide text-foreground">
+            Nossos <span className="text-primary">barbeiros</span>
+          </h2>
+          <p className="mb-6 text-sm text-muted-foreground">
+            Escolha seu barbeiro preferido e veja os horários disponíveis.
+          </p>
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
+            {barbers.map((barber) => (
+              <BarberItem key={barber.id} barbers={barber} />
+            ))}
+          </div>
+        </section>
 
-
-        <div className="pt-3">
+        {/* FAQ */}
+        <section className="mt-14">
           <FAQ />
-        </div>
+        </section>
       </div>
     </div>
   )

@@ -1,6 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import { Barber, BarberServices, Booking } from "@prisma/client"
@@ -16,7 +14,6 @@ import {
 } from "./ui/sheet"
 import { Calendar } from "./ui/calendar"
 import { ptBR } from "date-fns/locale"
-import { isPast, isToday, set } from "date-fns"
 import { useEffect, useMemo, useState } from "react"
 import { createBooking } from "../_actions/create-booking"
 import { useSession } from "next-auth/react"
@@ -34,31 +31,17 @@ import BookingSummary from "./booking-summary"
 import { useRouter } from "next/navigation"
 import { getBlock } from "../_actions/get-block"
 import { sendConfirmationEmail } from "../_actions/send-email"
-import { Loader2 } from "lucide-react" // Import do Loader2
+import { Clock, Loader2, MessageSquareText } from "lucide-react"
+import {
+  generateTimeSlots,
+  getServiceDuration,
+  isSlotAvailable,
+  slotToDate,
+} from "../_lib/schedule"
 
 interface ServiceItemProps {
   service: BarberServices
   barber: Pick<Barber, "name" | "id">
-}
-
-const TIME_LIST = [
-  "10:00",
-  "11:00",
-  "12:00",
-  "13:00",
-  "14:00",
-  "15:00",
-  "16:00",
-  "17:00",
-  "18:00",
-  "19:00"
-]
-
-interface GetTimeListProps {
-  bookings: Booking[]
-  selectedDay: Date
-  block: Block[]
-  barberId: string
 }
 
 interface Block {
@@ -70,96 +53,6 @@ interface Block {
   updatedAt: Date
 }
 
-const getTimeList = ({
-  block,
-  bookings,
-  selectedDay,
-  barberId,
-}: GetTimeListProps) => {
-  const dayOfWeek = selectedDay.getDay()
-  const specialBarberId = "4df3ad06-7a67-4941-901a-d8c166139673"
-  const barberWithLimitedTime = "9059b8db-51a1-44da-b79b-f63ac251413e"
-  const otherBarber = "ecc5f06c-1cc3-4ddd-a418-37b95a193f86"
-
-  // Normaliza o barberId para evitar problemas de comparação
-  const normalizedBarberId = String(barberId).trim()
-
-  let availableTimes = [...TIME_LIST]
-
-  // Aplicar condições de forma mutuamente exclusiva
-  if (normalizedBarberId === otherBarber) {
-    // availableTimes = ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00"];
-    availableTimes = ["09:00",
-      "10:00",
-      "11:00",
-      "12:00",
-      "13:00",
-      "14:00",
-      "15:00",
-      "16:00",
-      "17:00",
-      "18:00",
-      "19:00",
-      "20:00"];
-  } else if (normalizedBarberId === specialBarberId) {
-    availableTimes.unshift("08:00", "09:00");
-    // if (dayOfWeek === 6) {
-    //   // Terça-feira: horários a partir das 13h
-    //   availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) <= 15);
-    // }
-    //else if (dayOfWeek === 4) {
-    //     // Quinta-feira: nenhum horário disponível
-    //     availableTimes = [];
-    //   } else if (dayOfWeek === 5) {
-    //     // Sexta-feira: apenas até 12h (inclusive)
-    //     availableTimes = availableTimes.filter((time) => Number(time.split(":")[0]) >= 11);
-    //   } 
-  }
-
-  if (dayOfWeek === 6) {
-    availableTimes = availableTimes.filter((time) => {
-      const hour = Number(time.split(":")[0])
-
-      if (normalizedBarberId === barberWithLimitedTime) {
-        return hour >= 9 && hour <= 14
-      } else if ( normalizedBarberId === otherBarber ) {
-        return hour >= 10 && hour <= 15
-      } else {
-        return hour >= 8 && hour <= 15
-      }
-    })
-  }
-
-  return availableTimes.filter((time) => {
-    const hour = Number(time.split(":")[0])
-    const minutes = Number(time.split(":")[1])
-
-    const timeIsOnThePast = isPast(set(new Date(), { hours: hour, minutes }))
-    if (timeIsOnThePast && isToday(selectedDay)) {
-      return false
-    }
-
-    const hasBookingOnCurrentTime = bookings.some(
-      (booking) =>
-        String(booking.barberId).trim() === normalizedBarberId &&
-        booking.date.getHours() === hour &&
-        booking.date.getMinutes() === minutes
-    )
-
-    const isBlocked = block.some(
-      (block) =>
-        String(block.barberId).trim() === normalizedBarberId &&
-        block.date.getHours() === hour &&
-        block.date.getMinutes() === minutes
-    )
-
-    if (hasBookingOnCurrentTime || isBlocked) {
-      return false
-    }
-    return true
-  })
-}
-
 const ServiceItem = ({ service, barber }: ServiceItemProps) => {
   const { data } = useSession()
   const router = useRouter()
@@ -167,43 +60,40 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
   const [alertDialogOpen, setAlertDialogOpen] = useState(false)
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined)
   const [selectedTime, setSelectedTime] = useState<string | undefined>(undefined)
+  const [observation, setObservation] = useState("")
   const [dayBlock, setDayBlock] = useState<Block[]>([])
   const [dayBookings, setDayBookings] = useState<Booking[]>([])
   const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
- const loadBookings = async () => {
-  if (!selectedDay) return
-  const bookings = await getBookings({
-    date: selectedDay,
-    barberId: barber.id,
-  })
-  setDayBookings(bookings)
+  // Duração definida pelo barbeiro/serviço — o cliente não escolhe
+  const serviceDuration = getServiceDuration(barber.id, service.name)
 
-  const blockings: Block[] = await getBlock({
-    date: selectedDay,
-  })
-  setDayBlock(blockings)
-}
+  const loadBookings = async () => {
+    if (!selectedDay) return
+    const [bookings, blockings] = await Promise.all([
+      getBookings({ date: selectedDay, barberId: barber.id }),
+      getBlock({ date: selectedDay, barberId: barber.id }),
+    ])
+    setDayBookings(bookings)
+    setDayBlock(blockings as Block[])
+  }
 
-useEffect(() => {
-  loadBookings()
-}, [selectedDay, service.id, barber.id])
-
-useEffect(() => {
-  if (!selectedDay) return
-  const interval = setInterval(() => {
+  useEffect(() => {
     loadBookings()
-  }, 5000) 
-  return () => clearInterval(interval)
-}, [selectedDay])
+  }, [selectedDay, barber.id])
+
+  useEffect(() => {
+    if (!selectedDay || !bookingSheetIsOpen) return
+    const interval = setInterval(() => {
+      loadBookings()
+    }, 15000)
+    return () => clearInterval(interval)
+  }, [selectedDay, bookingSheetIsOpen])
 
   const selectedDate = useMemo(() => {
     if (!selectedDay || !selectedTime) return
-    return set(selectedDay, {
-      hours: Number(selectedTime?.split(":")[0]),
-      minutes: Number(selectedTime?.split(":")[1]),
-    })
+    return slotToDate(selectedDay, selectedTime)
   }, [selectedDay, selectedTime])
 
   const handleBookingClick = () => {
@@ -213,23 +103,13 @@ useEffect(() => {
     return setSignInDialogIsOpen(true)
   }
 
-  const alertDialog = () => {
-    return setAlertDialogOpen(true)
-  }
-
   const handleBookingSheetOpenChange = () => {
     setSelectedDay(undefined)
     setSelectedTime(undefined)
+    setObservation("")
     setDayBookings([])
+    setDayBlock([])
     setBookingSheetIsOpen(false)
-  }
-
-  const handleDateSelect = (date: Date | undefined) => {
-    setSelectedDay(date)
-  }
-
-  const handleTimeSelect = (time: string) => {
-    setSelectedTime(time)
   }
 
   const handleCreateBooking = async () => {
@@ -241,32 +121,15 @@ useEffect(() => {
         return
       }
 
-      const specialServiceId = "8bc967aa-a009-4283-bf9c-930b5d539536"
-      const otherBarberId = "ecc5f06c-1cc3-4ddd-a418-37b95a193f86"
-
-      const bookingsToCreate = [
-        {
+      await Promise.all([
+        createBooking({
           serviceId: service.id,
           date: selectedDate,
           type: "Reserva",
           barberId: barber.id,
-        },
-      ]
-
-      if (barber.id === otherBarberId && service.id === specialServiceId) {
-        const nextSlot = new Date(selectedDate)
-        nextSlot.setMinutes(nextSlot.getMinutes() + 30)
-
-        bookingsToCreate.push({
-          serviceId: service.id,
-          date: nextSlot,
-          type: "Reserva",
-          barberId: barber.id,
-        })
-      }
-
-      await Promise.all([
-        ...bookingsToCreate.map((booking) => createBooking(booking)),
+          durationMinutes: serviceDuration,
+          observation: observation.trim() || undefined,
+        }),
         sendConfirmationEmail(data.user.email, selectedDay, selectedTime),
       ])
 
@@ -289,42 +152,51 @@ useEffect(() => {
 
   const timeList = useMemo(() => {
     if (!selectedDay) return []
-    return getTimeList({
-      bookings: dayBookings,
-      selectedDay,
-      block: dayBlock,
-      barberId: barber.id,
-    })
-  }, [dayBookings, dayBlock, selectedDay, barber.id])
+    return generateTimeSlots(barber.id, selectedDay, serviceDuration).filter(
+      (slot) =>
+        isSlotAvailable({
+          barberId: barber.id,
+          day: selectedDay,
+          slot,
+          durationMinutes: serviceDuration,
+          bookings: dayBookings,
+          blocks: dayBlock,
+        }),
+    )
+  }, [dayBookings, dayBlock, selectedDay, barber.id, serviceDuration])
 
   return (
     <>
-      <Card className="mx-auto my-6 max-w-4xl shadow-lg">
-        <CardContent className="flex flex-col items-center gap-6 p-6 lg:flex-row lg:items-start">
+      <Card className="card-hover overflow-hidden rounded-2xl border-border/60">
+        <CardContent className="flex gap-4 p-4 sm:gap-5 sm:p-5">
           {/* IMAGEM */}
-          <div className="relative mx-auto aspect-square w-full max-w-[110px] lg:mx-0 lg:max-w-[110px]">
+          <div className="relative aspect-square w-[90px] shrink-0 overflow-hidden rounded-xl sm:w-[110px]">
             <Image
               alt={service.name}
               src={service.imageUrl}
               fill
-              className="rounded-lg object-cover"
+              className="object-cover"
+              sizes="110px"
             />
           </div>
 
           {/* DETALHES */}
-          <div className="flex-1 space-y-4">
-            <div className="space-y-2">
-              <h3 className="text-center text-xl font-semibold lg:text-left">
+          <div className="flex flex-1 flex-col justify-between gap-2">
+            <div className="space-y-1">
+              <h3 className="font-display text-xl tracking-wide">
                 {service.name}
               </h3>
-              <p className="text-center text-sm text-gray-500 lg:text-left">
+              <p className="line-clamp-2 text-sm text-muted-foreground">
                 {service.description}
+              </p>
+              <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <Clock size={12} className="text-primary" />
+                {serviceDuration === 60 ? "1 hora" : `${serviceDuration} min`}
               </p>
             </div>
 
-            {/* PREÇO E AÇÃO */}
-            <div className="flex flex-col items-center space-y-4 lg:items-start">
-              <p className="text-2xl font-bold text-red-600">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-lg font-bold text-primary">
                 {Intl.NumberFormat("pt-BR", {
                   style: "currency",
                   currency: "BRL",
@@ -336,56 +208,90 @@ useEffect(() => {
                 onOpenChange={handleBookingSheetOpenChange}
               >
                 <Button
-                  variant="secondary"
-                  size="lg"
+                  className="font-semibold"
                   onClick={handleBookingClick}
                 >
                   Reservar
                 </Button>
 
-                <SheetContent className="flex h-full w-full max-w-2xl flex-col px-4">
-                  <SheetHeader>
-                    <SheetTitle className="text-xl font-bold">
+                <SheetContent className="flex h-full w-full max-w-2xl flex-col overflow-hidden px-0">
+                  <SheetHeader className="border-b border-border/60 px-5 pb-4">
+                    <SheetTitle className="text-left font-display text-2xl tracking-wide">
                       Fazer Reserva
                     </SheetTitle>
+                    <p className="text-left text-sm text-muted-foreground">
+                      {service.name} com {barber.name} —{" "}
+                      {serviceDuration === 60 ? "1 hora" : `${serviceDuration} min`}
+                    </p>
                   </SheetHeader>
 
-                  <div className="scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-100 flex-1 overflow-y-auto">
-                    <div className="border-b py-5">
+                  <div className="flex-1 overflow-y-auto">
+                    {/* CALENDÁRIO */}
+                    <div className="flex justify-center border-b border-border/60 py-4">
                       <Calendar
                         mode="single"
                         locale={ptBR}
                         selected={selectedDay}
-                        onSelect={handleDateSelect}
+                        onSelect={setSelectedDay}
                         fromDate={new Date()}
                         disabled={(date) => date.getDay() === 0}
                       />
                     </div>
 
                     {selectedDay && (
-                      <div className="flex flex-wrap gap-3 border-b py-5">
-                        {timeList.length > 0 ? (
-                          timeList.map((time) => (
-                            <Button
-                              key={time}
-                              variant={
-                                selectedTime === time ? "default" : "outline"
-                              }
-                              className="rounded-full px-4 py-2"
-                              onClick={() => handleTimeSelect(time)}
-                            >
-                              {<p>
-                                {time}
-                              </p>
-                              }
-                            </Button>
-                          ))
-                        ) : (
-                          <p className="w-full text-center text-sm">
-                            Não há horários disponíveis para este dia.
+                      <>
+                        {/* HORÁRIOS */}
+                        <div className="border-b border-border/60 px-5 py-4">
+                          <p className="mb-3 text-sm font-semibold">
+                            Horários disponíveis
                           </p>
-                        )}
-                      </div>
+                          {timeList.length > 0 ? (
+                            <div className="grid grid-cols-4 gap-2 sm:grid-cols-5">
+                              {timeList.map((time) => (
+                                <Button
+                                  key={time}
+                                  size="sm"
+                                  variant={
+                                    selectedTime === time
+                                      ? "default"
+                                      : "outline"
+                                  }
+                                  className="rounded-full"
+                                  onClick={() => setSelectedTime(time)}
+                                >
+                                  {time}
+                                </Button>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="w-full py-2 text-center text-sm text-muted-foreground">
+                              Não há horários disponíveis para este dia.
+                            </p>
+                          )}
+                        </div>
+
+                        {/* OBSERVAÇÃO */}
+                        <div className="border-b border-border/60 px-5 py-4">
+                          <p className="mb-2 flex items-center gap-2 text-sm font-semibold">
+                            <MessageSquareText
+                              size={15}
+                              className="text-primary"
+                            />
+                            Observação{" "}
+                            <span className="font-normal text-muted-foreground">
+                              (opcional)
+                            </span>
+                          </p>
+                          <textarea
+                            value={observation}
+                            onChange={(e) => setObservation(e.target.value)}
+                            maxLength={300}
+                            rows={3}
+                            placeholder="Ex.: degradê baixo, chego 5 min atrasado, alergia a algum produto..."
+                            className="w-full resize-none rounded-xl border border-input bg-secondary/50 p-3 text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring"
+                          />
+                        </div>
+                      </>
                     )}
 
                     {selectedDate && (
@@ -394,18 +300,21 @@ useEffect(() => {
                           barber={barber}
                           service={service}
                           selectedDate={selectedDate}
+                          durationMinutes={serviceDuration}
+                          observation={observation.trim() || undefined}
                         />
                       </div>
                     )}
                   </div>
 
-                  <SheetFooter className="mt-5 flex justify-center px-5">
+                  <SheetFooter className="border-t border-border/60 p-5">
                     <Button
-                      onClick={alertDialog}
+                      onClick={() => setAlertDialogOpen(true)}
                       disabled={!selectedDay || !selectedTime}
-                      className="w-full max-w-sm"
+                      className="w-full font-semibold"
+                      size="lg"
                     >
-                      Confirmar
+                      Confirmar reserva
                     </Button>
                   </SheetFooter>
                 </SheetContent>
@@ -415,11 +324,14 @@ useEffect(() => {
         </CardContent>
       </Card>
 
-      <Dialog open={alertDialogOpen} onOpenChange={(open) => setAlertDialogOpen(open)}>
-        <DialogContent className="max-w-[90vw] sm:max-w-[450px] p-4 sm:p-6">
+      <Dialog
+        open={alertDialogOpen}
+        onOpenChange={(open) => setAlertDialogOpen(open)}
+      >
+        <DialogContent className="max-w-[90vw] rounded-2xl p-4 sm:max-w-[450px] sm:p-6">
           <DialogHeader>
-            <DialogTitle className="flex justify-center text-lg sm:text-xl font-bold">
-              AVISO
+            <DialogTitle className="flex justify-center font-display text-2xl tracking-wide">
+              Aviso
             </DialogTitle>
             <div className="flex justify-center py-4">
               <Image
@@ -427,19 +339,21 @@ useEffect(() => {
                 width={150}
                 height={150}
                 alt="Logo"
-                className="w-[100px] sm:w-[150px] h-auto"
+                className="h-auto w-[100px] sm:w-[150px]"
               />
             </div>
-            <DialogDescription className="text-white text-sm sm:text-base w-full px-2 sm:pl-8">
-              <span className="font-semibold">IMPORTANTE:</span> Caso o cliente não
-              compareça no horário agendado sem aviso prévio, será cobrada uma taxa de
-              50% do valor do corte. Agradecemos a compreensão!
+            <DialogDescription className="w-full px-2 text-sm text-foreground sm:text-base">
+              <span className="font-semibold text-primary">IMPORTANTE:</span>{" "}
+              Caso o cliente não compareça no horário agendado sem aviso prévio,
+              será cobrada uma taxa de 50% do valor do corte. Agradecemos a
+              compreensão!
             </DialogDescription>
-            <div className="flex justify-center pt-6 sm:pt-10">
+            <div className="flex justify-center pt-6">
               <Button
                 onClick={handleCreateBooking}
-                className="w-full max-w-[80%] sm:max-w-[300px] py-2 text-sm sm:text-base"
-                disabled={isLoading} // Desativa o botão durante o carregamento
+                className="w-full max-w-[300px] font-semibold"
+                size="lg"
+                disabled={isLoading}
               >
                 {isLoading ? (
                   <div className="flex items-center gap-2">

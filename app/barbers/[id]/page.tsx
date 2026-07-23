@@ -4,7 +4,8 @@ import SidebarSheet from "@/app/_components/sidebar-sheet"
 import { Button } from "@/app/_components/ui/button"
 import { Sheet, SheetTrigger } from "@/app/_components/ui/sheet"
 import { db } from "@/app/_lib/prisma"
-import { ChevronLeftIcon, MenuIcon } from "lucide-react"
+import { ChevronLeftIcon, MapPin, MenuIcon, Scissors } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
@@ -15,7 +16,6 @@ interface BarberPageProps {
 }
 
 const BarbersPage = async ({ params }: BarberPageProps) => {
-  //chamar o banco
   const barber = await db.barber.findUnique({
     where: {
       id: params.id,
@@ -25,23 +25,30 @@ const BarbersPage = async ({ params }: BarberPageProps) => {
     },
   })
 
-  //se acessar a url passando um id inválido mostrar erro
   if (!barber) {
     return notFound()
   }
 
   return (
     <div>
-      {/* IMAGEM */}
-      <div className="relative h-[50px] w-full">
+      {/* CAPA */}
+      <div className="relative h-[220px] w-full sm:h-[280px]">
+        <Image
+          alt={barber.name}
+          src={barber.imageUrl}
+          fill
+          priority
+          className="object-cover object-top"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/50 to-background" />
 
         <Button
           size="icon"
           variant="secondary"
-          className="absolute left-4 top-4"
+          className="absolute left-4 top-4 rounded-full bg-background/70 backdrop-blur"
           asChild
         >
-          <Link href="/">
+          <Link href="/" aria-label="Voltar">
             <ChevronLeftIcon />
           </Link>
         </Button>
@@ -50,38 +57,61 @@ const BarbersPage = async ({ params }: BarberPageProps) => {
           <SheetTrigger asChild>
             <Button
               size="icon"
-              variant="outline"
-              className="absolute right-4 top-4"
+              variant="secondary"
+              className="absolute right-4 top-4 rounded-full bg-background/70 backdrop-blur"
+              aria-label="Abrir menu"
             >
               <MenuIcon />
             </Button>
           </SheetTrigger>
           <SidebarSheet />
         </Sheet>
-      </div>
-      {/* TITULO */}
-      <div className="border-b border-solid p-5">
-        <h1 className="text-xl font-bold">{barber.name}</h1>
-      </div>
-      {/* SERVIÇOS */}
-      <div className="space-y-3 border-b border-solid p-5">
-        <h2 className="text-xs font-bold uppercase text-gray-400">Serviços</h2>
-        <div className="space-y-3">
-          {barber.services.map((service) => (
-            <ServiceItem
-              key={service.id}
-              barber={JSON.parse(JSON.stringify(barber))}
-              service={JSON.parse(JSON.stringify(service))}
-            />
-          ))}
+
+        {/* TITULO SOBRE A CAPA */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <div className="mx-auto max-w-4xl px-5 pb-4">
+            <p className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-primary">
+              <Scissors size={14} />
+              Barbeiro
+            </p>
+            <h1 className="font-display text-4xl tracking-wide sm:text-5xl">
+              {barber.name}
+            </h1>
+            <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+              <MapPin size={14} className="text-primary" />
+              R. Augusto Stresser, 725 — Curitiba
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* CONTATO */}
-      <div className="space-y-3 p-5">
-        {barber.phones.map((phone) => (
-          <PhoneItem key={phone} phone={phone} />
-        ))}
+      <div className="mx-auto max-w-4xl px-5">
+        {/* SERVIÇOS */}
+        <section className="mt-8">
+          <h2 className="mb-1 font-display text-2xl tracking-wide">
+            Serviços <span className="text-primary">disponíveis</span>
+          </h2>
+          <p className="mb-5 text-sm text-muted-foreground">
+            Escolha o serviço, a duração e o melhor horário para você.
+          </p>
+          <div className="space-y-4">
+            {barber.services.map((service) => (
+              <ServiceItem
+                key={service.id}
+                barber={JSON.parse(JSON.stringify(barber))}
+                service={JSON.parse(JSON.stringify(service))}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* CONTATO */}
+        <section className="mt-10 space-y-3">
+          <h2 className="font-display text-2xl tracking-wide">Contato</h2>
+          {barber.phones.map((phone) => (
+            <PhoneItem key={phone} phone={phone} />
+          ))}
+        </section>
       </div>
     </div>
   )
