@@ -4,10 +4,14 @@ import SidebarSheet from "@/app/_components/sidebar-sheet"
 import { Button } from "@/app/_components/ui/button"
 import { Sheet, SheetTrigger } from "@/app/_components/ui/sheet"
 import { db } from "@/app/_lib/prisma"
+import { BARBER_IDS } from "@/app/_lib/schedule"
 import { ChevronLeftIcon, MapPin, MenuIcon, Scissors } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+
+// Kalyl e Lucas: a foto de capa fica um pouco mais alta que o padrão (topo puro)
+const RAISED_COVER_PHOTO_BARBERS: string[] = [BARBER_IDS.KALYL, BARBER_IDS.LUCAS]
 
 interface BarberPageProps {
   params: {
@@ -38,7 +42,12 @@ const BarbersPage = async ({ params }: BarberPageProps) => {
           src={barber.imageUrl}
           fill
           priority
-          className="object-cover object-top"
+          className="object-cover"
+          style={{
+            objectPosition: RAISED_COVER_PHOTO_BARBERS.includes(barber.id)
+              ? "center 45%"
+              : "center top",
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/50 to-background" />
 

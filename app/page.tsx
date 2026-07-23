@@ -13,6 +13,10 @@ import CheckPhoneNumber from "./_components/checkNumber"
 import { Button } from "./_components/ui/button"
 import Link from "next/link"
 import { CalendarDays, MapPin, Scissors } from "lucide-react"
+import { BARBER_IDS } from "./_lib/schedule"
+
+// Ordem fixa de exibição: Kalyl, Lucas, Ygor
+const BARBER_ORDER = [BARBER_IDS.KALYL, BARBER_IDS.LUCAS, BARBER_IDS.YGOR]
 
 export const metadata = {
   title: "Barbearia Kalyl - Estilo, Tradição e Atendimento de Qualidade",
@@ -63,10 +67,13 @@ export const metadata = {
 
 const Home = async () => {
   const session = await getServerSession(authOptions)
-  const [barbers, confirmedBookings] = await Promise.all([
+  const [barbersList, confirmedBookings] = await Promise.all([
     db.barber.findMany({}),
     getConfirmedBookings(),
   ])
+  const barbers = [...barbersList].sort(
+    (a, b) => BARBER_ORDER.indexOf(a.id) - BARBER_ORDER.indexOf(b.id),
+  )
 
   return (
     <div>
