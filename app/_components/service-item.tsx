@@ -121,17 +121,28 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
         return
       }
 
-      await Promise.all([
-        createBooking({
-          serviceId: service.id,
-          date: selectedDate,
-          type: "Reserva",
-          barberId: barber.id,
-          durationMinutes: serviceDuration,
-          observation: observation.trim() || undefined,
-        }),
-        sendConfirmationEmail(data.user.email, selectedDay, selectedTime),
-      ])
+      const result = await createBooking({
+        serviceId: service.id,
+        date: selectedDate,
+        type: "Reserva",
+        barberId: barber.id,
+        durationMinutes: serviceDuration,
+        observation: observation.trim() || undefined,
+      })
+
+      if (!result.success) {
+        if (result.error === "blocked") {
+          toast.error(
+            "Sua conta está bloqueada para agendamentos. Fale com a barbearia.",
+          )
+        } else {
+          toast.error("Erro ao criar reserva!")
+        }
+        setAlertDialogOpen(false)
+        return
+      }
+
+      sendConfirmationEmail(data.user.email, selectedDay, selectedTime)
 
       handleBookingSheetOpenChange()
       setAlertDialogOpen(false)

@@ -1,288 +1,382 @@
 /* eslint-disable @next/next/no-img-element */
-"use client";
-import Header from "../_components/header";
-import AreaChart from "../_components/AreaChart";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "../_components/ui/pagination"
+"use client"
+
+import { useCallback, useEffect, useState } from "react"
+import Header from "../_components/header"
 import { Badge } from "../_components/ui/badge"
-import { getUserTime, getUserInfo } from '../_actions/get-user';
-import { useEffect, useState } from "react";
-import { countBookings } from "../_actions/get-books"
-import Modaledit from "../_components/modalEdit"
+import { Button } from "../_components/ui/button"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../_components/ui/dialog"
+import { Input } from "../_components/ui/input"
+import {
+  getAdminUsers,
+  getAdminUserStats,
+  setUserBlocked,
+  AdminUserRow,
+  AdminUserStats,
+} from "../_actions/admin-users"
+import { useSession } from "next-auth/react"
+import { toast } from "sonner"
+import {
+  Ban,
+  BadgeCheck,
+  CalendarCheck,
+  Loader2,
+  LockOpen,
+  Search,
+  Users,
+} from "lucide-react"
+import { cn } from "../_lib/utils"
+import { format } from "date-fns"
 
-
+const roleLabel = (role: string) => {
+  switch (role) {
+    case "ADMIN":
+      return "Admin"
+    case "MENSALISTAC":
+      return "Mensalista Cabelo"
+    case "MENSALISTAB":
+      return "Mensalista Barba"
+    case "MENSALISTACB":
+      return "Mensalista Cabelo e Barba"
+    default:
+      return "Cliente"
+  }
+}
 
 const Panel = () => {
-    const [totalUsers, setTotalUsers] = useState<number>(0); // Agora é um número
-    const [totalBookings, setTotalBookings] = useState<number>(0); // Agora é um número
-    const [totalMensalistas, setTotalMensal] = useState<number>(0);
-    const [users, setUsers] = useState<{ id: string, name: string | null; image: string | null; role: string; email: string }[]>([]);
+  const { data, status } = useSession()
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [stats, setStats] = useState<AdminUserStats | null>(null)
+  const [users, setUsers] = useState<AdminUserRow[]>([])
+  const [hasMore, setHasMore] = useState(false)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [search, setSearch] = useState("")
+  const [onlyBlocked, setOnlyBlocked] = useState(false)
+  const [confirmTarget, setConfirmTarget] = useState<AdminUserRow | null>(null)
+  const [isToggling, setIsToggling] = useState(false)
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  const loadStats = useCallback(() => {
+    getAdminUserStats()
+      .then(setStats)
+      .catch(() => toast.error("Erro ao carregar estatísticas."))
+  }, [])
 
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
+  const loadUsers = useCallback(
+    async (searchTerm: string, blockedOnly: boolean) => {
+      const result = await getAdminUsers({
+        search: searchTerm,
+        onlyBlocked: blockedOnly,
+      })
+      setUsers(result.users)
+      setHasMore(result.hasMore)
+    },
+    [],
+  )
 
+  // Carga inicial
+  useEffect(() => {
+    if (status === "loading") return
+    if (data?.user?.role !== "ADMIN") {
+      setIsLoading(false)
+      return
+    }
+    setIsAdmin(true)
+    Promise.all([loadUsers("", false), getAdminUserStats().then(setStats)])
+      .catch(() => toast.error("Erro ao carregar usuários."))
+      .finally(() => setIsLoading(false))
+  }, [data?.user?.role, status, loadUsers])
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const data = await getUserTime();
-            if (data.totalUsers > 0) {
-                setTotalUsers(data.totalUsers);
-            }
+  // Busca com debounce
+  useEffect(() => {
+    if (!isAdmin) return
+    const timeout = setTimeout(() => {
+      loadUsers(search, onlyBlocked).catch(() =>
+        toast.error("Erro ao buscar usuários."),
+      )
+    }, 400)
+    return () => clearTimeout(timeout)
+  }, [search, onlyBlocked, isAdmin, loadUsers])
 
-            const mensal = await getUserTime();
-            if (mensal.totalMensalistas > 0) {
-                setTotalMensal(mensal.totalMensalistas)
-            }
-        };
+  const handleLoadMore = async () => {
+    setIsLoadingMore(true)
+    try {
+      const result = await getAdminUsers({
+        search,
+        onlyBlocked,
+        skip: users.length,
+      })
+      setUsers((prev) => [...prev, ...result.users])
+      setHasMore(result.hasMore)
+    } catch {
+      toast.error("Erro ao carregar mais usuários.")
+    } finally {
+      setIsLoadingMore(false)
+    }
+  }
 
-        fetchData();
-    }, []);
+  const handleToggleBlock = async () => {
+    if (!confirmTarget) return
+    setIsToggling(true)
+    try {
+      const result = await setUserBlocked(
+        confirmTarget.id,
+        !confirmTarget.blocked,
+      )
+      if (!result.success) {
+        toast.error(
+          result.error === "cannot_block_admin"
+            ? "Não é possível bloquear um administrador."
+            : "Erro ao atualizar o usuário.",
+        )
+        return
+      }
+      toast.success(
+        confirmTarget.blocked
+          ? `${confirmTarget.name ?? "Usuário"} desbloqueado!`
+          : `${confirmTarget.name ?? "Usuário"} bloqueado! Ele não conseguirá mais agendar.`,
+      )
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.id === confirmTarget.id ? { ...u, blocked: !u.blocked } : u,
+        ),
+      )
+      loadStats()
+    } finally {
+      setIsToggling(false)
+      setConfirmTarget(null)
+    }
+  }
 
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const tableUser = await getUserInfo();
-            // Filtrando as roles que são "MENSALISTAC", "MENSALISTAB", ou "MENSALISTACB"
-            const filteredUsers = tableUser.userInfo.filter(user =>
-                ["MENSALISTAC", "MENSALISTAB", "MENSALISTACB"].includes(user.role)
-            );
-            setUsers(filteredUsers); // Atualiza o estado apenas com usuários filtrados
-        };
-
-        fetchData();
-    }, []);
-
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const total = await countBookings();
-            if (total > 0) {
-                setTotalBookings(total); // Define o valor corretamente
-            }
-        };
-        fetchData();
-    }, []);
-
-
+  if (status === "loading" || isLoading) {
     return (
-        <div>
-            <Header />
-            <div>
-                <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
-                    <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                        <div className="text-center">
-                            <div className="flex items-center justify-center w-10 h-10 mx-auto mb-3 rounded-full bg-red-500 sm:w-12 sm:h-12">
-                                <svg className="w-8 h-8 text-deep-purple-accent-400 sm:w-10 sm:h-10" stroke="currentColor" viewBox="0 0 52 52">
-                                    <polygon strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
-                                </svg>
-                            </div>
-                            <h6 className="text-4xl font-bold text-deep-purple-accent-400">{totalUsers}</h6>
-                            <p className="mb-2 font-bold text-md">Usuarios</p>
-                        </div>
-                        <div className="text-center">
-                            <div className="flex items-center justify-center w-10 h-10 mx-auto mb-3 rounded-full bg-red-500 sm:w-12 sm:h-12">
-                                <svg className="w-8 h-8 text-deep-purple-accent-400 sm:w-10 sm:h-10" stroke="currentColor" viewBox="0 0 52 52">
-                                    <polygon strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
-                                </svg>
-                            </div>
-                            <h6 className="text-4xl font-bold text-deep-purple-accent-400">{totalMensalistas}</h6>
-                            <p className="mb-2 font-bold text-md">Usuarios Mensalistas</p>
-                        </div>
-                        <div className="text-center">
-                            <div className="flex items-center justify-center w-10 h-10 mx-auto mb-3 rounded-full bg-red-500 sm:w-12 sm:h-12">
-                                <svg className="w-8 h-8 text-deep-purple-accent-400 sm:w-10 sm:h-10" stroke="currentColor" viewBox="0 0 52 52">
-                                    <polygon strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
-                                </svg>
-                            </div>
-                            <h6 className="text-4xl font-bold text-deep-purple-accent-400">{totalBookings}</h6>
-                            <p className="mb-2 font-bold text-md">Cortes Feitos</p>
-                        </div>
-                    </div>
-                </div>
-                {/* Títulos Acima dos Gráficos */}
-                <div className="text-center mb-6">
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Visão Geral da Barbearia</h3>
-                </div>
-                {/* Gráficos */}
-                <div className="relative px-20 pb-20 w-[]">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {/* Gráfico 1 */}
-                        <div className="bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6">
-                            <h3 className="text-center text-xl font-bold text-gray-900 dark:text-white mb-4">Diario</h3>
-                            <div className="flex justify-between">
-                                <div>
-                                    <h5 className="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">32.4k</h5>
-                                    <p className="text-base font-normal text-gray-500 dark:text-gray-400">Clientes Atendidos No Dia</p>
-                                </div>
-                                <div className="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 dark:text-green-500 text-center">
-                                    12%
-                                    <svg className="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
-                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
-                                    </svg>
-                                </div>
-                            </div>
-                            {/* Gráfico */}
-                            <div id="area-chart">
-                                <AreaChart />
-                            </div>
-                        </div>
-{/* 
-                        <div className="bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6">
-                            <h3 className="text-center text-xl font-bold text-gray-900 dark:text-white mb-4">Tudo</h3>
-                            <div className="flex justify-between">
-                                <div>
-                                    <h5 className="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">45.8k</h5>
-                                    <p className="text-base font-normal text-gray-500 dark:text-gray-400">Faturamento Total</p>
-                                </div>
-                                <div className="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 dark:text-green-500 text-center">
-                                    8%
-                                    <svg className="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
-                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13V1m0 0L1 5m4-4 4 4" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <div id="area-chart">
-                                <AreaChart />
-                            </div>
-                        </div>
-
-                        <div className="bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6">
-                            <h3 className="text-center text-xl font-bold text-gray-900 dark:text-white mb-4">Mensal</h3>
-                            <div className="flex justify-between">
-                                <div>
-                                    <h5 className="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">21.3k</h5>
-                                    <p className="text-base font-normal text-gray-500 dark:text-gray-400">Clientes Atendidos no Mês</p>
-                                </div>
-                                <div className="flex items-center px-2.5 py-0.5 text-base font-semibold text-red-500 dark:text-red-500 text-center">
-                                    -5%
-                                    <svg className="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
-                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 1v12m0 0 4-4m-4 4L1 9" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <div id="area-chart">
-                                <AreaChart />
-                            </div>
-                        </div> */}
-                    </div>
-                </div>
-            </div>
-
-            <section className="container px-4 mx-auto overflow-x-hidden">
-                <div className="flex items-center gap-x-3">
-                    <h2 className="text-lg font-medium text-gray-800 dark:text-white">Mensalistas</h2>
-
-                    <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">{totalMensalistas} Usuarios</span>
-                </div>
-
-                <div className="flex flex-col mt-6 ">
-                    <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                        <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                            <div className="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
-                                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                    <thead className="bg-gray-50 dark:bg-gray-800">
-                                        <tr>
-                                            <th scope="col" className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                                <div className="flex items-center gap-x-3">
-                                                    <span>Name</span>
-                                                </div>
-                                            </th>
-
-                                            <th scope="col" className="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                                <button className="flex items-center gap-x-2">
-                                                    <span>Status</span>
-                                                </button>
-                                            </th>
-
-                                            <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                                <button className="flex items-center gap-x-2">
-                                                    <span>Tipo</span>
-                                                </button>
-                                            </th>
-
-                                            <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">Email</th>
-
-                                            <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900 ">
-                                        {users.map((user) => (
-                                            <tr key={user.id}>
-                                                <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                                                    <div className="inline-flex items-center gap-x-3">
-                                                        <div className="flex items-center gap-x-2">
-                                                            <img
-                                                                className="object-cover w-10 h-10 rounded-full"
-                                                                src={user.image ? user.image : '/logo.png'} // Exibe uma imagem padrão se `user.image` for null ou undefined
-                                                                alt={user.name || 'No name'}
-                                                            />
-                                                            <div>
-                                                                <h2 className="font-medium text-gray-800 dark:text-white">{user.name}</h2>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                                                <Badge className="bg-emerald-600 hover:bg-emerald-500 text-white">Ativo</Badge>
-                                            </td>
-                                                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                                                    {user.role === "MENSALISTAC" ? "Mensalista Cabelo" :
-                                                        user.role === "MENSALISTAB" ? "Mensalista Barba" : "Mensalista Cabelo e Barba"}
-                                                </td>
-                                                <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">{user.email}</td>
-                                                <td className="px-4 py-4 text-sm whitespace-nowrap">
-                                                <div className="flex items-center gap-x-6">
-                                                    <button onClick={openModal} className="text-gray-500 transition-colors duration-200 dark:hover:text-yellow-500 dark:text-gray-300 hover:text-yellow-500 focus:outline-none">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-5 h-5">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                                        </svg>
-                                                    </button>
-
-                                                        <Modaledit isOpen={isModalOpen} onClose={closeModal} />
-                                                </div>
-                                            </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="flex items-center justify-between mt-6">
-                    <Pagination>
-                        <PaginationContent>
-                            <PaginationItem>
-                                <PaginationPrevious href="#" />
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationLink href="#">1</PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationEllipsis />
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationNext href="#" />
-                            </PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
-
-                </div>
-            </section>
+      <>
+        <Header />
+        <div className="flex h-[60vh] items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
-    );
-};
+      </>
+    )
+  }
 
+  if (!isAdmin) {
+    return (
+      <>
+        <Header />
+        <div className="flex h-[60vh] flex-col items-center justify-center gap-2 px-5 text-center">
+          <h1 className="font-display text-2xl">Acesso restrito</h1>
+          <p className="text-muted-foreground">
+            Esta área é exclusiva dos barbeiros.
+          </p>
+        </div>
+      </>
+    )
+  }
 
-export default Panel;
+  const statCards = [
+    { label: "Clientes", value: stats?.total ?? "–", icon: Users },
+    { label: "Mensalistas", value: stats?.mensalistas ?? "–", icon: BadgeCheck },
+    { label: "Bloqueados", value: stats?.blocked ?? "–", icon: Ban },
+  ]
+
+  return (
+    <>
+      <Header />
+      <div className="mx-auto max-w-5xl px-5 py-8">
+        <h1 className="font-display text-3xl tracking-wide">
+          Clientes <span className="text-primary">da barbearia</span>
+        </h1>
+        <p className="mb-6 text-sm text-muted-foreground">
+          Veja todos os clientes e bloqueie contas que não devem mais agendar.
+        </p>
+
+        {/* ESTATÍSTICAS */}
+        <div className="mb-6 grid grid-cols-3 gap-3">
+          {statCards.map((card) => (
+            <div
+              key={card.label}
+              className="rounded-2xl border border-border/60 bg-card p-4"
+            >
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  {card.label}
+                </p>
+                <card.icon size={16} className="text-primary" />
+              </div>
+              <p className="mt-2 font-display text-3xl">{card.value}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* BUSCA + FILTRO */}
+        <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="relative flex-1">
+            <Search
+              size={16}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Buscar por nome, e-mail ou telefone..."
+              className="rounded-xl pl-9"
+            />
+          </div>
+          <Button
+            variant={onlyBlocked ? "default" : "outline"}
+            className="rounded-xl"
+            onClick={() => setOnlyBlocked((v) => !v)}
+          >
+            <Ban size={15} />
+            Só bloqueados
+          </Button>
+        </div>
+
+        {/* LISTA */}
+        <div className="space-y-3">
+          {users.length === 0 && (
+            <p className="rounded-2xl border border-dashed border-border py-12 text-center text-sm text-muted-foreground">
+              Nenhum usuário encontrado.
+            </p>
+          )}
+
+          {users.map((user) => (
+            <div
+              key={user.id}
+              className={cn(
+                "flex flex-col gap-3 rounded-2xl border border-border/60 bg-card p-4 sm:flex-row sm:items-center sm:justify-between",
+                user.blocked && "border-destructive/40 bg-destructive/5",
+              )}
+            >
+              <div className="flex min-w-0 items-center gap-3">
+                <img
+                  src={user.image || "/logo.png"}
+                  alt={user.name || "Usuário"}
+                  className="h-11 w-11 shrink-0 rounded-full object-cover"
+                />
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="truncate font-semibold">
+                      {user.name || "Sem nome"}
+                    </p>
+                    {user.role !== "USER" && (
+                      <Badge
+                        variant="outline"
+                        className="border-primary/50 text-primary"
+                      >
+                        {roleLabel(user.role)}
+                      </Badge>
+                    )}
+                    {user.blocked && (
+                      <Badge variant="destructive">Bloqueado</Badge>
+                    )}
+                  </div>
+                  <p className="truncate text-sm text-muted-foreground">
+                    {user.email}
+                    {user.number ? ` • ${user.number}` : ""}
+                  </p>
+                  <p className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <CalendarCheck size={12} className="text-primary" />
+                    {user.bookingsCount} agendamento
+                    {user.bookingsCount === 1 ? "" : "s"} • cliente desde{" "}
+                    {format(new Date(user.createdAt), "MM/yyyy")}
+                  </p>
+                </div>
+              </div>
+
+              {user.role !== "ADMIN" && (
+                <Button
+                  size="sm"
+                  variant={user.blocked ? "outline" : "destructive"}
+                  className="shrink-0 self-end sm:self-auto"
+                  onClick={() => setConfirmTarget(user)}
+                >
+                  {user.blocked ? (
+                    <>
+                      <LockOpen size={14} />
+                      Desbloquear
+                    </>
+                  ) : (
+                    <>
+                      <Ban size={14} />
+                      Bloquear
+                    </>
+                  )}
+                </Button>
+              )}
+            </div>
+          ))}
+
+          {hasMore && (
+            <Button
+              variant="outline"
+              className="mx-auto flex w-full max-w-[240px]"
+              onClick={handleLoadMore}
+              disabled={isLoadingMore}
+            >
+              {isLoadingMore ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Carregando...
+                </>
+              ) : (
+                "Carregar mais"
+              )}
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* CONFIRMAÇÃO */}
+      <Dialog
+        open={!!confirmTarget}
+        onOpenChange={(open) => !open && setConfirmTarget(null)}
+      >
+        <DialogContent className="w-[90%] max-w-md rounded-2xl">
+          <DialogHeader>
+            <DialogTitle>
+              {confirmTarget?.blocked ? "Desbloquear" : "Bloquear"}{" "}
+              {confirmTarget?.name ?? "usuário"}?
+            </DialogTitle>
+            <DialogDescription>
+              {confirmTarget?.blocked
+                ? "O cliente voltará a conseguir fazer agendamentos normalmente."
+                : "O cliente continuará conseguindo entrar no site, mas não conseguirá mais fazer agendamentos até ser desbloqueado."}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex flex-row gap-3">
+            <DialogClose asChild>
+              <Button variant="secondary" className="w-full">
+                Voltar
+              </Button>
+            </DialogClose>
+            <Button
+              variant={confirmTarget?.blocked ? "default" : "destructive"}
+              className="w-full"
+              onClick={handleToggleBlock}
+              disabled={isToggling}
+            >
+              {isToggling ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : confirmTarget?.blocked ? (
+                "Desbloquear"
+              ) : (
+                "Bloquear"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  )
+}
+
+export default Panel

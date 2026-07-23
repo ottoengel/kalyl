@@ -16,6 +16,7 @@ model User {
   number           String?
   image            String?
   role             String    @default("USER") // Campo para indicar o papel do usuário
+  blocked          Boolean   @default(false) // Conta bloqueada não consegue agendar
   stripeCustomerId String? // Adicionando o campo para armazenar o customerId
   accounts         Account[]
   sessions         Session[]

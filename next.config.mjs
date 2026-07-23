@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    // bcrypt é módulo nativo — não pode ser empacotado pelo webpack
+    serverComponentsExternalPackages: ["bcrypt"],
+  },
   images: {
     remotePatterns: [
       {
