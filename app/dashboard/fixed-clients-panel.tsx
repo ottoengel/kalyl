@@ -255,12 +255,12 @@ const FixedClientsPanel = ({ barbers, onChanged }: FixedClientsPanelProps) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-muted-foreground">
           Horários recorrentes reservados. Eles somem da agenda dos clientes
           automaticamente.
         </p>
-        <Button size="sm" onClick={openCreate}>
+        <Button size="sm" className="w-full shrink-0 sm:w-auto" onClick={openCreate}>
           <Plus size={14} />
           Novo
         </Button>
@@ -285,8 +285,8 @@ const FixedClientsPanel = ({ barbers, onChanged }: FixedClientsPanelProps) => {
               !client.active && "opacity-60",
             )}
           >
-            <div className="flex flex-wrap items-start justify-between gap-2">
-              <div>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
                 <p className="font-semibold">
                   {client.clientName}{" "}
                   {!client.active && (
@@ -316,7 +316,7 @@ const FixedClientsPanel = ({ barbers, onChanged }: FixedClientsPanelProps) => {
                 )}
               </div>
 
-              <div className="flex gap-1.5">
+              <div className="flex shrink-0 gap-1.5">
                 <Button
                   size="sm"
                   variant="outline"

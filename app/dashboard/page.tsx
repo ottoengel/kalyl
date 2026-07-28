@@ -706,15 +706,15 @@ const Dashboard = () => {
 
           {/* AGENDAMENTOS */}
           <section className="rounded-2xl border border-border/60 bg-card p-5">
-            <div className="mb-4 flex items-center justify-between">
+            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <h2 className="font-display text-xl tracking-wide">
                 Agendamentos
               </h2>
-              <div className="flex rounded-full border border-border/60 p-0.5">
+              <div className="flex w-fit max-w-full overflow-x-auto rounded-full border border-border/60 p-0.5">
                 <button
                   onClick={() => setActiveTab("confirmados")}
                   className={cn(
-                    "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
+                    "whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium transition-colors sm:px-4 sm:text-sm",
                     activeTab === "confirmados"
                       ? "bg-primary text-primary-foreground"
                       : "text-muted-foreground hover:text-foreground",
@@ -725,7 +725,7 @@ const Dashboard = () => {
                 <button
                   onClick={() => setActiveTab("finalizados")}
                   className={cn(
-                    "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
+                    "whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium transition-colors sm:px-4 sm:text-sm",
                     activeTab === "finalizados"
                       ? "bg-primary text-primary-foreground"
                       : "text-muted-foreground hover:text-foreground",
@@ -736,7 +736,7 @@ const Dashboard = () => {
                 <button
                   onClick={() => setActiveTab("fixos")}
                   className={cn(
-                    "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
+                    "whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium transition-colors sm:px-4 sm:text-sm",
                     activeTab === "fixos"
                       ? "bg-primary text-primary-foreground"
                       : "text-muted-foreground hover:text-foreground",

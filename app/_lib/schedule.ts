@@ -39,9 +39,9 @@ const BARBER_SCHEDULES: Record<string, BarberSchedule> = {
     weekdays: { open: 10, close: 20 },
     saturday: { open: 10, close: 15 },
   },
-  // Ygor
+  // Ygor — último atendimento às 19h (1h) ou 19:30 (30 min)
   [BARBER_IDS.YGOR]: {
-    weekdays: { open: 10, close: 19 },
+    weekdays: { open: 10, close: 20 },
     saturday: { open: 10, close: 16 },
   },
 }
