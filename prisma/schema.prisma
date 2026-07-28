@@ -74,9 +74,10 @@ model Barber {
   imageUrl  String
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
-  services  BarberServices[]
-  bookings  Booking[]
-  blocks    Block[]
+  services     BarberServices[]
+  bookings     Booking[]
+  blocks       Block[]
+  fixedClients FixedClient[]
 }
 
 model BarberServices {
@@ -104,6 +105,36 @@ model Booking {
   updatedAt       DateTime       @updatedAt
   type            String         @default("Reserva")
   barber          Barber         @relation(fields: [barberId], references: [id])
+}
+
+// Cliente fixo: horário recorrente reservado (semanal, quinzenal ou mensal)
+model FixedClient {
+  id              String            @id @default(uuid())
+  barberId        String
+  barber          Barber            @relation(fields: [barberId], references: [id])
+  clientName      String
+  phone           String?
+  frequency       String            @default("SEMANAL") // SEMANAL | QUINZENAL | MENSAL
+  dayOfWeek       Int // 1 = segunda ... 6 = sábado
+  time            String // "HH:mm"
+  durationMinutes Int               @default(60)
+  startDate       DateTime // âncora para quinzenal/mensal
+  notes           String?
+  active          Boolean           @default(true)
+  skips           FixedClientSkip[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+// Ocorrência desmarcada de um cliente fixo (ex.: cliente avisou que não vem no dia X)
+model FixedClientSkip {
+  id            String      @id @default(uuid())
+  fixedClientId String
+  fixedClient   FixedClient @relation(fields: [fixedClientId], references: [id], onDelete: Cascade)
+  date          DateTime // dia da ocorrência desmarcada (00:00 local)
+  createdAt     DateTime    @default(now())
+
+  @@unique([fixedClientId, date])
 }
 
 model Block {

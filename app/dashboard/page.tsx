@@ -30,6 +30,11 @@ import { addMinutes, format, isPast, isToday, startOfMonth, subDays } from "date
 import { deleteBlock } from "../_actions/delete-block"
 import { getBarbers } from "../_actions/get-barber"
 import {
+  getFixedOccupancy,
+  FixedOccupancy,
+} from "../_actions/fixed-clients"
+import FixedClientsPanel from "./fixed-clients-panel"
+import {
   getDashboardMetrics,
   getMetricsForPeriod,
   DashboardMetrics,
@@ -62,7 +67,7 @@ type BookingWithRelations = Prisma.BookingGetPayload<{
   }
 }>
 
-type SlotStatus = "free" | "blocked" | "booked" | "past"
+type SlotStatus = "free" | "blocked" | "booked" | "fixed" | "past"
 
 interface SlotInfo {
   time: string
@@ -87,7 +92,10 @@ const Dashboard = () => {
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined)
   const [dayBlocks, setDayBlocks] = useState<Block[]>([])
   const [dayBookings, setDayBookings] = useState<Booking[]>([])
-  const [activeTab, setActiveTab] = useState<"confirmados" | "finalizados">("confirmados")
+  const [dayFixed, setDayFixed] = useState<FixedOccupancy[]>([])
+  const [activeTab, setActiveTab] = useState<
+    "confirmados" | "finalizados" | "fixos"
+  >("confirmados")
   const [isPending, startTransition] = useTransition()
 
   // Filtro de período do rendimento
@@ -206,14 +214,17 @@ const Dashboard = () => {
     if (!selectedDay || !scheduleBarberId) {
       setDayBlocks([])
       setDayBookings([])
+      setDayFixed([])
       return
     }
-    const [blocks, bookings] = await Promise.all([
+    const [blocks, bookings, fixed] = await Promise.all([
       getBlock({ date: selectedDay, barberId: scheduleBarberId }),
       getBookings({ date: selectedDay, barberId: scheduleBarberId }),
+      getFixedOccupancy({ date: selectedDay, barberId: scheduleBarberId }),
     ])
     setDayBlocks(blocks)
     setDayBookings(bookings)
+    setDayFixed(fixed)
   }, [selectedDay, scheduleBarberId])
 
   useEffect(() => {
@@ -255,6 +266,19 @@ const Dashboard = () => {
         }
       }
 
+      const fixed = dayFixed.find((f) => {
+        const fixedStart = new Date(f.date)
+        const fixedEnd = addMinutes(fixedStart, f.durationMinutes ?? 30)
+        return slotStart < fixedEnd && fixedStart < slotEnd
+      })
+      if (fixed) {
+        return {
+          time,
+          status: "fixed" as SlotStatus,
+          clientName: fixed.clientName,
+        }
+      }
+
       const block = dayBlocks.find((b) => {
         const blockStart = new Date(b.date)
         const blockEnd = addMinutes(blockStart, step)
@@ -270,12 +294,17 @@ const Dashboard = () => {
 
       return { time, status: "free" as SlotStatus }
     })
-  }, [selectedDay, scheduleBarberId, dayBlocks, dayBookings, confirmedBookingsById])
+  }, [selectedDay, scheduleBarberId, dayBlocks, dayBookings, dayFixed, confirmedBookingsById])
 
   // ---- Ações sobre a grade ----
   const handleSlotClick = (slot: SlotInfo) => {
     if (!selectedDay || !scheduleBarberId) return
-    if (slot.status === "booked" || slot.status === "past") return
+    if (
+      slot.status === "booked" ||
+      slot.status === "fixed" ||
+      slot.status === "past"
+    )
+      return
 
     startTransition(async () => {
       try {
@@ -616,17 +645,20 @@ const Dashboard = () => {
                         disabled={
                           isPending ||
                           slot.status === "booked" ||
+                          slot.status === "fixed" ||
                           slot.status === "past"
                         }
                         onClick={() => handleSlotClick(slot)}
                         title={
                           slot.status === "booked"
                             ? `Reservado${slot.clientName ? ` — ${slot.clientName}` : ""}`
-                            : slot.status === "blocked"
-                              ? "Bloqueado — toque para liberar"
-                              : slot.status === "past"
-                                ? "Horário já passou"
-                                : "Livre — toque para bloquear"
+                            : slot.status === "fixed"
+                              ? `Cliente fixo${slot.clientName ? ` — ${slot.clientName}` : ""}`
+                              : slot.status === "blocked"
+                                ? "Bloqueado — toque para liberar"
+                                : slot.status === "past"
+                                  ? "Horário já passou"
+                                  : "Livre — toque para bloquear"
                         }
                         className={cn(
                           "rounded-lg border p-2 text-center text-sm font-medium transition-all",
@@ -637,6 +669,8 @@ const Dashboard = () => {
                             "border-destructive/50 bg-destructive/15 text-red-400 line-through hover:bg-destructive/25",
                           slot.status === "booked" &&
                             "cursor-default border-primary/50 bg-primary/15 text-primary",
+                          slot.status === "fixed" &&
+                            "cursor-default border-amber-500/50 bg-amber-500/15 text-amber-400",
                           slot.status === "past" &&
                             "cursor-default border-border/40 bg-transparent text-muted-foreground/40",
                         )}
@@ -660,6 +694,10 @@ const Dashboard = () => {
                   <span className="flex items-center gap-1.5">
                     <span className="h-2.5 w-2.5 rounded-full bg-destructive" />
                     Bloqueado
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="h-2.5 w-2.5 rounded-full bg-amber-500" />
+                    Cliente fixo
                   </span>
                 </div>
               </div>
@@ -695,6 +733,17 @@ const Dashboard = () => {
                 >
                   Finalizados ({concludedCount})
                 </button>
+                <button
+                  onClick={() => setActiveTab("fixos")}
+                  className={cn(
+                    "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
+                    activeTab === "fixos"
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  Fixos
+                </button>
               </div>
             </div>
 
@@ -715,6 +764,11 @@ const Dashboard = () => {
                       </p>
                     )}
                   </>
+                ) : activeTab === "fixos" ? (
+                  <FixedClientsPanel
+                    barbers={barbers}
+                    onChanged={loadDaySchedule}
+                  />
                 ) : (
                   <>
                     {concludedBookings.map((booking) => (

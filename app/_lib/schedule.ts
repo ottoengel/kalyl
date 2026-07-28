@@ -34,14 +34,14 @@ const BARBER_SCHEDULES: Record<string, BarberSchedule> = {
     weekdays: { open: 8, close: 20 },
     saturday: { open: 8, close: 16 },
   },
-  // Kalyl — sábado reduzido
+  // Kalyl — sábado reduzido (abre 10h: o horário das 9h é de cliente fixo anual)
   [BARBER_IDS.KALYL]: {
     weekdays: { open: 10, close: 20 },
-    saturday: { open: 9, close: 15 },
+    saturday: { open: 10, close: 15 },
   },
-  // Ygor — expediente estendido
+  // Ygor
   [BARBER_IDS.YGOR]: {
-    weekdays: { open: 9, close: 21 },
+    weekdays: { open: 10, close: 19 },
     saturday: { open: 10, close: 16 },
   },
 }

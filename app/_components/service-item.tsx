@@ -30,6 +30,10 @@ import SignInDialog from "./sign-in-dialog"
 import BookingSummary from "./booking-summary"
 import { useRouter } from "next/navigation"
 import { getBlock } from "../_actions/get-block"
+import {
+  getFixedOccupancy,
+  FixedOccupancy,
+} from "../_actions/fixed-clients"
 import { sendConfirmationEmail } from "../_actions/send-email"
 import { Clock, Loader2, MessageSquareText } from "lucide-react"
 import {
@@ -63,6 +67,7 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
   const [observation, setObservation] = useState("")
   const [dayBlock, setDayBlock] = useState<Block[]>([])
   const [dayBookings, setDayBookings] = useState<Booking[]>([])
+  const [dayFixed, setDayFixed] = useState<FixedOccupancy[]>([])
   const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -71,12 +76,14 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
 
   const loadBookings = async () => {
     if (!selectedDay) return
-    const [bookings, blockings] = await Promise.all([
+    const [bookings, blockings, fixed] = await Promise.all([
       getBookings({ date: selectedDay, barberId: barber.id }),
       getBlock({ date: selectedDay, barberId: barber.id }),
+      getFixedOccupancy({ date: selectedDay, barberId: barber.id }),
     ])
     setDayBookings(bookings)
     setDayBlock(blockings as Block[])
+    setDayFixed(fixed)
   }
 
   useEffect(() => {
@@ -109,6 +116,7 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
     setObservation("")
     setDayBookings([])
     setDayBlock([])
+    setDayFixed([])
     setBookingSheetIsOpen(false)
   }
 
@@ -170,11 +178,11 @@ const ServiceItem = ({ service, barber }: ServiceItemProps) => {
           day: selectedDay,
           slot,
           durationMinutes: serviceDuration,
-          bookings: dayBookings,
+          bookings: [...dayBookings, ...dayFixed],
           blocks: dayBlock,
         }),
     )
-  }, [dayBookings, dayBlock, selectedDay, barber.id, serviceDuration])
+  }, [dayBookings, dayBlock, dayFixed, selectedDay, barber.id, serviceDuration])
 
   return (
     <>
