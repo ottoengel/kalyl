@@ -411,9 +411,6 @@ const FixedClientsPanel = ({ barbers, onChanged }: FixedClientsPanelProps) => {
             <DialogTitle className="font-display text-xl tracking-wide">
               {form.id ? "Editar cliente fixo" : "Novo cliente fixo"}
             </DialogTitle>
-            <DialogDescription>
-              O horário fica reservado automaticamente conforme a recorrência.
-            </DialogDescription>
           </DialogHeader>
 
           <div className="flex flex-col gap-3">
